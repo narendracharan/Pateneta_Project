@@ -75,6 +75,7 @@ exports.sellerSearch = async (req, res) => {
     }
     const searchIdeas = await UserRegister.find({
       fullName_en: { $regex: search, $options: "i" },
+      companyName_en:{ $regex: search, $options: "i" }
       // companyName_en: { $regex: search, $options: "i" },
       //     $and: [
       //       { fullName_en: { $regex: new RegExp(search.trim(), "i") } },

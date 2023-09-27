@@ -17,6 +17,10 @@ const schema=new mongoose.Schema({
     profile:{
         type:String,
         require:true
+    },
+    otp:{
+        type: Number,
+        require: true,
     }
 })
 schema.methods.AdminAuthToken = function () {

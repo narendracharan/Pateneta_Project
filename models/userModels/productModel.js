@@ -22,16 +22,15 @@ const schema = new mongoose.Schema({
     ref: "categroy",
     require: true,
   },
-
   subCategory_Id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "subCategroy",
     require: true,
   },
-  subCategory_ar: {
-    type: String,
-    require: true,
-  },
+  // subCategory_ar: {
+  //   type: String,
+  //   require: true,
+  // },
   selectDocument: {
     type: String,
     require: true,
@@ -84,7 +83,7 @@ const schema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default: false,
+    default: true,
   },
 });
 schema.set("timestamps", true);

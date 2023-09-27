@@ -4,13 +4,16 @@ const { error, success } = require("../../responseCode");
 //------->  new IdeaRequest Api
 exports.ideaRequestList = async (req, res) => {
   try {
-    const {from,to}=req.body
-    const list = await ideaRequestSchema.find({
-        $and:[
-            from ?{createdAt:{$gte:new Date(from)}}:{},
-            to ?{createdAt :{$lte :new Date(`${to}T23:59:59`)}}:{}
-          ]
-    }).populate("user_Id").sort({createdAt:-1});
+    const { from, to } = req.body;
+    const list = await ideaRequestSchema
+      .find({
+        $and: [
+          from ? { createdAt: { $gte: new Date(from) } } : {},
+          to ? { createdAt: { $lte: new Date(`${to}T23:59:59`) } } : {},
+        ],
+      })
+      .populate("user_Id")
+      .sort({ createdAt: -1 });
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch {
     res.status(400).json(error("Failed", res.statusCode));
@@ -66,31 +69,69 @@ exports.viewIdeaRequest = async (req, res) => {
 
 ///----> search Idea Api
 
-exports.searchIdeaRequest=async(req,res)=>{
-    try{
-        const search = req.body.search;
-        if (!search) {
-          return res
-            .status(201)
-            .json(error("Please provide search key", res.statusCode));
-        }
-        const searchIdeas = await ideaRequestSchema.find({
-          $and: [
-            { title_en: { $regex: new RegExp(search.trim(), "i") } },
-            { description_en: { $regex: new RegExp(search.trim(), "i") } },
-            { category_en: { $regex: new RegExp(search.trim(), "i") } },
-            { subCategory_en: { $regex: new RegExp(search.trim(), "i") } },
-            { briefDescription_en: { $regex: new RegExp(search.trim(), "i") } },
-          ],
-        });
-        if (searchIdeas.length > 0) {
-          return res
-            .status(200)
-            .json(success(res.statusCode, "Success", { searchIdeas }));
-        } else {
-          res.status(201).json(error("Ideas are not Found", res.statusCode));
-        }
-    }catch(err){
-        res.status(400).json(error("Failed",res.statusCode))
+exports.searchIdeaRequest = async (req, res) => {
+  try {
+    const search = req.body.search;
+    if (!search) {
+      return res
+        .status(201)
+        .json(error("Please provide search key", res.statusCode));
     }
-}
+    const searchIdeas = await ideaRequestSchema.find({
+      $and: [
+        { title_en: { $regex: new RegExp(search.trim(), "i") } },
+        { description_en: { $regex: new RegExp(search.trim(), "i") } },
+        { category_en: { $regex: new RegExp(search.trim(), "i") } },
+        { subCategory_en: { $regex: new RegExp(search.trim(), "i") } },
+        { briefDescription_en: { $regex: new RegExp(search.trim(), "i") } },
+      ],
+    });
+    if (searchIdeas.length > 0) {
+      return res
+        .status(200)
+        .json(success(res.statusCode, "Success", { searchIdeas }));
+    } else {
+      res.status(201).json(error("Ideas are not Found", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+///--->> update Status
+exports.updateStatus = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const status = req.body.status;
+    if (!status) {
+      res.status(200).json(error("Please provide status", res.statusCode));
+    }
+    const updateStatus = await ideaRequestSchema.findById(id);
+    updateStatus.status = status;
+    if (updateStatus) {
+      res
+        .status(201)
+        .json(success(res.statusCode, "Success", { updateStatus }));
+    } else {
+      res.status(201).json(error("No Data Found", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.deleteBussinessIdea = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deleteIdea = await ideaRequestSchema.findByIdAndDelete(id);
+    if (deleteIdea) {
+      res
+        .status(200)
+        .json(success(res.statusCode, "Deleted Data", { deleteIdea }));
+    } else {
+      res.status(201).json(error("No Data Found", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};

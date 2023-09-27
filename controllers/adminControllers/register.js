@@ -4,6 +4,8 @@ const { error, success } = require("../../responseCode");
 const validator = require("validator");
 const categoryModels = require("../../models/adminModels/categoryModels");
 const subCategoryModel = require("../../models/adminModels/subCategoryModel");
+const userModels = require("../../models/adminModels/userModels");
+const { transporter } = require("../../services/mailServices");
 
 
 
@@ -43,10 +45,10 @@ exports.adminRegister = async (req, res) => {
 //------> admin Login Api
 exports.loginAdmin = async (req, res) => {
   try {
-    const { userEmail, password } = req.body;
-    if (userEmail && password) {
+    const { userName, password } = req.body;
+    if (userName && password) {
       const verifyUser = await adminSchema.findOne({
-        userEmail: userEmail,
+        userName: userName,
       });
       if (verifyUser != null) {
         const isMatch = await bcrypt.compare(password, verifyUser.password);
@@ -86,7 +88,7 @@ exports.loginAdmin = async (req, res) => {
 //---> admin reset password Api
 exports.resetPassword = async (req, res) => {
   try {
-    const { newPassword, confirmPassword, Email } = req.body;
+    const { newPassword, confirmPassword, userEmail } = req.body;
     if (newPassword && confirmPassword && Email) {
       if (newPassword !== confirmPassword) {
         return res
@@ -95,7 +97,7 @@ exports.resetPassword = async (req, res) => {
       } else {
         const passwordHash = await bcrypt.hash(newPassword, 10);
         const createPassword = await adminSchema.findOneAndUpdate(
-          { Email: Email },
+          { userEmail: userEmail },
           {
             $set: { password: passwordHash },
           }
@@ -131,3 +133,46 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
+
+exports.sendUserResetPassword = async (req, res) => {
+  try {
+    const { userEmail } = req.body;
+    const user = await userModels.findOne({ userEmail: userEmail });
+    if (user) {
+      const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
+      let info = await transporter.sendMail({
+        from: "s04450647@gmail.com",
+        to: userEmail,
+        subject: "Email Send For Reset Password",
+        text: `This ${otp} Otp Verify To Email`,
+      });
+      await userSchema.findOneAndUpdate({ userEmail: userEmail }, { otp: otp });
+      return res.status(200).json(success(res.statusCode, "Success", {}));
+    } else {
+      res.status(400).json(error("userEmail are empty", res.statusCode));
+    }
+  } catch (err) {
+    res.status(500).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.OtpVerify = async (req, res) => {
+  try {
+    const { userEmail, otp } = req.body;
+    if (!userEmail || !otp) {
+      return res
+        .status(201)
+        .json(error("Empty Otp Details Are Not Allowed", res.statusCode));
+    }
+    const userOtpVerify = await userModels.findOne({ userEmail: userEmail });
+    if (userOtpVerify.otp == otp) {
+      return res
+        .status(200)
+        .json(success(res.statusCode, "Verify Otp Successfully", {}));
+    } else {
+      return res.status(200).json(error("Invalid Otp", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};

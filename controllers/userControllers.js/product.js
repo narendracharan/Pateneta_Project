@@ -3,6 +3,8 @@ const { error, success } = require("../../responseCode");
 const userSchema = require("../../models/userModels/UserRegister");
 const categoryModels = require("../../models/adminModels/categoryModels");
 const subCategoryModel = require("../../models/adminModels/subCategoryModel");
+const productModel = require("../../models/userModels/productModel");
+const { resetPassword } = require("./register");
 
 //---------> create bussiness idea api
 exports.createIdea = async (req, res) => {
@@ -20,6 +22,73 @@ exports.createIdea = async (req, res) => {
     }
     const saveIdea = await idea.save();
     res.status(201).json(success(res.statusCode, "Success", { saveIdea }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+//----> update bussiness idea
+
+exports.updateBussinessIdea = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const {
+      title_en,
+      title_ar,
+      description_en,
+      description_ar,
+      category_Id,
+      subCategory_Id,
+      briefDescription_en,
+      briefDescription_ar,
+      Price,
+      ideaLogo,
+      baseBid,
+    } = req.body;
+    const product = await productSchema.findById(id);
+    if (title_en) {
+      product.title_en = title_en;
+    }
+    if (title_ar) {
+      product.title_ar = title_ar;
+    }
+    if (description_en) {
+      product.description_en = description_en;
+    }
+    if (description_ar) {
+      product.description_ar = description_ar;
+    }
+    if (category_Id) {
+      product.category_Id = category_Id;
+    }
+    if (subCategory_Id) {
+      product.subCategory_Id = subCategory_Id;
+    }
+    if (briefDescription_en) {
+      product.briefDescription_en = briefDescription_en;
+    }
+    if (briefDescription_ar) {
+      product.briefDescription_ar = briefDescription_en;
+    }
+    if (Price) {
+      product.Price = Price;
+    }
+    if (baseBid) {
+      product.baseBid = baseBid;
+    }
+    if (req.files) {
+      for (let i = 0; i < req.files.length; i++) {
+        if (req.files[i].fieldname == "productPic") {
+          product.productPic = req.files[i].filename;
+        }
+        if (req.files[i].fieldname == "ideaLogo") {
+          product.ideaLogo = req.files[i].filename;
+        }
+      }
+    }
+    await product.save();
+    res.status(200).json(success(res.statusCode, "Success", { product }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -91,7 +160,9 @@ exports.addBids = async (req, res) => {
 //-----> list of biseBid APi
 exports.baseBidList = async (req, res) => {
   try {
-    const list = await productSchema.find({ user_Id: req.params.id }).populate("user_Id")
+    const list = await productSchema
+      .find({ user_Id: req.params.id })
+      .populate("user_Id");
     const bidsData = list.filter((x) => x.baseBid);
     res.status(200).json(success(res.statusCode, "Success", { bidsData }));
   } catch (err) {
@@ -102,40 +173,71 @@ exports.baseBidList = async (req, res) => {
 //-----> my bussiness Idea Api
 exports.myBussinessIdea = async (req, res) => {
   try {
-    const id = req.params.id
-    let myIdeas = await productSchema.find({ user_Id: id }).populate("user_Id")
-    res.status(200).json(success(res.statusCode, "Success", { myIdeas }))
+    const id = req.params.id;
+    let myIdeas = await productSchema.find({ user_Id: id }).populate("user_Id");
+    res.status(200).json(success(res.statusCode, "Success", { myIdeas }));
   } catch (err) {
-    res.status(400).json(error("Failed", res.statusCode))
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 
 ///---------> Category Listing Api
 
 exports.CategoryListing = async (req, res) => {
   try {
-    const categoryList = await categoryModels.find({})
-    res.status(200).json(success(res.statusCode, "Success", { categoryList }))
+    const categoryList = await categoryModels.find({});
+    res.status(200).json(success(res.statusCode, "Success", { categoryList }));
     if (categoryList.length > 0) {
       res.status(200).json(success(res.statusCode, "Success", { listData }));
     } else {
       res.status(201).json(error("List are not found", res.statusCode));
     }
   } catch (err) {
-    res.status(400).json(error("Failed", res.statusCode))
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
 //-------> subCategory Listing APi
 exports.subCategoryListing = async (req, res) => {
   try {
-    const categoryList = await subCategoryModel.find({})
-    res.status(200).json(success(res.statusCode, "Success", { categoryList }))
+    const id = req.params.id;
+    const categoryList = await subCategoryModel.find({ category_Id: id });
+    res.status(200).json(success(res.statusCode, "Success", { categoryList }));
     if (categoryList.length > 0) {
       res.status(200).json(success(res.statusCode, "Success", { listData }));
     } else {
       res.status(201).json(error("List are not found", res.statusCode));
     }
   } catch (err) {
-    res.status(400).json(error("Failed", res.statusCode))
+    res.status(400).json(error("Failed", res.statusCode));
   }
-}
+};
+
+exports.lowtoHighPrice = async (req, res) => {
+  try {
+    const productFilter = await productSchema.find({}).sort({ Price: 1 });
+    if (productFilter) {
+      res
+        .status(200)
+        .json(success(res.statusCode, "Success", { productFilter }));
+    } else {
+      res.status(201).json(error("NO Data Found", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.highToLowPrice = async (req, res) => {
+  try {
+    const productFilter = await productSchema.find({}).sort({ Price: -1 });
+    if (productFilter) {
+      res
+        .status(200)
+        .json(success(res.statusCode, "Success", { productFilter }));
+    } else {
+      res.status(201).json(error("Failed", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};

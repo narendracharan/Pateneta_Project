@@ -2,7 +2,7 @@ const userSchema = require("../../models/userModels/UserRegister");
 const { error, success } = require("../../responseCode");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
-const jwt=require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 const languageModels = require("../../models/userModels/languageModels");
 const productModel = require("../../models/userModels/productModel");
 //const otpGenerator=require("otp-generator")
@@ -265,6 +265,9 @@ exports.userEditProfile = async (req, res) => {
       Email,
       profile,
       mobileNumber,
+      anotherEmail,
+      DOB,
+      address,
     } = req.body;
     const passwordHash = await bcrypt.hash(password, 10);
     var allFiled = {
@@ -276,6 +279,10 @@ exports.userEditProfile = async (req, res) => {
       Email: Email,
       mobileNumber: mobileNumber,
       profile: req.file.filename,
+      coverImage: req.file.filename,
+      anotherEmail: anotherEmail,
+      DOB: DOB,
+      address: address,
     };
     const updateProfile = await userSchema.findByIdAndUpdate(
       req.params.id,
@@ -315,7 +322,9 @@ exports.addLanguage = async (req, res) => {
 exports.updateLanguage = async (req, res) => {
   try {
     const updateLanguage = await languageModels.findByIdAndUpdate(
-      req.params.id,req.body,{new:true}
+      req.params.id,
+      req.body,
+      { new: true }
     );
     res
       .status(200)
@@ -362,8 +371,44 @@ exports.logOut = async (req, res) => {
   }
 };
 
-
-
+exports.userResetPassword = async (req, res) => {
+  try {
+    const id =req.params.id
+    const { password, newPassword, confirmPassword } = req.body;
+    if (!password) {
+      res.status(201).json(error("please provide password", res.statusCode));
+    }
+    if (!newPassword) {
+      res.status(201).json(error("please provide newPassword", res.statusCode));
+    }
+    if (!confirmPassword) {
+      res
+        .status(201)
+        .json(error("please provide confirmPassword", res.statusCode));
+    }
+    if (newPassword == confirmPassword) {
+      
+      const match=await userSchema.findById(id)
+      console.log(match);
+      if (!(await match.checkPassword(password,match.password))) {
+        return res
+          .status(201)
+          .json(error("Password not matched", res.statusCode));
+      }
+      const passwordHash = await bcrypt.hash(newPassword, 10);
+      match.password = passwordHash;
+      await match.save()
+      res.status(200).json(success(res.statusCode,"Success",{match}))
+    } else {
+      res
+        .status(201)
+        .json(error("newPassword and confirmPassword connot be same"));
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
 
 exports.sendOtpPassword = async (req, res) => {
   try {
