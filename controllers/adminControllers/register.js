@@ -7,9 +7,7 @@ const subCategoryModel = require("../../models/adminModels/subCategoryModel");
 const userModels = require("../../models/adminModels/userModels");
 const { transporter } = require("../../services/mailServices");
 
-
-
-///-------> admin Signup Api 
+///-------> admin Signup Api
 exports.adminRegister = async (req, res) => {
   try {
     const { userName, userEmail, password } = req.body;
@@ -133,26 +131,29 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
-
 exports.sendUserResetPassword = async (req, res) => {
   try {
-    const { userEmail } = req.body;
-    const user = await userModels.findOne({ userEmail: userEmail });
+    const {userEmail} = req.body;
+    const user = await userModels.findOne({userEmail:userEmail})
+ 
     if (user) {
       const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
-      let info = await transporter.sendMail({
+      let info = {
         from: "s04450647@gmail.com",
         to: userEmail,
         subject: "Email Send For Reset Password",
         text: `This ${otp} Otp Verify To Email`,
-      });
-      await userSchema.findOneAndUpdate({ userEmail: userEmail }, { otp: otp });
+      };
+     
+      await userModels.findOneAndUpdate({ userEmail: userEmail }, { otp: otp });
+      await transporter.sendMail(info);
       return res.status(200).json(success(res.statusCode, "Success", {}));
     } else {
-      res.status(400).json(error("userEmail are empty", res.statusCode));
+      res.status(201).json(error("userEmail are empty", res.statusCode));
     }
   } catch (err) {
-    res.status(500).json(error("Failed", res.statusCode));
+    console.log(err);
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
