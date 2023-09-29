@@ -6,6 +6,26 @@ const { error, success } = require("../../responseCode");
 exports.createContent = async (req, res) => {
   try {
     const { title_en, Description_en, title_ar, Description_ar } = req.body;
+    if (!title_en) {
+      return res
+        .status(201)
+        .json(error("please provide title_en", res.statusCode));
+    }
+    if (!Description_en) {
+      return res
+        .status(201)
+        .json(error("please provide Description_en", res.statusCode));
+    }
+    if (!Description_ar) {
+      return res
+        .status(201)
+        .json(error("please provide Description_ar", res.statusCode));
+    }
+    if (!title_ar) {
+      return res
+        .status(201)
+        .json(error("please provide title_ar", res.statusCode));
+    }
     const newContent = new contentSchema({
       title_en: title_en,
       Description_en: Description_en,

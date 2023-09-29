@@ -1,6 +1,7 @@
 const categoryModels = require("../../models/adminModels/categoryModels");
 const subCategoryModel = require("../../models/adminModels/subCategoryModel"); //----> create category api
 const { error, success } = require("../../responseCode");
+
 exports.createCategory = async (req, res) => {
   try {
     const { categoryName, user_Id } = req.body;

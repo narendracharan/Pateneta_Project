@@ -9,11 +9,11 @@ const schema = new mongoose.Schema({
         require: true,
         Price: Number,
       },
-      seller_Id:{
+      seller_Id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user",
         require: true,
-      }
+      },
     },
   ],
   paymentStatus: {
@@ -23,19 +23,19 @@ const schema = new mongoose.Schema({
   paymentIntent: {
     type: String,
     default: "Card",
-    enum: ["UPI", "Phone Pay","Card"],
+    enum: ["UPI", "Phone Pay", "Card"],
   },
   user_Id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
     require: true,
   },
-//   cardNumber:{
-//     type:Number
-//   },
-//   securityCode:{
-    
-//   }
+  //   cardNumber:{
+  //     type:Number
+  //   },
+  //   securityCode:{
+
+  //   }
 });
 
 schema.set("timestamps", true);

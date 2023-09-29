@@ -82,14 +82,14 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  status:{
-    type:String,
-    default:true
+  status: {
+    type: String,
+    default: true,
   },
-  declineDoc:{
-    type:String,
-    require:true
-  }
+  declineDoc: {
+    type: String,
+    require: true,
+  },
 });
 schema.methods.checkPassword = async function (plainPassword, hashedPassword) {
   return await bcrypt.compare(plainPassword, hashedPassword);

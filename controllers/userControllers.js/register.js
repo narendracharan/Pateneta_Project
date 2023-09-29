@@ -373,7 +373,7 @@ exports.logOut = async (req, res) => {
 
 exports.userResetPassword = async (req, res) => {
   try {
-    const id =req.params.id
+    const id = req.params.id;
     const { password, newPassword, confirmPassword } = req.body;
     if (!password) {
       res.status(201).json(error("please provide password", res.statusCode));
@@ -387,18 +387,17 @@ exports.userResetPassword = async (req, res) => {
         .json(error("please provide confirmPassword", res.statusCode));
     }
     if (newPassword == confirmPassword) {
-      
-      const match=await userSchema.findById(id)
+      const match = await userSchema.findById(id);
       console.log(match);
-      if (!(await match.checkPassword(password,match.password))) {
+      if (!(await match.checkPassword(password, match.password))) {
         return res
           .status(201)
           .json(error("Password not matched", res.statusCode));
       }
       const passwordHash = await bcrypt.hash(newPassword, 10);
       match.password = passwordHash;
-      await match.save()
-      res.status(200).json(success(res.statusCode,"Success",{match}))
+      await match.save();
+      res.status(200).json(success(res.statusCode, "Success", { match }));
     } else {
       res
         .status(201)

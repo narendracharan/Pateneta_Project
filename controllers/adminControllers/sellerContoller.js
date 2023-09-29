@@ -75,7 +75,7 @@ exports.sellerSearch = async (req, res) => {
     }
     const searchIdeas = await UserRegister.find({
       fullName_en: { $regex: search, $options: "i" },
-      companyName_en:{ $regex: search, $options: "i" }
+      companyName_en: { $regex: search, $options: "i" },
       // companyName_en: { $regex: search, $options: "i" },
       //     $and: [
       //       { fullName_en: { $regex: new RegExp(search.trim(), "i") } },
@@ -84,7 +84,9 @@ exports.sellerSearch = async (req, res) => {
     });
     console.log(searchIdeas);
     if (searchIdeas.length > 0) {
-      return res.status(200).json(success(res.statusCode, "Success", { searchIdeas }));
+      return res
+        .status(200)
+        .json(success(res.statusCode, "Success", { searchIdeas }));
     } else {
       res.status(201).json(error("User are not Found", res.statusCode));
     }

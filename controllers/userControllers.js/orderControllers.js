@@ -7,7 +7,8 @@ const stripe = require("stripe")(
 
 exports.createPayment = async (req, res) => {
   try {
-    const { carts, currency,CardNumber, cvv, expiryDate, holderName } = req.body;
+    const { carts, currency, CardNumber, cvv, expiryDate, holderName } =
+      req.body;
     let products = [];
     for (let i = 0; i < carts.length; i++) {
       let object = {};
@@ -26,7 +27,7 @@ exports.createPayment = async (req, res) => {
     }
     let cartsTotal = 0;
     for (let i = 0; i < products.length; i++) {
-      cartsTotal = cartsTotal + products[i].Price + products[i].baseBid
+      cartsTotal = cartsTotal + products[i].Price + products[i].baseBid;
     }
     console.log(products);
     console.log(cartsTotal);
@@ -36,8 +37,8 @@ exports.createPayment = async (req, res) => {
       { apiVersion: "2022-11-15" }
     );
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: cartsTotal ,
-       currency: currency,
+      amount: cartsTotal,
+      currency: currency,
       customer: customer.id,
       automatic_payment_methods: {
         enabled: true,

@@ -1,5 +1,6 @@
 const adminSchema = require("../../models/adminModels/userModels");
 const bcrypt = require("bcrypt");
+const moment = require("moment");
 const { error, success } = require("../../responseCode");
 const validator = require("validator");
 const categoryModels = require("../../models/adminModels/categoryModels");
@@ -24,6 +25,10 @@ exports.adminRegister = async (req, res) => {
         .status(201)
         .json(error("Please enter password", res.statusCode));
     }
+    const checkName = await adminSchema.findOne({ userName: userName });
+    if (checkName) {
+      return res.status(201).json(error("userName are already register"));
+    }
     const checkMail = await adminSchema.findOne({ userEmail: userEmail });
     if (checkMail) {
       return res.status(201).json(error("userEmail are already register"));
@@ -44,39 +49,39 @@ exports.adminRegister = async (req, res) => {
 exports.loginAdmin = async (req, res) => {
   try {
     const { userName, password } = req.body;
-    if (userName && password) {
-      const verifyUser = await adminSchema.findOne({
-        userName: userName,
-      });
-      if (verifyUser != null) {
-        const isMatch = await bcrypt.compare(password, verifyUser.password);
-        if (isMatch) {
-          const token = await verifyUser.AdminAuthToken();
-          return res
-            .header("x-auth-token-user", token)
-            .header("access-control-expose-headers", "x-auth-token-admin")
-            .status(201)
-            .json(
-              success(res.statusCode, "login SuccessFully", {
-                verifyUser,
-                token,
-              })
-            );
-        } else {
-          res
-            .status(403)
-            .json(error("User Password Are Incorrect", res.statusCode));
-        }
-      } else {
-        res
-          .status(403)
-          .json(error("User userEmail Are Incorrect", res.statusCode));
-      }
-    } else {
-      res
-        .status(403)
-        .json(error("UserEamil and Password Are empty", res.statusCode));
+    if (!userName) {
+      return res
+        .status(201)
+        .json(error("please provide username", res.statusCode));
     }
+    if (!password) {
+      return res
+        .status(201)
+        .json(error("please provide password", res.statusCode));
+    }
+    const verifyUser = await adminSchema.findOne({
+      userName: userName,
+    });
+    if (!verifyUser) {
+      return res
+        .status(201)
+        .json(error("userName Not Register", res.statusCode));
+    }
+    const isMatch = await bcrypt.compare(password, verifyUser.password);
+    if (!isMatch) {
+      return res.status(201).json(error("password is Matched", res.statusCode));
+    }
+    const token = await verifyUser.AdminAuthToken();
+    res
+      .header("x-auth-token-user", token)
+      .header("access-control-expose-headers", "x-auth-token-admin")
+      .status(201)
+      .json(
+        success(res.statusCode, "login SuccessFully", {
+          verifyUser,
+          token,
+        })
+      );
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
@@ -121,6 +126,8 @@ exports.updateProfile = async (req, res) => {
     const data = {
       userName: req.body.userName,
       profile: req.file.filename,
+      userEmail: req.body.userEmail,
+      mobileNumber: req.body.mobileNumber,
     };
     const updateData = await adminSchema.findByIdAndUpdate(id, data, {
       new: true,
@@ -133,19 +140,24 @@ exports.updateProfile = async (req, res) => {
 
 exports.sendUserResetPassword = async (req, res) => {
   try {
-    const {userEmail} = req.body;
-    const user = await userModels.findOne({userEmail:userEmail})
- 
+    const { userEmail } = req.body;
+    const user = await userModels.findOne({ userEmail: userEmail });
+
     if (user) {
       const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
       let info = {
         from: "s04450647@gmail.com",
         to: userEmail,
         subject: "Email Send For Reset Password",
-        text: `This ${otp} Otp Verify To Email`,
+        text: `This ${otp} Otp Verify To Email.
+          Your OTP will expire in 10 minutes`,
       };
-     
-      await userModels.findOneAndUpdate({ userEmail: userEmail }, { otp: otp });
+      const date = new Date(moment(new Date()).add(10, "minute"));
+      await userModels.updateMany(
+        { userEmail: userEmail },
+        { otp: otp, expireOtp: date }
+      );
+
       await transporter.sendMail(info);
       return res.status(200).json(success(res.statusCode, "Success", {}));
     } else {
@@ -166,6 +178,10 @@ exports.OtpVerify = async (req, res) => {
         .json(error("Empty Otp Details Are Not Allowed", res.statusCode));
     }
     const userOtpVerify = await userModels.findOne({ userEmail: userEmail });
+    if (userOtpVerify.otp === +otp && new Date() > userOtpVerify.expireOtp) {
+      return res.status(201).json(error("OTP Expired", res.statusCode));
+    }
+
     if (userOtpVerify.otp == otp) {
       return res
         .status(200)
