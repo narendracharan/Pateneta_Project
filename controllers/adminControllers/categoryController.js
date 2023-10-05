@@ -28,7 +28,7 @@ exports.createCategory = async (req, res) => {
 //------>create subCategory Api
 exports.createSubCategory = async (req, res) => {
   try {
-    const { subCategoryName, user_Id } = req.body;
+    const { subCategoryName, user_Id,category_Id } = req.body;
     if (!subCategoryName) {
       return res
         .status(201)
@@ -41,6 +41,7 @@ exports.createSubCategory = async (req, res) => {
       subCategoryName: subCategoryName,
       user_Id: user_Id,
       subCategoryPic: req.file.filename,
+      category_Id:category_Id
     });
     const subCategoryData = await newOne.save();
     res
@@ -108,6 +109,7 @@ exports.updateSubCategory = async (req, res) => {
     const data = {
       subCategoryName: req.body.subCategoryName,
       subCategoryPic: req.file.filename,
+      category_Id:req.body.category_Id
     };
     if (data) {
       const updateData = await subCategoryModel.findByIdAndUpdate(id, data, {

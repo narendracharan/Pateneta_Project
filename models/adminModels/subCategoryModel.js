@@ -14,10 +14,9 @@ const schema = new mongoose.Schema({
     ref: "category",
   },
   user_Id: {
-    category_Id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "admin",
-    },
+    
   },
 });
 

@@ -97,16 +97,16 @@ exports.updateBussinessIdea = async (req, res) => {
 //-----------> list of bussiness ideas Api
 exports.listBussinesIdeas = async (req, res) => {
   try {
-    const verify = await productSchema.find({ verify: "APPROVED" });
-    if (verify) {
-      return res
-        .status(200)
-        .json(success(res.statusCode, "Success", { verify }));
-    } else {
-      res.status(201).json(error("You are Not Verify", res.statusCode));
-    }
+    const verify =  await productSchema.aggregate([
+      {
+        $match: {
+          verify: "APPROVED",
+        },
+      },
+    ]);
+    res.status(200).json(success(res.statusCode,"Success",{verify}))
   } catch (err) {
-    res.status(400).json(error("Failed", res.statusCode));
+    res.status(400).json(error("Error in Listing", res.statusCode));
   }
 };
 
@@ -145,13 +145,20 @@ exports.searchBussinessIdea = async (req, res) => {
 exports.addBids = async (req, res) => {
   try {
     const id = req.params.id;
-    const baseBid = req.body.baseBid;
-    const updateBids = await productSchema.findByIdAndUpdate(
-      id,
-      { baseBid: baseBid },
-      { new: true }
-    );
-    res.status(200).json(success(res.statusCode, "Success", { updateBids }));
+    const { Price, user_Id } = req.body;
+    if (!Price) {
+      res.status(201).json(error("Please provide Price", res.statusCode));
+    }
+    if (!user_Id) {
+      res.status(201).json(error("Please Provide User_Id", res.statusCode));
+    }
+    const product = await productSchema.findById({ _id: id });
+    product.baseBid.push({
+      Price: Price,
+      user_Id: user_Id,
+    });
+    const newProduct = await product.save();
+    res.status(200).json(success(res.statusCode, "Success", { newProduct }));
   } catch (err) {
     res.status(200).json(error("Failed", res.statusCode));
   }
@@ -174,7 +181,19 @@ exports.baseBidList = async (req, res) => {
 exports.myBussinessIdea = async (req, res) => {
   try {
     const id = req.params.id;
-    let myIdeas = await productSchema.find({ user_Id: id }).populate("user_Id");
+    let myIdeas = await productSchema.find().populate("baseBid.user_Id")
+    for(let i=0;i<myIdeas.length;i++){
+      var baseBide = myIdeas[i].baseBid.filter(
+        (baseBide) =>
+          String(baseBide.user_Id) === String(id)
+      );
+    let obj={
+    baseBide:baseBide,
+    title:myIdeas[i].title_en,
+    title_ar:myIdeas[i].title_ar,
+    bidStatus:myIdeas[i].bidsVerify
+    }
+  }
     res.status(200).json(success(res.statusCode, "Success", { myIdeas }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -241,3 +260,4 @@ exports.highToLowPrice = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+

@@ -121,18 +121,21 @@ exports.resetPassword = async (req, res) => {
 //---> admin update api
 exports.updateProfile = async (req, res) => {
   try {
-    const id = req.params.id;
-
-    const data = {
-      userName: req.body.userName,
-      profile: req.file.filename,
-      userEmail: req.body.userEmail,
-      mobileNumber: req.body.mobileNumber,
-    };
-    const updateData = await adminSchema.findByIdAndUpdate(id, data, {
-      new: true,
-    });
-    res.status(200).json(success(res.statusCode, "Success", { updateData }));
+    const { userName, userEmail, mobileNumber, profile } = req.body;
+    const admin = await adminSchema.findById(req.params.id);
+    if (userName) {
+      admin.userName = userName;
+    }
+    if (userEmail) {
+      admin.userEmail = userEmail;
+    }
+    if (mobileNumber) {
+      admin.mobileNumber = mobileNumber;
+    }
+      admin.profile = req.file.filename;
+    
+    await admin.save();
+    res.status(200).json(success(res.statusCode, "Success", { admin }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }

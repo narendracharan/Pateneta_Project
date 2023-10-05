@@ -60,19 +60,28 @@ const schema = new mongoose.Schema({
     ref: "user",
     require: true,
   },
-  baseBid: {
-    type: Number,
-    require: true,
-  },
+  baseBid: [
+    {
+      Price: {
+        type: Number,
+        require: true,
+      },
+      user_Id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+        require: true,
+      },
+    },
+  ],
   bidsVerify: {
     type: String,
     enum: ["PENDING", "Accepted", "Decline"],
     default: "PENDING",
   },
-  highestBid: {
-    type: Number,
-    require: true,
-  },
+  // highestBid: {
+  //   type: Number,
+  //   require: true,
+  // },
   verify: {
     type: String,
     enum: ["PENDING", "APPROVED", "REJECTED"],

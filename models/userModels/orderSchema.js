@@ -9,27 +9,36 @@ const schema = new mongoose.Schema({
         require: true,
         Price: Number,
       },
-      seller_Id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
+      Price: {
+        type: Number,
         require: true,
       },
+      bids_Id:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "product",
+        require: true,
+      }
     },
   ],
   paymentStatus: {
     type: String,
+    default:"Paid",
     enum: ["Paid", "Process", "Cancelled"],
   },
   paymentIntent: {
     type: String,
-    default: "Card",
-    enum: ["UPI", "Phone Pay", "Card"],
+    default: "COD",
+    enum: ["UPI", "Phone Pay", "COD"],
   },
   user_Id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
     require: true,
   },
+  total:{
+    type:Number,
+    require:true
+  }
   //   cardNumber:{
   //     type:Number
   //   },

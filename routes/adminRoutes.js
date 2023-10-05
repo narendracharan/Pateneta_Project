@@ -56,6 +56,7 @@ const {
   declineDoc,
 } = require("../controllers/adminControllers/userManagement");
 const adminAuthorisationUser = require("../middleware/adminAuthentication");
+const { homeDashboards } = require("../controllers/adminControllers/dashboards");
 
 //-admin register
 router.post("/create-admin", adminRegister);
@@ -126,6 +127,7 @@ router.post("/edit-seller/:id", adminAuthorisationUser, editSeller);
 router.post("/seller-Details/:id", adminAuthorisationUser, sellerDetails);
 router.post("/seller-delete/:id", adminAuthorisationUser, sellerDelete);
 router.post("/seller-search", adminAuthorisationUser, sellerSearch);
+router.post("/home-dashboard",homeDashboards)
 
 //reports
 router.post("/reports-list", adminAuthorisationUser, reportsList);

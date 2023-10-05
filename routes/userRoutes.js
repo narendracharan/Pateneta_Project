@@ -36,8 +36,9 @@ const {
   subCategoryList,
 } = require("../controllers/adminControllers/categoryController");
 const {
-  createPayment,
+  createPayment, createOrder, orderDetails,
 } = require("../controllers/userControllers.js/orderControllers");
+const { salesList, userSalesDetails, salesSearch } = require("../controllers/userControllers.js/salesControllers");
 const router = express.Router();
 
 ///---->user register Routes
@@ -55,32 +56,42 @@ router.post(
   upload.single("profile"),
   userEditProfile
 );
-router.post("/change-password/:id", userResetPassword);
+router.post("/change-password/:id",tokenAuthorisationUser, userResetPassword);
 
 ///--->language routes
 router.post("/add-language", addLanguage);
 router.post("/update-language/:id", updateLanguage);
 
 ///---> carete idea routes
-router.post("/create-idea", upload.any(), createIdea);
-router.post("/list-bussiness-ideas", listBussinesIdeas);
-router.post("/search-bussiness-ideas", searchBussinessIdea);
-router.post("/low-to-high", lowtoHighPrice);
-router.post("/high-to-low", highToLowPrice);
-router.post("/my-bussiness-idea/:id", myBussinessIdea);
-router.post("/update-idea/:id", upload.any(), updateBussinessIdea);
+router.post("/create-idea", tokenAuthorisationUser,upload.any(), createIdea);
+router.post("/list-bussiness-ideas",tokenAuthorisationUser, listBussinesIdeas);
+router.post("/search-bussiness-ideas", tokenAuthorisationUser,searchBussinessIdea);
+router.post("/low-to-high", tokenAuthorisationUser,lowtoHighPrice);
+router.post("/high-to-low",tokenAuthorisationUser, highToLowPrice);
+router.post("/my-bussiness-idea/:id",tokenAuthorisationUser, myBussinessIdea);
+router.post("/update-idea/:id", tokenAuthorisationUser,upload.any(), updateBussinessIdea);
+
+
+//----> user Order
+router.post("/user-order",createOrder)
+router.post("/order-details/:id",orderDetails)
+
+//---->>selas routes
+router.post("/user-sales-list/:id",salesList)
+router.post("/sales-details/:id",userSalesDetails)
+router.post("/search-sales",salesSearch)
 
 //=----> add Bids ROutes
-router.post("/bids-add/:id", addBids);
-router.post("/list-Bids/:id", baseBidList);
+router.post("/bids-add/:id", tokenAuthorisationUser,addBids);
+router.post("/list-Bids/:id", tokenAuthorisationUser,baseBidList);
 
 //----category Routes
-router.post("/category-list", categoryList);
-router.post("/sub-category-list/:id", subCategoryList);
+router.post("/category-list", tokenAuthorisationUser,categoryList);
+router.post("/sub-category-list/:id", tokenAuthorisationUser,subCategoryList);
 
 ///--> Privacy Routes
 router.post("/push-notification", pushNotification);
 router.post("/privacy-list", PrivacyUser);
-router.post("/create-payment", createPayment);
+//router.post("/create-payment", createPayment);
 router.post("/user-report", createReports);
 module.exports = router;
