@@ -97,14 +97,22 @@ exports.updateBussinessIdea = async (req, res) => {
 //-----------> list of bussiness ideas Api
 exports.listBussinesIdeas = async (req, res) => {
   try {
-    const verify =  await productSchema.aggregate([
+    const verify = await productSchema.aggregate([
+      // {
+      //   $lookup: {
+      //     from: "users",
+      //     localField: "user_Id",
+      //     foreignField: "_id",
+      //     as: "categories",
+      //   },
+      // },
       {
         $match: {
           verify: "APPROVED",
         },
       },
     ]);
-    res.status(200).json(success(res.statusCode,"Success",{verify}))
+    res.status(200).json(success(res.statusCode, "Success", { verify }));
   } catch (err) {
     res.status(400).json(error("Error in Listing", res.statusCode));
   }
@@ -119,15 +127,56 @@ exports.searchBussinessIdea = async (req, res) => {
         .status(201)
         .json(error("Please provide search key", res.statusCode));
     }
-    const searchIdeas = await productSchema.find({
-      $and: [
-        { title_en: { $regex: new RegExp(search.trim(), "i") } },
-        { description_en: { $regex: new RegExp(search.trim(), "i") } },
-        { category_en: { $regex: new RegExp(search.trim(), "i") } },
-        { subCategory_en: { $regex: new RegExp(search.trim(), "i") } },
-        { briefDescription_en: { $regex: new RegExp(search.trim(), "i") } },
-      ],
-    });
+    const searchIdeas = await productSchema.aggregate([
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category_Id",
+          foreignField: "_id",
+          as: "categories",
+        },
+      },
+      {
+        $lookup: {
+          from: "subcategories",
+          localField: "subCategory_Id",
+          foreignField: "_id",
+          as: "subcategoriess",
+        },
+      },
+       { $unwind: "$categories" },
+      { $unwind: "$subcategoriess" },
+      {
+        $match: {
+          $or: [
+            {
+              title_en: { $regex: search, $options: "i" },
+            },
+            {
+              description_en: { $regex: search, $options: "i" },
+            },
+            {
+              briefDescription_en: { $regex: search, $options: "i" },
+            },
+            {
+              "categories.categoryName": { $regex: search, $options: "i" },
+            },
+            {
+              "subcategoriess.subCategoryName": { $regex: search, $options: "i" },
+            },
+          ],
+        },
+      },
+    ])
+    //find({
+    //   $and: [
+    //     { title_en: { $regex: new RegExp(search.trim(), "i") } },
+    //     { description_en: { $regex: new RegExp(search.trim(), "i") } },
+    //     { category_en: { $regex: new RegExp(search.trim(), "i") } },
+    //     { subCategory_en: { $regex: new RegExp(search.trim(), "i") } },
+    //     { briefDescription_en: { $regex: new RegExp(search.trim(), "i") } },
+    //   ],
+    // });
     if (searchIdeas.length > 0) {
       return res
         .status(200)
@@ -181,22 +230,39 @@ exports.baseBidList = async (req, res) => {
 exports.myBussinessIdea = async (req, res) => {
   try {
     const id = req.params.id;
-    let myIdeas = await productSchema.find().populate("baseBid.user_Id")
-    for(let i=0;i<myIdeas.length;i++){
+    let Bids = [];
+
+    let myIdeas = await productSchema.find().populate("user_Id");
+
+    for (let i = 0; i < myIdeas.length; i++) {
       var baseBide = myIdeas[i].baseBid.filter(
-        (baseBide) =>
-          String(baseBide.user_Id) === String(id)
+        (baseBide) => String(baseBide.user_Id) === String(id)
       );
-    let obj={
-    baseBide:baseBide,
-    title:myIdeas[i].title_en,
-    title_ar:myIdeas[i].title_ar,
-    bidStatus:myIdeas[i].bidsVerify
+      let obj = {
+        baseBide: baseBide,
+        title: myIdeas[i].title_en,
+        title_ar: myIdeas[i].title_ar,
+        bidStatus: myIdeas[i].bidsVerify,
+        user: myIdeas[i].user_Id.fullName_en,
+        date: myIdeas[i].createdAt,
+      };
+      Bids.push(obj);
     }
-  }
-    res.status(200).json(success(res.statusCode, "Success", { myIdeas }));
+    res.status(200).json(success(res.statusCode, "Success", { Bids }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+//--->> bids view
+
+exports.bidsView = async (req, res) => {
+  try {
+    const bidsView = await productModel.findById(req.params.id);
+    res.status(200).json(success(res.statusCode, "Success", { bidsView }));
+  } catch (err) {
+    res.status(400).json(error("Error in bids View", res.statusCode));
   }
 };
 
@@ -219,7 +285,7 @@ exports.CategoryListing = async (req, res) => {
 exports.subCategoryListing = async (req, res) => {
   try {
     const id = req.params.id;
-    const categoryList = await subCategoryModel.find({ category_Id: id });
+    const categoryList = await subCategoryModel.find({ category_Id: id }).populate("category_Id")
     res.status(200).json(success(res.statusCode, "Success", { categoryList }));
     if (categoryList.length > 0) {
       res.status(200).json(success(res.statusCode, "Success", { listData }));
@@ -260,4 +326,3 @@ exports.highToLowPrice = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-

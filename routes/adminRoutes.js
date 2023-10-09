@@ -20,6 +20,8 @@ const {
   subCategoryList,
   categorySearch,
   subCategorySearch,
+  categoryStatus,
+  subCategoryStatus,
 } = require("../controllers/adminControllers/categoryController");
 const {
   ideaRequestList,
@@ -46,6 +48,14 @@ const {
   sellerDetails,
   sellerDelete,
   sellerSearch,
+  buyerUserList,
+  buyerDetails,
+  deleteBuyer,
+  buyerStatus,
+  salesUserList,
+  salesUserDetails,
+  searchSales,
+  salesOrderExports,
 } = require("../controllers/adminControllers/sellerContoller");
 const {
   userList,
@@ -104,8 +114,11 @@ router.post(
   adminAuthorisationUser,
   deleteSubCategory
 );
+///-------> Category Routes
 router.post("/category-search", adminAuthorisationUser, categorySearch);
 router.post("/subCategory-search", adminAuthorisationUser, subCategorySearch);
+router.post("/category-status-change/:id",categoryStatus)
+router.post("/subCategory-status-change/:id",subCategoryStatus)
 
 //--idea Request Routes
 router.post("/idea-request-list", adminAuthorisationUser, ideaRequestList);
@@ -127,6 +140,14 @@ router.post("/edit-seller/:id", adminAuthorisationUser, editSeller);
 router.post("/seller-Details/:id", adminAuthorisationUser, sellerDetails);
 router.post("/seller-delete/:id", adminAuthorisationUser, sellerDelete);
 router.post("/seller-search", adminAuthorisationUser, sellerSearch);
+router.post("/user-sales-list",salesUserList)
+router.post("/salesUserDetails/:id",salesUserDetails)
+router.post("/sales-exports",salesOrderExports)
+router.post("/search-sales",searchSales)
+router.post("/buyer-list",buyerUserList)
+router.post("/buyer-delete/:id",deleteBuyer)
+router.post("/change-status/:id",buyerStatus)
+router.post("/buyer-details/:id",buyerDetails)
 router.post("/home-dashboard",homeDashboards)
 
 //reports

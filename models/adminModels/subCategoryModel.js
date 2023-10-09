@@ -9,14 +9,17 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  status: {
+    type: String,
+    default: true,
+  },
   category_Id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "category",
   },
   user_Id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "admin",
-    
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "admin",
   },
 });
 

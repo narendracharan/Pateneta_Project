@@ -28,7 +28,7 @@ exports.createCategory = async (req, res) => {
 //------>create subCategory Api
 exports.createSubCategory = async (req, res) => {
   try {
-    const { subCategoryName, user_Id,category_Id } = req.body;
+    const { subCategoryName, user_Id, category_Id } = req.body;
     if (!subCategoryName) {
       return res
         .status(201)
@@ -41,7 +41,7 @@ exports.createSubCategory = async (req, res) => {
       subCategoryName: subCategoryName,
       user_Id: user_Id,
       subCategoryPic: req.file.filename,
-      category_Id:category_Id
+      category_Id: category_Id,
     });
     const subCategoryData = await newOne.save();
     res
@@ -109,7 +109,7 @@ exports.updateSubCategory = async (req, res) => {
     const data = {
       subCategoryName: req.body.subCategoryName,
       subCategoryPic: req.file.filename,
-      category_Id:req.body.category_Id
+      category_Id: req.body.category_Id,
     };
     if (data) {
       const updateData = await subCategoryModel.findByIdAndUpdate(id, data, {
@@ -194,5 +194,48 @@ exports.subCategorySearch = async (req, res) => {
     }
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.categoryStatus = async (req, res) => {
+  try {
+    const status = req.body.status;
+    if (!status) {
+      return res
+        .status(201)
+        .json(error("Please Provide Status Key", res.statusCode));
+    }
+    const categoryStatus = await categoryModels.findById(req.params.id);
+    if (status) {
+      categoryStatus.status = status;
+    }
+    await categoryStatus.save();
+    res
+      .status(200)
+      .json(success(res.statusCode, "Success", { categoryStatus }));
+  } catch (err) {
+    res.status(400).json(error("Error in Category Status", res.statusCode));
+  }
+};
+
+
+exports.subCategoryStatus = async (req, res) => {
+  try {
+    const status = req.body.status;
+    if (!status) {
+      return res
+        .status(201)
+        .json(error("Please Provide Status Key", res.statusCode));
+    }
+    const subCategoryStatus = await categoryModels.findById(req.params.id);
+    if (status) {
+      subCategoryStatus.status = status;
+    }
+    await subCategoryStatus.save();
+    res
+      .status(200)
+      .json(success(res.statusCode, "Success", { subCategoryStatus }));
+  } catch (err) {
+    res.status(400).json(error("Error in Category Status", res.statusCode));
   }
 };

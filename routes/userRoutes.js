@@ -25,6 +25,7 @@ const {
   lowtoHighPrice,
   highToLowPrice,
   updateBussinessIdea,
+  bidsView,
 } = require("../controllers/userControllers.js/product");
 const {
   pushNotification,
@@ -36,7 +37,7 @@ const {
   subCategoryList,
 } = require("../controllers/adminControllers/categoryController");
 const {
-  createPayment, createOrder, orderDetails,
+  createPayment, createOrder, orderDetails, downloadUserOrder,
 } = require("../controllers/userControllers.js/orderControllers");
 const { salesList, userSalesDetails, salesSearch } = require("../controllers/userControllers.js/salesControllers");
 const router = express.Router();
@@ -75,6 +76,7 @@ router.post("/update-idea/:id", tokenAuthorisationUser,upload.any(), updateBussi
 //----> user Order
 router.post("/user-order",createOrder)
 router.post("/order-details/:id",orderDetails)
+router.post("/order-download/:id",downloadUserOrder)
 
 //---->>selas routes
 router.post("/user-sales-list/:id",salesList)
@@ -84,6 +86,7 @@ router.post("/search-sales",salesSearch)
 //=----> add Bids ROutes
 router.post("/bids-add/:id", tokenAuthorisationUser,addBids);
 router.post("/list-Bids/:id", tokenAuthorisationUser,baseBidList);
+router.post("/bids-view/:id",bidsView)
 
 //----category Routes
 router.post("/category-list", tokenAuthorisationUser,categoryList);

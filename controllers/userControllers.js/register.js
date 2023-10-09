@@ -34,15 +34,21 @@ exports.userRegister = async (req, res) => {
         .status(201)
         .json(error("Please enter password", res.statusCode));
     }
-    const checkNumber = await userSchema.findOne({
+    const checkName = await userSchema.find({
+     fullName_ar:fullName_en
+    });
+    if (checkName) {
+      return res.status(201).json(error("Name is already register"));
+    }
+    const checkNumber = await userSchema.find({
       mobileNumber: mobileNumber,
     });
     if (checkNumber) {
-      return res.status(201).json(error("mobileNumber are already register"));
+      return res.status(201).json(error("mobileNumber is already register"));
     }
-    const checkMail = await userSchema.findOne({ Email: Email });
+    const checkMail = await userSchema.find({ Email: Email });
     if (checkMail) {
-      return res.status(201).json(error("Email are already register"));
+      return res.status(201).json(error("Email is already register"));
     }
     const passwordHash = await bcrypt.hash(password, 10);
     const newUser = new userSchema({
@@ -51,7 +57,7 @@ exports.userRegister = async (req, res) => {
       Email: Email,
       mobileNumber: mobileNumber,
       password: passwordHash,
-      type: "User",
+     // type: "User",
     });
     const user = await newUser.save();
     res.status(200).json(success(res.statusCode, "Success", { user }));
@@ -126,15 +132,21 @@ exports.companySignup = async (req, res) => {
         .status(201)
         .json(error("Please enter password", res.statusCode));
     }
+    const checkName = await userSchema.find({
+      companyName_en:companyName_en
+     });
+     if (checkName) {
+       return res.status(201).json(error("companyName is already register"));
+     }
     const checkNumber = await userSchema.findOne({
       mobileNumber: mobileNumber,
     });
     if (checkNumber) {
-      return res.status(201).json(error("mobileNumber are already register"));
+      return res.status(201).json(error("mobileNumber is already register"));
     }
     const checkMail = await userSchema.findOne({ Email: Email });
     if (checkMail) {
-      return res.status(201).json(error("Email are already register"));
+      return res.status(201).json(error("Email is already register"));
     }
     const passwordHash = await bcrypt.hash(password, 10);
     const newUser = new userSchema({
@@ -187,7 +199,7 @@ exports.userKyc = async (req, res) => {
   try {
     const id = req.params.id;
     const { docFile, IdNumber } = req.body;
-    if (docFile && IdNumber) {
+    if (!docFile && !IdNumber) {
       return res.status(201).json(error("All Filed are required"));
     }
     if (req.files.length) {
@@ -223,7 +235,7 @@ exports.companyKyc = async (req, res) => {
   try {
     const id = req.params.id;
     const { docFile, companyNumber } = req.body;
-    if (docFile && companyNumber) {
+    if (!docFile && !companyNumber) {
       return res.status(201).json(error("All Filed are required"));
     }
     if (req.files.length) {
@@ -376,13 +388,13 @@ exports.userResetPassword = async (req, res) => {
     const id = req.params.id;
     const { password, newPassword, confirmPassword } = req.body;
     if (!password) {
-      res.status(201).json(error("please provide password", res.statusCode));
+     return res.status(201).json(error("please provide password", res.statusCode));
     }
     if (!newPassword) {
-      res.status(201).json(error("please provide newPassword", res.statusCode));
+     return res.status(201).json(error("please provide newPassword", res.statusCode));
     }
     if (!confirmPassword) {
-      res
+     return res
         .status(201)
         .json(error("please provide confirmPassword", res.statusCode));
     }

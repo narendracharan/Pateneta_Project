@@ -19,12 +19,12 @@ const schema = new mongoose.Schema({
   },
   category_Id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "categroy",
+    ref: "category",
     require: true,
   },
   subCategory_Id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "subCategroy",
+    ref: "subCategory",
     require: true,
   },
   // subCategory_ar: {

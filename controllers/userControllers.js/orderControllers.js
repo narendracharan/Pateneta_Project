@@ -4,6 +4,10 @@ const { error, success } = require("../../responseCode");
 const stripe = require("stripe")(
   "sk_test_51NbHnuSG9WVEqhGVYG0dgDb45pjjeb3V818JYvVfTm1Dsg95fm8EzApsT17EOOL56g7ZifI8QMgDldMFOZ4SY3UV00tRcPT4WY"
 );
+const fs = require("fs");
+const jsonrawtoxlsx = require("jsonrawtoxlsx");
+const moment = require("moment");
+
 
 exports.createOrder = async (req, res) => {
   try {
@@ -108,3 +112,38 @@ exports.orderDetails = async (req, res) => {
 //     res.status(400).json(error("Failed", res.statusCode));
 //   }
 // };
+
+
+exports.downloadUserOrder=async(req,res)=>{
+  try{
+    const order = await orderSchema.find({_id:req.params.id}).populate(["products.product_Id","user_Id"]);
+    let allOrders = [];
+    for (const exportOrder of order) {
+      let date = String(exportOrder.createdAt).split(" ");
+      const newDate = `${date[2]}/${date[1]}/${date[3]}`;
+      let obj = {
+        "Order Date": newDate,
+        "Order ID": `${exportOrder._id}`,
+      //  "Saller ID":`${exportOrder.products.length}`,
+        "User Name":`${exportOrder.user_Id.fullName_en}``${exportOrder.user_Id.companyName_en}`,
+        "User Email":`${exportOrder.user_Id.Email}`,
+        "User MobileNumber":`${exportOrder.user_Id.mobileNumber}`,
+        "Payment Method": ` ${exportOrder.paymentIntent}`,
+        "Delivery Status": `${exportOrder.paymentStatus}`,
+        "Total Amount": `${exportOrder.total}`,
+      };
+      allOrders.push(obj);
+    }
+    const filename = Date.now();
+    const excel = jsonrawtoxlsx(allOrders);
+    const file = fs.writeFileSync(`./public/${filename}.xlsx`, excel, "binary");
+    res.status(201).json(
+      success(res.statusCode, "Exported Successfully", {
+        file: `${process.env.BASE_URL}/${filename}.xlsx`,
+      })
+    );
+  }catch(err){
+    console.log(err);
+    res.status(400).json(error("Error in download Order",res.statusCode,{err}))
+  }
+}
