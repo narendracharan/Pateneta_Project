@@ -98,14 +98,14 @@ exports.updateBussinessIdea = async (req, res) => {
 exports.listBussinesIdeas = async (req, res) => {
   try {
     const verify = await productSchema.aggregate([
-      // {
-      //   $lookup: {
-      //     from: "users",
-      //     localField: "user_Id",
-      //     foreignField: "_id",
-      //     as: "categories",
-      //   },
-      // },
+      {
+        $lookup: {
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "users",
+        },
+      },
       {
         $match: {
           verify: "APPROVED",
@@ -146,6 +146,11 @@ exports.searchBussinessIdea = async (req, res) => {
       },
        { $unwind: "$categories" },
       { $unwind: "$subcategoriess" },
+      {
+        $match: {
+          verify: "APPROVED",
+        },
+      },
       {
         $match: {
           $or: [
@@ -216,11 +221,26 @@ exports.addBids = async (req, res) => {
 //-----> list of biseBid APi
 exports.baseBidList = async (req, res) => {
   try {
+    const id = req.params.id;
     const list = await productSchema
-      .find({ user_Id: req.params.id })
+      .find()
       .populate("user_Id");
-    const bidsData = list.filter((x) => x.baseBid);
-    res.status(200).json(success(res.statusCode, "Success", { bidsData }));
+      let Bids = [];
+      for (let i = 0; i < list.length; i++) {
+        var baseBide = list[i].baseBid.filter(
+          (baseBide) => String(baseBide.user_Id) === String(id)
+        );
+        let obj = {
+          baseBide: baseBide,
+          title: list[i].title_en,
+          title_ar: list[i].title_ar,
+          bidStatus: list[i].bidsVerify,
+          user: list[i].user_Id.fullName_en,
+          date: list[i].createdAt,
+        };
+        Bids.push(obj);
+      }
+    res.status(200).json(success(res.statusCode, "Success", { Bids }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -230,25 +250,8 @@ exports.baseBidList = async (req, res) => {
 exports.myBussinessIdea = async (req, res) => {
   try {
     const id = req.params.id;
-    let Bids = [];
-
-    let myIdeas = await productSchema.find().populate("user_Id");
-
-    for (let i = 0; i < myIdeas.length; i++) {
-      var baseBide = myIdeas[i].baseBid.filter(
-        (baseBide) => String(baseBide.user_Id) === String(id)
-      );
-      let obj = {
-        baseBide: baseBide,
-        title: myIdeas[i].title_en,
-        title_ar: myIdeas[i].title_ar,
-        bidStatus: myIdeas[i].bidsVerify,
-        user: myIdeas[i].user_Id.fullName_en,
-        date: myIdeas[i].createdAt,
-      };
-      Bids.push(obj);
-    }
-    res.status(200).json(success(res.statusCode, "Success", { Bids }));
+    let myIdeas = await productSchema.find({user_Id:id}).populate("user_Id");
+    res.status(200).json(success(res.statusCode, "Success", { myIdeas }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));

@@ -18,9 +18,9 @@ exports.userRegister = async (req, res) => {
   try {
     const { fullName_en, fullName_ar, Email, mobileNumber, password } =
       req.body;
-    if (!fullName_en || fullName_ar) {
-      return res.status(201).json(error("Please enter  name", res.statusCode));
-    }
+    // if (!fullName_en || !fullName_ar) {
+    //   return res.status(201).json(error("Please enter  name", res.statusCode));
+    // }
     if (!validator.isEmail(Email)) {
       return res.status(201).json(error("Please enter  Email", res.statusCode));
     }
@@ -34,19 +34,19 @@ exports.userRegister = async (req, res) => {
         .status(201)
         .json(error("Please enter password", res.statusCode));
     }
-    const checkName = await userSchema.find({
-     fullName_ar:fullName_en
+    const checkName = await userSchema.findOne({
+      fullName_ar: fullName_en,
     });
     if (checkName) {
       return res.status(201).json(error("Name is already register"));
     }
-    const checkNumber = await userSchema.find({
+    const checkNumber = await userSchema.findOne({
       mobileNumber: mobileNumber,
     });
     if (checkNumber) {
       return res.status(201).json(error("mobileNumber is already register"));
     }
-    const checkMail = await userSchema.find({ Email: Email });
+    const checkMail = await userSchema.findOne({ Email: Email });
     if (checkMail) {
       return res.status(201).json(error("Email is already register"));
     }
@@ -57,7 +57,7 @@ exports.userRegister = async (req, res) => {
       Email: Email,
       mobileNumber: mobileNumber,
       password: passwordHash,
-     // type: "User",
+      // type: "User",
     });
     const user = await newUser.save();
     res.status(200).json(success(res.statusCode, "Success", { user }));
@@ -133,11 +133,11 @@ exports.companySignup = async (req, res) => {
         .json(error("Please enter password", res.statusCode));
     }
     const checkName = await userSchema.find({
-      companyName_en:companyName_en
-     });
-     if (checkName) {
-       return res.status(201).json(error("companyName is already register"));
-     }
+      companyName_en: companyName_en,
+    });
+    if (checkName) {
+      return res.status(201).json(error("companyName is already register"));
+    }
     const checkNumber = await userSchema.findOne({
       mobileNumber: mobileNumber,
     });
@@ -388,13 +388,17 @@ exports.userResetPassword = async (req, res) => {
     const id = req.params.id;
     const { password, newPassword, confirmPassword } = req.body;
     if (!password) {
-     return res.status(201).json(error("please provide password", res.statusCode));
+      return res
+        .status(201)
+        .json(error("please provide password", res.statusCode));
     }
     if (!newPassword) {
-     return res.status(201).json(error("please provide newPassword", res.statusCode));
+      return res
+        .status(201)
+        .json(error("please provide newPassword", res.statusCode));
     }
     if (!confirmPassword) {
-     return res
+      return res
         .status(201)
         .json(error("please provide confirmPassword", res.statusCode));
     }
