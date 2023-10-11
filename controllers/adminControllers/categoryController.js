@@ -16,7 +16,7 @@ exports.createCategory = async (req, res) => {
     const newOne = new categoryModels({
       categoryName: categoryName,
       user_Id: user_Id,
-      catrgory_Pic: req.file.filename,
+      catrgory_Pic:`${process.env.BASE_URL}/${req.file.filename}`,
     });
     const categoryData = await newOne.save();
     res.status(200).json(success(res.statusCode, "Success", { categoryData }));
@@ -40,7 +40,7 @@ exports.createSubCategory = async (req, res) => {
     const newOne = new subCategoryModel({
       subCategoryName: subCategoryName,
       user_Id: user_Id,
-      subCategoryPic: req.file.filename,
+      subCategoryPic: `${process.env.BASE_URL}/${req.file.filename}`,
       category_Id: category_Id,
     });
     const subCategoryData = await newOne.save();
@@ -87,7 +87,7 @@ exports.updateCategory = async (req, res) => {
     const id = req.params.id;
     const data = {
       categoryName: req.body.categoryName,
-      categoryPic: req.file.filename,
+      categoryPic: `${process.env.BASE_URL}/${req.file.filename}`,
     };
     if (data) {
       const updateData = await categoryModels.findByIdAndUpdate(id, data, {
@@ -108,7 +108,7 @@ exports.updateSubCategory = async (req, res) => {
     const id = req.params.id;
     const data = {
       subCategoryName: req.body.subCategoryName,
-      subCategoryPic: req.file.filename,
+      subCategoryPic: `${process.env.BASE_URL}/${req.file.filename}`,
       category_Id: req.body.category_Id,
     };
     if (data) {

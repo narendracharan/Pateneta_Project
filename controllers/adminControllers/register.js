@@ -132,7 +132,7 @@ exports.updateProfile = async (req, res) => {
     if (mobileNumber) {
       admin.mobileNumber = mobileNumber;
     }
-      admin.profile = req.file.filename;
+      admin.profile = `${process.env.BASE_URL}/${req.file.filename}`;
     
     await admin.save();
     res.status(200).json(success(res.statusCode, "Success", { admin }));

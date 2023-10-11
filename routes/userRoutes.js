@@ -26,16 +26,14 @@ const {
   highToLowPrice,
   updateBussinessIdea,
   bidsView,
+  subCategoryListing,
+  CategoryListing,
 } = require("../controllers/userControllers.js/product");
 const {
   pushNotification,
   PrivacyUser,
   createReports,
 } = require("../controllers/userControllers.js/notification");
-const {
-  categoryList,
-  subCategoryList,
-} = require("../controllers/adminControllers/categoryController");
 const {
   createPayment, createOrder, orderDetails, downloadUserOrder,
 } = require("../controllers/userControllers.js/orderControllers");
@@ -89,8 +87,8 @@ router.post("/list-Bids/:id", tokenAuthorisationUser,baseBidList);
 router.post("/bids-view/:id",bidsView)
 
 //----category Routes
-router.post("/category-list", tokenAuthorisationUser,categoryList);
-router.post("/sub-category-list/:id", tokenAuthorisationUser,subCategoryList);
+router.post("/category-list", tokenAuthorisationUser,CategoryListing);
+router.post("/sub-category-list/:id", tokenAuthorisationUser,subCategoryListing);
 
 ///--> Privacy Routes
 router.post("/push-notification", pushNotification);

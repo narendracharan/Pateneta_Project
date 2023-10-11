@@ -13,10 +13,12 @@ exports.createIdea = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "productPic") {
-          idea.productPic.push(`${process.env.BASE_URL}/${req.files[i].filename}`);
+          idea.productPic.push(
+            `${process.env.BASE_URL}/${req.files[i].filename}`
+          );
         }
         if (req.files[i].fieldname == "ideaLogo") {
-          idea.ideaLogo = `${process.env.BASE_URL}/${req.files[i].filename}`
+          idea.ideaLogo = `${process.env.BASE_URL}/${req.files[i].filename}`;
         }
       }
     }
@@ -79,10 +81,10 @@ exports.updateBussinessIdea = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "productPic") {
-          product.productPic = `${process.env.BASE_URL}/${req.files[i].filename}`
+          product.productPic = `${process.env.BASE_URL}/${req.files[i].filename}`;
         }
         if (req.files[i].fieldname == "ideaLogo") {
-          product.ideaLogo = `${process.env.BASE_URL}/${req.files[i].filename}`
+          product.ideaLogo = `${process.env.BASE_URL}/${req.files[i].filename}`;
         }
       }
     }
@@ -143,7 +145,7 @@ exports.searchBussinessIdea = async (req, res) => {
           as: "subcategoriess",
         },
       },
-       { $unwind: "$categories" },
+      { $unwind: "$categories" },
       { $unwind: "$subcategoriess" },
       {
         $match: {
@@ -166,12 +168,15 @@ exports.searchBussinessIdea = async (req, res) => {
               "categories.categoryName": { $regex: search, $options: "i" },
             },
             {
-              "subcategoriess.subCategoryName": { $regex: search, $options: "i" },
+              "subcategoriess.subCategoryName": {
+                $regex: search,
+                $options: "i",
+              },
             },
           ],
         },
       },
-    ])
+    ]);
     //find({
     //   $and: [
     //     { title_en: { $regex: new RegExp(search.trim(), "i") } },
@@ -221,24 +226,22 @@ exports.addBids = async (req, res) => {
 exports.baseBidList = async (req, res) => {
   try {
     const id = req.params.id;
-    const list = await productSchema
-      .find()
-      .populate("user_Id");
-      let Bids = [];
-      for (let i = 0; i < list.length; i++) {
-        var baseBide = list[i].baseBid.filter(
-          (baseBide) => String(baseBide.user_Id) === String(id)
-        );
-        let obj = {
-          baseBide: baseBide,
-          title: list[i].title_en,
-          title_ar: list[i].title_ar,
-          bidStatus: list[i].bidsVerify,
-          user: list[i].user_Id.fullName_en,
-          date: list[i].createdAt,
-        };
-        Bids.push(obj);
-      }
+    const list = await productSchema.find().populate("user_Id");
+    let Bids = [];
+    for (let i = 0; i < list.length; i++) {
+      var baseBide = list[i].baseBid.filter(
+        (baseBide) => String(baseBide.user_Id) === String(id)
+      );
+      let obj = {
+        baseBide: baseBide,
+        title: list[i].title_en,
+        title_ar: list[i].title_ar,
+        bidStatus: list[i].bidsVerify,
+        user: list[i].user_Id.fullName_en,
+        date: list[i].createdAt,
+      };
+      Bids.push(obj);
+    }
     res.status(200).json(success(res.statusCode, "Success", { Bids }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -249,7 +252,7 @@ exports.baseBidList = async (req, res) => {
 exports.myBussinessIdea = async (req, res) => {
   try {
     const id = req.params.id;
-    let myIdeas = await productSchema.find({user_Id:id}).populate("user_Id");
+    let myIdeas = await productSchema.find({ user_Id: id }).populate("user_Id");
     res.status(200).json(success(res.statusCode, "Success", { myIdeas }));
   } catch (err) {
     console.log(err);
@@ -270,15 +273,16 @@ exports.bidsView = async (req, res) => {
 
 ///---------> Category Listing Api
 
-exports.CategoryListing = async (req, res) => {
+exports. CategoryListing = async (req, res) => {
   try {
     const categoryList = await categoryModels.find({});
     res.status(200).json(success(res.statusCode, "Success", { categoryList }));
-    if (categoryList.length > 0) {
-      res.status(200).json(success(res.statusCode, "Success", { listData }));
-    } else {
-      res.status(201).json(error("List are not found", res.statusCode));
-    }
+    // if (categoryList.length > 0) {
+    //   res.status(200).json(success(res.statusCode, "Success", { categoryList }));
+    // } else {
+    //   res.status(201).json(error("List are not found", res.statusCode));
+    // }
+    // res.status(200).json(success(res.statusCode, "Success", { categoryList }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -287,13 +291,14 @@ exports.CategoryListing = async (req, res) => {
 exports.subCategoryListing = async (req, res) => {
   try {
     const id = req.params.id;
-    const categoryList = await subCategoryModel.find({ category_Id: id }).populate("category_Id")
+    const categoryList = await subCategoryModel.find({ category_Id: id })
+      .populate("category_Id");
     res.status(200).json(success(res.statusCode, "Success", { categoryList }));
-    if (categoryList.length > 0) {
-      res.status(200).json(success(res.statusCode, "Success", { listData }));
-    } else {
-      res.status(201).json(error("List are not found", res.statusCode));
-    }
+    // if (categoryList.length > 0) {
+    //   res.status(200).json(success(res.statusCode, "Success", { categoryList }));
+    // } else {
+    //   res.status(201).json(error("List are not found", res.statusCode));
+    // }
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
