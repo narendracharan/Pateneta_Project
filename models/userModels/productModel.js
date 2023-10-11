@@ -73,6 +73,10 @@ const schema = new mongoose.Schema({
       },
     },
   ],
+  urlFile: {
+    type: String,
+    require: true,
+  },
   bidsVerify: {
     type: String,
     enum: ["PENDING", "Accepted", "Decline"],

@@ -86,7 +86,7 @@ router.post(
 router.post(
   "/create-category",
   adminAuthorisationUser,
-  upload.single("categoryPic"),
+  upload.single("category_Pic"),
   createCategory
 );
 router.post(

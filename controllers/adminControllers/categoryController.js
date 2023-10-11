@@ -16,11 +16,12 @@ exports.createCategory = async (req, res) => {
     const newOne = new categoryModels({
       categoryName: categoryName,
       user_Id: user_Id,
-      catrgory_Pic:`${process.env.BASE_URL}/${req.file.filename}`,
+      category_Pic:`${process.env.BASE_URL}/${req.file.filename}`,
     });
     const categoryData = await newOne.save();
     res.status(200).json(success(res.statusCode, "Success", { categoryData }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

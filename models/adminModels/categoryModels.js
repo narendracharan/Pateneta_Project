@@ -5,7 +5,7 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  catrgory_Pic: {
+  category_Pic: {
     type: String,
     require: true,
   },
