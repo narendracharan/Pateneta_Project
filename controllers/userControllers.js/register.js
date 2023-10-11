@@ -116,9 +116,9 @@ exports.companySignup = async (req, res) => {
   try {
     const { companyName_en, companyName_ar, Email, mobileNumber, password } =
       req.body;
-    if (!companyName_en || companyName_ar) {
-      return res.status(201).json(error("Please enter  name", res.statusCode));
-    }
+    // if (!companyName_en || companyName_ar) {
+    //   return res.status(201).json(error("Please enter  name", res.statusCode));
+    // }
     if (!validator.isEmail(Email)) {
       return res.status(201).json(error("Please enter  Email", res.statusCode));
     }
@@ -132,7 +132,7 @@ exports.companySignup = async (req, res) => {
         .status(201)
         .json(error("Please enter password", res.statusCode));
     }
-    const checkName = await userSchema.find({
+    const checkName = await userSchema.findOne({
       companyName_en: companyName_en,
     });
     if (checkName) {
@@ -155,7 +155,7 @@ exports.companySignup = async (req, res) => {
       Email: Email,
       mobileNumber: mobileNumber,
       password: passwordHash,
-      type: "User",
+      // type: "User",
     });
     const company = await newUser.save();
     res.status(201).json(success(res.statusCode, "Success", { company }));
@@ -275,35 +275,55 @@ exports.userEditProfile = async (req, res) => {
       companyName_en,
       password,
       Email,
-      profile,
       mobileNumber,
       anotherEmail,
       DOB,
       address,
     } = req.body;
     const passwordHash = await bcrypt.hash(password, 10);
-    var allFiled = {
-      fullName_en: fullName_en,
-      fullName_ar: fullName_ar,
-      companyName_en: companyName_en,
-      companyName_ar: companyName_ar,
-      password: passwordHash,
-      Email: Email,
-      mobileNumber: mobileNumber,
-      profile: req.file.filename,
-      coverImage: req.file.filename,
-      anotherEmail: anotherEmail,
-      DOB: DOB,
-      address: address,
-    };
-    const updateProfile = await userSchema.findByIdAndUpdate(
-      req.params.id,
-      allFiled,
-      { new: true }
-    );
+    const userprofile = await userSchema.findById(req.params.id)
+    if (fullName_en) {
+      userprofile.fullName_en = fullName_en
+    }
+    if (fullName_ar) {
+      userprofile.fullName_ar = fullName_ar
+    }
+    if (companyName_en) {
+      userprofile.companyName_en = companyName_en
+    }
+    if (companyName_ar) {
+      userprofile.companyName_ar = companyName_ar
+    }
+    if (password) {
+      userprofile.password = passwordHash
+    }
+    if (Email) {
+      userprofile.Email = Email
+    }
+    if (mobileNumber) {
+      userprofile.mobileNumber = mobileNumber
+    }
+    if (DOB) {
+      userprofile.DOB = DOB
+    }
+    if (address) {
+      userprofile.address = address
+    }
+    if (anotherEmail) {
+      userprofile.anotherEmail = anotherEmail
+    }
+    if (req.files.length) {
+      if (req.files[0].fieldname == "profile") {
+        userprofile.profile = `${process.env.BASE_URL}/${req.files[0].filename}`
+      }
+      if (req.files[0].fieldname == "coverImage") {
+        userprofile.coverImage = `${process.env.BASE_URL}/${req.files[0].filename}`
+      }
+    }
+    await userprofile.save()
     res
       .status(200)
-      .json(success(res.statusCode, "Updated Profile", updateProfile));
+      .json(success(res.statusCode, "Updated Profile", userprofile));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));

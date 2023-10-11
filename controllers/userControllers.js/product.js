@@ -13,10 +13,10 @@ exports.createIdea = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "productPic") {
-          idea.productPic.push(req.files[i].filename);
+          idea.productPic.push(`${process.env.BASE_URL}/${req.files[i].filename}`);
         }
         if (req.files[i].fieldname == "ideaLogo") {
-          idea.ideaLogo = req.files[i].filename;
+          idea.ideaLogo = `${process.env.BASE_URL}/${req.files[i].filename}`
         }
       }
     }
@@ -32,7 +32,6 @@ exports.createIdea = async (req, res) => {
 exports.updateBussinessIdea = async (req, res) => {
   try {
     const id = req.params.id;
-
     const {
       title_en,
       title_ar,
@@ -80,10 +79,10 @@ exports.updateBussinessIdea = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "productPic") {
-          product.productPic = req.files[i].filename;
+          product.productPic = `${process.env.BASE_URL}/${req.files[i].filename}`
         }
         if (req.files[i].fieldname == "ideaLogo") {
-          product.ideaLogo = req.files[i].filename;
+          product.ideaLogo = `${process.env.BASE_URL}/${req.files[i].filename}`
         }
       }
     }

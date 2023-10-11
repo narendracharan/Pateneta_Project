@@ -54,7 +54,7 @@ router.post("/verify-user/:id", verifyUser);
 router.post(
   "/updated-profile/:id",
   tokenAuthorisationUser,
-  upload.single("profile"),
+  upload.any(),
   userEditProfile
 );
 router.post("/change-password/:id",tokenAuthorisationUser, userResetPassword);
