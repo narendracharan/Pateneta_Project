@@ -9,7 +9,7 @@ app.use(bodyparser.json())
 require("./config/connection")
 const router=require("./routes/userRoutes")
 const adminRouter=require("./routes/adminRoutes")
-process.env["BASE_URL"] = "https://localhost:5000";
+process.env["BASE_URL"] = "https://patentaadmin.techgropsedev.com:3001";
 app.use(express.static("./public"))
 app.use("/user",router)
 app.use("/admin",adminRouter)

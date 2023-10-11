@@ -90,6 +90,9 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  commission:{
+    type:Number
+  }
 });
 schema.methods.checkPassword = async function (plainPassword, hashedPassword) {
   return await bcrypt.compare(plainPassword, hashedPassword);

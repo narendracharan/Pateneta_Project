@@ -56,6 +56,7 @@ const {
   salesUserDetails,
   searchSales,
   salesOrderExports,
+  setCommission,
 } = require("../controllers/adminControllers/sellerContoller");
 const {
   userList,
@@ -140,15 +141,16 @@ router.post("/edit-seller/:id", adminAuthorisationUser, editSeller);
 router.post("/seller-Details/:id", adminAuthorisationUser, sellerDetails);
 router.post("/seller-delete/:id", adminAuthorisationUser, sellerDelete);
 router.post("/seller-search", adminAuthorisationUser, sellerSearch);
-router.post("/user-sales-list",salesUserList)
-router.post("/salesUserDetails/:id",salesUserDetails)
-router.post("/sales-exports",salesOrderExports)
-router.post("/search-sales",searchSales)
-router.post("/buyer-list",buyerUserList)
-router.post("/buyer-delete/:id",deleteBuyer)
-router.post("/change-status/:id",buyerStatus)
-router.post("/buyer-details/:id",buyerDetails)
-router.post("/home-dashboard",homeDashboards)
+router.post("/user-sales-list",adminAuthorisationUser,salesUserList)
+router.post("/salesUserDetails/:id",adminAuthorisationUser,salesUserDetails)
+router.post("/sales-exports",adminAuthorisationUser,salesOrderExports)
+router.post("/search-sales",adminAuthorisationUser,searchSales)
+router.post("/buyer-list",adminAuthorisationUser,buyerUserList)
+router.post("/buyer-delete/:id",adminAuthorisationUser,deleteBuyer)
+router.post("/change-status/:id",adminAuthorisationUser,buyerStatus)
+router.post("/buyer-details/:id",adminAuthorisationUser,buyerDetails)
+router.post("/home-dashboard",adminAuthorisationUser,homeDashboards)
+router.post("/set-commission",adminAuthorisationUser,setCommission)
 
 //reports
 router.post("/reports-list", adminAuthorisationUser, reportsList);

@@ -38,7 +38,7 @@ exports.sellerList = async (req, res) => {
           ],
         },
       },
-    ])
+    ]);
     if (list.length > 0) {
       return res.status(200).json(success(res.statusCode, "Success", { list }));
     } else {
@@ -286,13 +286,12 @@ exports.searchSales = async (req, res) => {
         },
       },
     ]);
- 
+
     if (saleSearch.length > 0) {
       return res
         .status(200)
         .json(success(res.statusCode, "Success", { saleSearch }));
-     }
-     else {
+    } else {
       res.status(201).json(error("No Data Found", res.statusCode));
     }
   } catch (err) {
@@ -301,11 +300,11 @@ exports.searchSales = async (req, res) => {
   }
 };
 
-
-
 exports.salesOrderExports = async (req, res) => {
   try {
-    const order = await orderSchema.find({}).populate(["products.product_Id","user_Id"]);
+    const order = await orderSchema
+      .find({})
+      .populate(["products.product_Id", "user_Id"]);
     let allOrders = [];
     for (const exportOrder of order) {
       let date = String(exportOrder.createdAt).split(" ");
@@ -313,7 +312,7 @@ exports.salesOrderExports = async (req, res) => {
       let obj = {
         "Order Date": newDate,
         "Order ID": `${exportOrder._id}`,
-        "User Name":`${exportOrder.user_Id.fullName_en}`,
+        "User Name": `${exportOrder.user_Id.fullName_en}`,
         "Payment Method": ` ${exportOrder.paymentIntent}`,
         "Delivery Status": `${exportOrder.paymentStatus}`,
         "Total Amount": `${exportOrder.total}`,
@@ -331,5 +330,21 @@ exports.salesOrderExports = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.setCommission = async (req, res) => {
+  try {
+    const Commission = req.body.Commission;
+    
+    if (!Commission) {
+      return res
+        .status(201)
+        .json(error("Please provide commission", res.statusCode));
+    }
+    const user = await UserRegister.updateMany({commission:Commission})
+    res.status(200).json(success(res.statusCode,"Success",{user}))
+  } catch (err) {
+    res.status(400).json(error("Error in Set Commission", res.statusCode));
   }
 };
