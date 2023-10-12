@@ -216,7 +216,7 @@ exports.userKyc = async (req, res) => {
       } else {
         const data = {
           IdNumber: req.body.IdNumber,
-          docFile: req.files[0].filename,
+          docFile:`${process.env.BASE_URL}/${req.files[0].filename}`,
         };
         const createKyc = await userSchema.findByIdAndUpdate(id, data, {
           new: true,
@@ -252,7 +252,7 @@ exports.companyKyc = async (req, res) => {
       } else {
         const data = {
           IdNumber: req.body.companyNumber,
-          docFile: req.files[0].filename,
+          docFile: `${process.env.BASE_URL}/${req.files[0].filename}`,
         };
         const createKyc = await userSchema.findByIdAndUpdate(id, data, {
           new: true,
