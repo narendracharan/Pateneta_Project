@@ -76,19 +76,19 @@ router.post("/update-idea/:id", tokenAuthorisationUser,upload.any(), updateBussi
 
 
 //----> user Order
-router.post("/user-order",createOrder)
-router.post("/order-details/:id",orderDetails)
-router.post("/order-download/:id",downloadUserOrder)
+router.post("/user-order",tokenAuthorisationUser,createOrder)
+router.post("/order-details/:id",tokenAuthorisationUser,orderDetails)
+router.post("/order-download/:id",tokenAuthorisationUser,downloadUserOrder)
 
 //---->>selas routes
-router.post("/user-sales-list/:id",salesList)
-router.post("/sales-details/:id",userSalesDetails)
-router.post("/search-sales",salesSearch)
+router.post("/user-sales-list/:id",tokenAuthorisationUser,salesList)
+router.post("/sales-details/:id",tokenAuthorisationUser,userSalesDetails)
+router.post("/search-sales",tokenAuthorisationUser,salesSearch)
 
 //=----> add Bids ROutes
 router.post("/bids-add/:id", tokenAuthorisationUser,addBids);
 router.post("/list-Bids/:id", tokenAuthorisationUser,baseBidList);
-router.post("/bids-view/:id",bidsView)
+router.post("/bids-view/:id",tokenAuthorisationUser,bidsView)
 
 //----category Routes
 router.post("/category-list", tokenAuthorisationUser,CategoryListing);
@@ -96,7 +96,7 @@ router.post("/sub-category-list/:id", tokenAuthorisationUser,subCategoryListing)
 
 ///--> Privacy Routes
 router.post("/push-notification", pushNotification);
-router.post("/privacy-list", PrivacyUser);
+router.post("/privacy-list", tokenAuthorisationUser,PrivacyUser);
 //router.post("/create-payment", createPayment);
-router.post("/user-report", createReports);
+router.post("/user-report", tokenAuthorisationUser,createReports);
 module.exports = router;

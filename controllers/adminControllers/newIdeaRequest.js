@@ -12,7 +12,7 @@ exports.ideaRequestList = async (req, res) => {
           to ? { createdAt: { $lte: new Date(`${to}T23:59:59`) } } : {},
         ],
       })
-      .populate("user_Id")
+      .populate(["user_Id","category_Id","subCategory_Id"])
       .sort({ createdAt: -1 });
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch {
