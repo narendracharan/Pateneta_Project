@@ -74,6 +74,11 @@ exports.userLogin = async (req, res) => {
       const verifyUser = await userSchema.findOne({
         mobileNumber: mobileNumber,
       });
+      if (verifyUser.userVerifyDOc != "APPROVED") {
+        res
+          .status(201)
+          .json(error("Your Are NOt Approved User", res.statusCode));
+      }
       if (verifyUser != null) {
         const isMatch = await bcrypt.compare(password, verifyUser.password);
         if (isMatch) {
@@ -216,7 +221,7 @@ exports.userKyc = async (req, res) => {
       } else {
         const data = {
           IdNumber: req.body.IdNumber,
-          docFile:`${process.env.BASE_URL}/${req.files[0].filename}`,
+          docFile: `${process.env.BASE_URL}/${req.files[0].filename}`,
         };
         const createKyc = await userSchema.findByIdAndUpdate(id, data, {
           new: true,
