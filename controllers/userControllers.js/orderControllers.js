@@ -8,7 +8,6 @@ const fs = require("fs");
 const jsonrawtoxlsx = require("jsonrawtoxlsx");
 const moment = require("moment");
 
-
 exports.createOrder = async (req, res) => {
   try {
     const { product_Id, Price, user_Id, total, bids_Id } = req.body;
@@ -113,10 +112,11 @@ exports.orderDetails = async (req, res) => {
 //   }
 // };
 
-
-exports.downloadUserOrder=async(req,res)=>{
-  try{
-    const order = await orderSchema.find({_id:req.params.id}).populate(["products.product_Id","user_Id"]);
+exports.downloadUserOrder = async (req, res) => {
+  try {
+    const order = await orderSchema
+      .find({ _id: req.params.id })
+      .populate(["products.product_Id", "user_Id"]);
     let allOrders = [];
     for (const exportOrder of order) {
       let date = String(exportOrder.createdAt).split(" ");
@@ -124,10 +124,10 @@ exports.downloadUserOrder=async(req,res)=>{
       let obj = {
         "Order Date": newDate,
         "Order ID": `${exportOrder._id}`,
-      //  "Saller ID":`${exportOrder.products.length}`,
-        "User Name":`${exportOrder.user_Id.fullName_en}``${exportOrder.user_Id.companyName_en}`,
-        "User Email":`${exportOrder.user_Id.Email}`,
-        "User MobileNumber":`${exportOrder.user_Id.mobileNumber}`,
+        //  "Saller ID":`${exportOrder.products.length}`,
+        "User Name": `${exportOrder.user_Id.fullName_en}``${exportOrder.user_Id.companyName_en}`,
+        "User Email": `${exportOrder.user_Id.Email}`,
+        "User MobileNumber": `${exportOrder.user_Id.mobileNumber}`,
         "Payment Method": ` ${exportOrder.paymentIntent}`,
         "Delivery Status": `${exportOrder.paymentStatus}`,
         "Total Amount": `${exportOrder.total}`,
@@ -142,8 +142,10 @@ exports.downloadUserOrder=async(req,res)=>{
         file: `${process.env.BASE_URL}/${filename}.xlsx`,
       })
     );
-  }catch(err){
+  } catch (err) {
     console.log(err);
-    res.status(400).json(error("Error in download Order",res.statusCode,{err}))
+    res
+      .status(400)
+      .json(error("Error in download Order", res.statusCode, { err }));
   }
-}
+};

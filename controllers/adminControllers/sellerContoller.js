@@ -336,14 +336,15 @@ exports.salesOrderExports = async (req, res) => {
 exports.setCommission = async (req, res) => {
   try {
     const Commission = req.body.Commission;
-    
     if (!Commission) {
       return res
         .status(201)
         .json(error("Please provide commission", res.statusCode));
     }
-    const user = await UserRegister.updateMany({commission:Commission})
-    res.status(200).json(success(res.statusCode,"Success",{user}))
+    const user = await UserRegister.updateMany({}, [
+      { $set: { commission: Commission } },
+    ]);
+    res.status(200).json(success(res.statusCode, "Success", { user }));
   } catch (err) {
     res.status(400).json(error("Error in Set Commission", res.statusCode));
   }

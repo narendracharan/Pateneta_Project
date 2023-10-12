@@ -29,6 +29,16 @@ exports.createIdea = async (req, res) => {
   }
 };
 
+exports.bussinessIdeaDetails = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const detailsIdea = await productSchema.findById(id);
+    res.status(200).json(success(res.statusCode, "Success", { detailsIdea }));
+  } catch (err) {
+    res.status(400).json(error("Error in Bussiness Idea Details",res.statusCode));
+  }
+};
+
 //----> update bussiness idea
 
 exports.updateBussinessIdea = async (req, res) => {
@@ -273,7 +283,7 @@ exports.bidsView = async (req, res) => {
 
 ///---------> Category Listing Api
 
-exports. CategoryListing = async (req, res) => {
+exports.CategoryListing = async (req, res) => {
   try {
     const categoryList = await categoryModels.find({});
     res.status(200).json(success(res.statusCode, "Success", { categoryList }));
@@ -291,7 +301,8 @@ exports. CategoryListing = async (req, res) => {
 exports.subCategoryListing = async (req, res) => {
   try {
     const id = req.params.id;
-    const categoryList = await subCategoryModel.find({ category_Id: id })
+    const categoryList = await subCategoryModel
+      .find({ category_Id: id })
       .populate("category_Id");
     res.status(200).json(success(res.statusCode, "Success", { categoryList }));
     // if (categoryList.length > 0) {

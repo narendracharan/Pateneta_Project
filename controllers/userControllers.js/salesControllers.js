@@ -51,8 +51,8 @@ exports.salesSearch = async (req, res) => {
               "users.fullName_en": { $regex: search, $options: "i" },
             },
             {
-                "users.companyName_ar": { $regex: search, $options: "i" },
-              },
+              "users.companyName_ar": { $regex: search, $options: "i" },
+            },
           ],
         },
       },

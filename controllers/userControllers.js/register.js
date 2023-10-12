@@ -281,46 +281,46 @@ exports.userEditProfile = async (req, res) => {
       address,
     } = req.body;
     const passwordHash = await bcrypt.hash(password, 10);
-    const userprofile = await userSchema.findById(req.params.id)
+    const userprofile = await userSchema.findById(req.params.id);
     if (fullName_en) {
-      userprofile.fullName_en = fullName_en
+      userprofile.fullName_en = fullName_en;
     }
     if (fullName_ar) {
-      userprofile.fullName_ar = fullName_ar
+      userprofile.fullName_ar = fullName_ar;
     }
     if (companyName_en) {
-      userprofile.companyName_en = companyName_en
+      userprofile.companyName_en = companyName_en;
     }
     if (companyName_ar) {
-      userprofile.companyName_ar = companyName_ar
+      userprofile.companyName_ar = companyName_ar;
     }
     if (password) {
-      userprofile.password = passwordHash
+      userprofile.password = passwordHash;
     }
     if (Email) {
-      userprofile.Email = Email
+      userprofile.Email = Email;
     }
     if (mobileNumber) {
-      userprofile.mobileNumber = mobileNumber
+      userprofile.mobileNumber = mobileNumber;
     }
     if (DOB) {
-      userprofile.DOB = DOB
+      userprofile.DOB = DOB;
     }
     if (address) {
-      userprofile.address = address
+      userprofile.address = address;
     }
     if (anotherEmail) {
-      userprofile.anotherEmail = anotherEmail
+      userprofile.anotherEmail = anotherEmail;
     }
     if (req.files.length) {
       if (req.files[0].fieldname == "profile") {
-        userprofile.profile = `${process.env.BASE_URL}/${req.files[0].filename}`
+        userprofile.profile = `${process.env.BASE_URL}/${req.files[0].filename}`;
       }
       if (req.files[0].fieldname == "coverImage") {
-        userprofile.coverImage = `${process.env.BASE_URL}/${req.files[0].filename}`
+        userprofile.coverImage = `${process.env.BASE_URL}/${req.files[0].filename}`;
       }
     }
-    await userprofile.save()
+    await userprofile.save();
     res
       .status(200)
       .json(success(res.statusCode, "Updated Profile", userprofile));
@@ -442,6 +442,16 @@ exports.userResetPassword = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.userDetails = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const userDetails = await userSchema.findById(id);
+    res.status(200).json(success(res.statusCode, "Success", { userDetails }));
+  } catch (err) {
+    res.status(400).json(error("Error in User Details", res.statusCode));
   }
 };
 
