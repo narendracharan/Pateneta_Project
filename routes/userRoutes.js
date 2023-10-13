@@ -30,6 +30,7 @@ const {
   subCategoryListing,
   CategoryListing,
   bussinessIdeaDetails,
+  recommandedProduct,
 } = require("../controllers/userControllers.js/product");
 const {
   pushNotification,
@@ -72,6 +73,7 @@ router.post("/low-to-high", tokenAuthorisationUser,lowtoHighPrice);
 router.post("/high-to-low",tokenAuthorisationUser, highToLowPrice);
 router.post("/bussines-idea-details/:id",tokenAuthorisationUser,bussinessIdeaDetails)
 router.post("/my-bussiness-idea/:id",tokenAuthorisationUser, myBussinessIdea);
+router.post("/recommanded-ideas",tokenAuthorisationUser,recommandedProduct)
 router.post("/update-idea/:id", tokenAuthorisationUser,upload.any(), updateBussinessIdea);
 
 

@@ -32,10 +32,14 @@ exports.createIdea = async (req, res) => {
 exports.bussinessIdeaDetails = async (req, res) => {
   try {
     const id = req.params.id;
-    const detailsIdea = await productSchema.findById(id).populate("baseBid.user_Id")
+    const detailsIdea = await productSchema
+      .findById(id)
+      .populate("baseBid.user_Id");
     res.status(200).json(success(res.statusCode, "Success", { detailsIdea }));
   } catch (err) {
-    res.status(400).json(error("Error in Bussiness Idea Details",res.statusCode));
+    res
+      .status(400)
+      .json(error("Error in Bussiness Idea Details", res.statusCode));
   }
 };
 
@@ -342,5 +346,21 @@ exports.highToLowPrice = async (req, res) => {
     }
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.recommandedProduct = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const products = await productModel
+      .find({ category_Id: id })
+      .populate("user_Id");
+    if (products.length > 0) {
+      res.status(200).json(success(res.statusCode, "Success", { products }));
+    } else {
+      res.status(201).json(error("No Data Found", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Error in Recommanded Product", res.statusCode));
   }
 };
