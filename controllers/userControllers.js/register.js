@@ -50,6 +50,7 @@ exports.userRegister = async (req, res) => {
     if (checkMail) {
       return res.status(201).json(error("Email is already register"));
     }
+    const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
     const passwordHash = await bcrypt.hash(password, 10);
     const newUser = new userSchema({
       fullName_en: fullName_en,
@@ -60,7 +61,7 @@ exports.userRegister = async (req, res) => {
       // type: "User",
     });
     const user = await newUser.save();
-    res.status(200).json(success(res.statusCode, "Success", { user }));
+    res.status(200).json(success(res.statusCode, "Success", { user,otp }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -79,6 +80,7 @@ exports.userLogin = async (req, res) => {
           .status(201)
           .json(error("Your Are NOt Approved User", res.statusCode));
       }
+      const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
       if (verifyUser != null) {
         const isMatch = await bcrypt.compare(password, verifyUser.password);
         if (isMatch) {
@@ -91,6 +93,7 @@ exports.userLogin = async (req, res) => {
               success(res.statusCode, "login SuccessFully", {
                 verifyUser,
                 token,
+                otp
               })
             );
         } else {
@@ -489,3 +492,23 @@ exports.sendOtpPassword = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+// exports.OtpVerify = async (req, res) => {
+//   try {
+//     const otp  = req.body.otp
+//     const userOtpVerify = await userModels.findOne({ userEmail: userEmail });
+//     if (userOtpVerify.otp === +otp && new Date() > userOtpVerify.expireOtp) {
+//       return res.status(201).json(error("OTP Expired", res.statusCode));
+//     }
+
+//     if (userOtpVerify.otp == otp) {
+//       return res
+//         .status(200)
+//         .json(success(res.statusCode, "Verify Otp Successfully", {}));
+//     } else {
+//       return res.status(200).json(error("Invalid Otp", res.statusCode));
+//     }
+//   } catch (err) {
+//     res.status(400).json(error("Failed", res.statusCode));
+//   }
+// };

@@ -100,7 +100,7 @@ router.post("/sub-category-list", adminAuthorisationUser, subCategoryList);
 router.post(
   "/update-category/:id",
   adminAuthorisationUser,
-  upload.single("categoryPic"),
+  upload.single("category_Pic"),
   updateCategory
 );
 router.post(

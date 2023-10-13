@@ -70,7 +70,7 @@ router.post("/list-bussiness-ideas",tokenAuthorisationUser, listBussinesIdeas);
 router.post("/search-bussiness-ideas", tokenAuthorisationUser,searchBussinessIdea);
 router.post("/low-to-high", tokenAuthorisationUser,lowtoHighPrice);
 router.post("/high-to-low",tokenAuthorisationUser, highToLowPrice);
-router.post("/bussines-idea-details/:id",bussinessIdeaDetails)
+router.post("/bussines-idea-details/:id",tokenAuthorisationUser,bussinessIdeaDetails)
 router.post("/my-bussiness-idea/:id",tokenAuthorisationUser, myBussinessIdea);
 router.post("/update-idea/:id", tokenAuthorisationUser,upload.any(), updateBussinessIdea);
 

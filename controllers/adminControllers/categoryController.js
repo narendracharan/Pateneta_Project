@@ -16,7 +16,7 @@ exports.createCategory = async (req, res) => {
     const newOne = new categoryModels({
       categoryName: categoryName,
       user_Id: user_Id,
-      category_Pic:`${process.env.BASE_URL}/${req.file.filename}`,
+      category_Pic: `${process.env.BASE_URL}/${req.file.filename}`,
     });
     const categoryData = await newOne.save();
     res.status(200).json(success(res.statusCode, "Success", { categoryData }));
@@ -85,20 +85,19 @@ exports.subCategoryList = async (req, res) => {
 
 exports.updateCategory = async (req, res) => {
   try {
+    const { categoryName, user_Id } = req.body;
     const id = req.params.id;
-    const data = {
-      categoryName: req.body.categoryName,
-      categoryPic: `${process.env.BASE_URL}/${req.file.filename}`,
-    };
-    if (data) {
-      const updateData = await categoryModels.findByIdAndUpdate(id, data, {
-        new: true,
-      });
-      res.status(200).json(success(res.statusCode, "Success", { updateData }));
-    } else {
-      res.status(201).json(error("All Filed are required", res.statusCode));
+    const category = await categoryModels.findById(id);
+    if (categoryName) {
+      category.categoryName = categoryName;
     }
+    if (req.file) {
+      category.category_Pic = `${process.env.BASE_URL}/${req.file.filename}`;
+    }
+
+    res.status(200).json(success(res.statusCode, "Success", { category }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -107,19 +106,19 @@ exports.updateCategory = async (req, res) => {
 exports.updateSubCategory = async (req, res) => {
   try {
     const id = req.params.id;
-    const data = {
-      subCategoryName: req.body.subCategoryName,
-      subCategoryPic: `${process.env.BASE_URL}/${req.file.filename}`,
-      category_Id: req.body.category_Id,
-    };
-    if (data) {
-      const updateData = await subCategoryModel.findByIdAndUpdate(id, data, {
-        new: true,
-      });
-      res.status(200).json(success(res.statusCode, "Success", { updateData }));
-    } else {
-      res.status(201).json(error("All Filed are required", res.statusCode));
+    const { subCategoryName, category_Id } = req.body;
+    const subCategory = await subCategoryModel.findById(id);
+    if (subCategoryName) {
+      subCategory.subCategoryName = subCategoryName;
     }
+    if (category_Id) {
+      subCategory.category_Id = category_Id;
+    }
+    if (req.file) {
+      subCategory.subCategoryPic = `${process.env.BASE_URL}/${req.file.filename}`;
+    }
+
+    res.status(200).json(success(res.statusCode, "Success", { subCategory }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -218,7 +217,6 @@ exports.categoryStatus = async (req, res) => {
     res.status(400).json(error("Error in Category Status", res.statusCode));
   }
 };
-
 
 exports.subCategoryStatus = async (req, res) => {
   try {
