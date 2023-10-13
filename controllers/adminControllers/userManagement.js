@@ -1,5 +1,6 @@
 const userModels = require("../../models/userModels/UserRegister");
 const { error, success } = require("../../responseCode");
+const { transporter } = require("../../services/mailServices");
 
 exports.userList = async (req, res) => {
   try {
@@ -41,13 +42,18 @@ exports.approvedDoc = async (req, res) => {
     const approvedUser = await userModels.findById(id);
     approvedUser.userVerifyDOc = approved;
     await approvedUser.save();
-    if (approvedUser) {
-      res
-        .status(200)
-        .json(success(res.statusCode, "Success", { approvedUser }));
-    } else {
-      res.status(201).json(error("No Data Found", res.statusCode));
-    }
+    var mailOptions = {
+      from: "s04450647@gmail.com",
+      to: approvedUser.Email,
+      subject: "Account Verify",
+      text: `Greetings ${approvedUser.fullName_en}
+        Your account has been partially approved by admin.
+        We are delighted to welcome you to Patenta, a platform where each and every idea is valued.
+        Your access to our platform is now hassle-free.
+`,
+    };
+    await transporter.sendMail(mailOptions);
+    res.status(200).json(success(res.statusCode, "Success", { approvedUser }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }

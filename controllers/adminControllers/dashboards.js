@@ -6,13 +6,13 @@ const moment = require("moment");
 
 exports.homeDashboards = async (req, res) => {
   try {
-    const totalSallerCount = await userModels.aggregate([
+    const totalSallerCount = await productSchema.aggregate([
       {
         $lookup: {
-          from: "product",
-          foreignField: "user_Id",
-          localField: "_id",
-          as: "order",
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "users",
         },
       },
       {
@@ -22,13 +22,13 @@ exports.homeDashboards = async (req, res) => {
         },
       },
     ]);
-    const totalBuyerCount = await userModels.aggregate([
+    const totalBuyerCount = await orderSchema.aggregate([
       {
         $lookup: {
-          from: "order",
-          foreignField: "user_Id",
-          localField: "_id",
-          as: "order",
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "users",
         },
       },
       {
@@ -38,7 +38,6 @@ exports.homeDashboards = async (req, res) => {
         },
       },
     ]);
-    console.log(totalBuyerCount);
     const saleOfMonth = await orderSchema.aggregate([
       {
         $match: {

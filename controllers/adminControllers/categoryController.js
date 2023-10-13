@@ -117,7 +117,7 @@ exports.updateSubCategory = async (req, res) => {
     if (req.file) {
       subCategory.subCategoryPic = `${process.env.BASE_URL}/${req.file.filename}`;
     }
-
+    await subCategory.save();
     res.status(200).json(success(res.statusCode, "Success", { subCategory }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

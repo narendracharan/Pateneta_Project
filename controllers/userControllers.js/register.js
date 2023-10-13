@@ -157,6 +157,7 @@ exports.companySignup = async (req, res) => {
       return res.status(201).json(error("Email is already register"));
     }
     const passwordHash = await bcrypt.hash(password, 10);
+    const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
     const newUser = new userSchema({
       companyName_en: companyName_en,
       companyName_ar: companyName_ar,
@@ -166,7 +167,7 @@ exports.companySignup = async (req, res) => {
       // type: "User",
     });
     const company = await newUser.save();
-    res.status(201).json(success(res.statusCode, "Success", { company }));
+    res.status(201).json(success(res.statusCode, "Success", { company,otp }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
