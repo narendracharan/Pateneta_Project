@@ -57,6 +57,7 @@ const {
   searchSales,
   salesOrderExports,
   setCommission,
+  buyerSearch,
 } = require("../controllers/adminControllers/sellerContoller");
 const {
   userList,
@@ -146,6 +147,7 @@ router.post("/salesUserDetails/:id",adminAuthorisationUser,salesUserDetails)
 router.post("/sales-exports",adminAuthorisationUser,salesOrderExports)
 router.post("/search-sales",adminAuthorisationUser,searchSales)
 router.post("/buyer-list",adminAuthorisationUser,buyerUserList)
+router.post("/buyer-search",adminAuthorisationUser,buyerSearch)
 router.post("/buyer-delete/:id",adminAuthorisationUser,deleteBuyer)
 router.post("/change-status/:id",adminAuthorisationUser,buyerStatus)
 router.post("/buyer-details/:id",adminAuthorisationUser,buyerDetails)

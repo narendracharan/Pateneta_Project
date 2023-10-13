@@ -69,7 +69,7 @@ exports.loginAdmin = async (req, res) => {
     }
     const isMatch = await bcrypt.compare(password, verifyUser.password);
     if (!isMatch) {
-      return res.status(201).json(error("password is Matched", res.statusCode));
+      return res.status(201).json(error("password is Not Matched", res.statusCode));
     }
     const token = await verifyUser.AdminAuthToken();
     res

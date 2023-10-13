@@ -61,7 +61,7 @@ exports.userRegister = async (req, res) => {
       // type: "User",
     });
     const user = await newUser.save();
-    res.status(200).json(success(res.statusCode, "Success", { user,otp }));
+    res.status(200).json(success(res.statusCode, "Success", { user, otp }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -71,48 +71,49 @@ exports.userRegister = async (req, res) => {
 exports.userLogin = async (req, res) => {
   try {
     const { mobileNumber, password } = req.body;
-    if (mobileNumber && password) {
-      const verifyUser = await userSchema.findOne({
-        mobileNumber: mobileNumber,
-      });
-      if (verifyUser.userVerifyDOc != "APPROVED") {
-        res
-          .status(201)
-          .json(error("Your Are NOt Approved User", res.statusCode));
-      }
-      const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
-      if (verifyUser != null) {
-        const isMatch = await bcrypt.compare(password, verifyUser.password);
-        if (isMatch) {
-          const token = await verifyUser.generateAdminAuthToken();
-          return res
-            .header("x-auth-token-user", token)
-            .header("access-control-expose-headers", "x-auth-token-admin")
-            .status(201)
-            .json(
-              success(res.statusCode, "login SuccessFully", {
-                verifyUser,
-                token,
-                otp
-              })
-            );
-        } else {
-          res
-            .status(403)
-            .json(error("User Password Are Incorrect", res.statusCode));
-        }
-      } else {
-        res
-          .status(403)
-          .json(error("User mobileNumber Are Incorrect", res.statusCode));
-      }
-    } else {
-      res
-        .status(403)
-        .json(
-          error("User mobileNumber and Password Are empty", res.statusCode)
-        );
+
+    if (!mobileNumber) {
+      return res
+        .status(201)
+        .json(error("Please Provide MobileNumber", res.statusCode));
     }
+    if (!password) {
+      return res
+        .status(201)
+        .json(error("Please Provide Passwprd", res.statusCode));
+    }
+
+    const verifyUser = await userSchema.findOne({
+      mobileNumber: mobileNumber,
+    });
+    if (!verifyUser) {
+      return res
+        .status(201)
+        .json(error("mobileNumber is Not Register", res.statusCode));
+    }
+    if (verifyUser.userVerifyDOc != "APPROVED") {
+      res.status(201).json(error("Your Are Not Approved User", res.statusCode));
+    }
+    const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
+
+    const isMatch = await bcrypt.compare(password, verifyUser.password);
+    if (!isMatch) {
+      return res
+        .status(201)
+        .json(error("User Password Are Incorrect", res.statusCode));
+    }
+    const token = await verifyUser.generateAdminAuthToken();
+    return res
+      .header("x-auth-token-user", token)
+      .header("access-control-expose-headers", "x-auth-token-admin")
+      .status(201)
+      .json(
+        success(res.statusCode, "login SuccessFully", {
+          verifyUser,
+          token,
+          otp,
+        })
+      );
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
@@ -167,7 +168,7 @@ exports.companySignup = async (req, res) => {
       // type: "User",
     });
     const company = await newUser.save();
-    res.status(201).json(success(res.statusCode, "Success", { company,otp }));
+    res.status(201).json(success(res.statusCode, "Success", { company, otp }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }

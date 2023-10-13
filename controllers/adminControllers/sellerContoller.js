@@ -9,13 +9,13 @@ const moment = require("moment");
 exports.sellerList = async (req, res) => {
   try {
     const { from, to } = req.body;
-    const list = await UserRegister.aggregate([
+    const list = await productModel.aggregate([
       {
         $lookup: {
-          from: "products",
-          foreignField: "user_Id",
-          localField: "_id",
-          as: "products",
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "users",
         },
       },
       {
@@ -23,17 +23,17 @@ exports.sellerList = async (req, res) => {
           $and: [
             from
               ? {
-                  createdAt: {
-                    $gte: new Date(moment(new Date(from)).startOf("day")),
-                  },
-                }
+                createdAt: {
+                  $gte: new Date(moment(new Date(from)).startOf("day")),
+                },
+              }
               : {},
             to
               ? {
-                  createdAt: {
-                    $lte: new Date(moment(new Date(to)).endOf("day")),
-                  },
-                }
+                createdAt: {
+                  $lte: new Date(moment(new Date(to)).endOf("day")),
+                },
+              }
               : {},
           ],
         },
@@ -98,16 +98,80 @@ exports.sellerSearch = async (req, res) => {
         .status(201)
         .json(error("Please provide search key", res.statusCode));
     }
-    const searchIdeas = await UserRegister.find({
-      fullName_en: { $regex: search, $options: "i" },
-      companyName_en: { $regex: search, $options: "i" },
-      // companyName_en: { $regex: search, $options: "i" },
-      //     $and: [
-      //       { fullName_en: { $regex: new RegExp(search.trim(), "i") } },
-      //       { companyName_en: { $regex: new RegExp(search.trim(), "i") } },
-      //    ],
-    });
-    console.log(searchIdeas);
+    const searchIdeas = await productModel.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "users",
+        },
+      },
+      { $unwind: "$users" },
+      {
+        $match: {
+          $or: [
+            {
+              "users.fullName_en": { $regex: search, $options: "i" },
+            },
+            {
+              "users.companyName_en": {
+                $regex: search,
+                $options: "i",
+              },
+            },
+          ],
+        },
+      },
+    ])
+    if (searchIdeas.length > 0) {
+      return res
+        .status(200)
+        .json(success(res.statusCode, "Success", { searchIdeas }));
+    } else {
+      res.status(201).json(error("User are not Found", res.statusCode));
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+
+exports.buyerSearch = async (req, res) => {
+  try {
+    const search = req.body.search;
+    if (!search) {
+      return res
+        .status(201)
+        .json(error("Please provide search key", res.statusCode));
+    }
+    const searchIdeas = await orderSchema.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "users",
+        },
+      },
+      { $unwind: "$users" },
+      {
+        $match: {
+          $or: [
+            {
+              "users.fullName_en": { $regex: search, $options: "i" },
+            },
+            {
+              "users.companyName_en": {
+                $regex: search,
+                $options: "i",
+              },
+            },
+          ],
+        },
+      },
+    ])
     if (searchIdeas.length > 0) {
       return res
         .status(200)
@@ -124,13 +188,13 @@ exports.sellerSearch = async (req, res) => {
 exports.buyerUserList = async (req, res) => {
   try {
     const { from, to } = req.body;
-    const buyerList = await UserRegister.aggregate([
+    const buyerList = await orderSchema.aggregate([
       {
         $lookup: {
-          from: "order",
-          foreignField: "user_Id",
-          localField: "_id",
-          as: "order",
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "users",
         },
       },
       {
@@ -138,17 +202,17 @@ exports.buyerUserList = async (req, res) => {
           $and: [
             from
               ? {
-                  createdAt: {
-                    $gte: new Date(moment(new Date(from)).startOf("day")),
-                  },
-                }
+                createdAt: {
+                  $gte: new Date(moment(new Date(from)).startOf("day")),
+                },
+              }
               : {},
             to
               ? {
-                  createdAt: {
-                    $lte: new Date(moment(new Date(to)).endOf("day")),
-                  },
-                }
+                createdAt: {
+                  $lte: new Date(moment(new Date(to)).endOf("day")),
+                },
+              }
               : {},
           ],
         },
