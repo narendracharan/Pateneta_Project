@@ -130,7 +130,7 @@ router.post(
 );
 
 ///--> Privacy Routes
-router.post("/push-notification", pushNotification);
+//router.post("/push-notification", pushNotification);
 router.post("/privacy-list", tokenAuthorisationUser, PrivacyUser);
 //router.post("/create-payment", createPayment);
 router.post("/user-report", tokenAuthorisationUser, createReports);
