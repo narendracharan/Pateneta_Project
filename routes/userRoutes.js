@@ -31,6 +31,7 @@ const {
   CategoryListing,
   bussinessIdeaDetails,
   recommandedProduct,
+  subCategoryIdeas,
 } = require("../controllers/userControllers.js/product");
 const {
   pushNotification,
@@ -75,7 +76,7 @@ router.post("/bussines-idea-details/:id",tokenAuthorisationUser,bussinessIdeaDet
 router.post("/my-bussiness-idea/:id",tokenAuthorisationUser, myBussinessIdea);
 router.post("/recommanded-ideas",tokenAuthorisationUser,recommandedProduct)
 router.post("/update-idea/:id", tokenAuthorisationUser,upload.any(), updateBussinessIdea);
-
+router.post("/sub-category-ideas/:id",tokenAuthorisationUser,subCategoryIdeas)
 
 //----> user Order
 router.post("/user-order",tokenAuthorisationUser,createOrder)

@@ -42,17 +42,32 @@ exports.approvedDoc = async (req, res) => {
     const approvedUser = await userModels.findById(id);
     approvedUser.userVerifyDOc = approved;
     await approvedUser.save();
-    var mailOptions = {
-      from: "s04450647@gmail.com",
-      to: approvedUser.Email,
-      subject: "Account Verify",
-      text: `Greetings ${approvedUser.fullName_en}
+    if (approvedUser.fullName_en) {
+      var mailOptions = {
+        from: "s04450647@gmail.com",
+        to: approvedUser.Email,
+        subject: "Account Verify",
+        text: `Greetings ${approvedUser.fullName_en}
+          Your account has been partially approved by admin.
+          We are delighted to welcome you to Patenta, a platform where each and every idea is valued.
+          Your access to our platform is now hassle-free.
+  `,
+      };
+      await transporter.sendMail(mailOptions);
+    }
+    if (approvedUser.companyName_en) {
+      var mailOptions = {
+        from: "s04450647@gmail.com",
+        to: approvedUser.Email,
+        subject: "Account Verify",
+        text: `Greetings ${approvedUser.companyName_en}
         Your account has been partially approved by admin.
         We are delighted to welcome you to Patenta, a platform where each and every idea is valued.
         Your access to our platform is now hassle-free.
 `,
-    };
-    await transporter.sendMail(mailOptions);
+      };
+      await transporter.sendMail(mailOptions);
+    }
     res.status(200).json(success(res.statusCode, "Success", { approvedUser }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

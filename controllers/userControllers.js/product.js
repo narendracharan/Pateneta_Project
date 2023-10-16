@@ -225,6 +225,13 @@ exports.addBids = async (req, res) => {
       res.status(201).json(error("Please Provide User_Id", res.statusCode));
     }
     const product = await productSchema.findById({ _id: id });
+    if (product.baseBid.length) {
+      if (product.baseBid[0].Price > Price) {
+        return res
+          .status(201)
+          .json(error("Please Add Bids Up To Current Bid", res.statusCode));
+      }
+    }
     product.baseBid.push({
       Price: Price,
       user_Id: user_Id,
@@ -362,5 +369,17 @@ exports.recommandedProduct = async (req, res) => {
     }
   } catch (err) {
     res.status(400).json(error("Error in Recommanded Product", res.statusCode));
+  }
+};
+
+exports.subCategoryIdeas = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const ideas = await productModel
+      .find({ subCategory_Id: id })
+      .populate("user_Id");
+    res.status(200).json(success(res.statusCode, "Success", { ideas }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
