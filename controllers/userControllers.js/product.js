@@ -34,7 +34,7 @@ exports.bussinessIdeaDetails = async (req, res) => {
     const id = req.params.id;
     const detailsIdea = await productSchema
       .findById(id)
-      .populate("baseBid.user_Id");
+      .populate(["baseBid.user_Id", "user_Id"]);
     res.status(200).json(success(res.statusCode, "Success", { detailsIdea }));
   } catch (err) {
     res
@@ -273,7 +273,9 @@ exports.baseBidList = async (req, res) => {
 exports.myBussinessIdea = async (req, res) => {
   try {
     const id = req.params.id;
-    let myIdeas = await productSchema.find({ user_Id: id }).populate("user_Id");
+    let myIdeas = await productSchema
+      .find({ user_Id: id })
+      .populate(["user_Id", "category_Id", "subCategory_Id"]);
     res.status(200).json(success(res.statusCode, "Success", { myIdeas }));
   } catch (err) {
     console.log(err);
