@@ -8,6 +8,11 @@ exports.homeDashboards = async (req, res) => {
   try {
     const totalSallerCount = await productSchema.aggregate([
       {
+        $match: {
+          verify: "APPROVED",
+        },
+      },
+      {
         $lookup: {
           from: "users",
           localField: "user_Id",

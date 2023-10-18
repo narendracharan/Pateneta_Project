@@ -235,6 +235,7 @@ exports.addBids = async (req, res) => {
     product.baseBid.push({
       Price: Price,
       user_Id: user_Id,
+      createdAt: new Date(),
     });
     const newProduct = await product.save();
     res.status(200).json(success(res.statusCode, "Success", { newProduct }));
@@ -330,7 +331,15 @@ exports.subCategoryListing = async (req, res) => {
 
 exports.lowtoHighPrice = async (req, res) => {
   try {
-    const productFilter = await productSchema.find({}).sort({ Price: 1 });
+    const productFilter = await productSchema.aggregate([
+      { $sort: { Price: 1 } },
+      { $sort: { "baseBid.Price": 1 } },
+      {
+        $match: {
+          verify: "APPROVED",
+        },
+      },
+    ]);
     if (productFilter) {
       res
         .status(200)
@@ -345,7 +354,15 @@ exports.lowtoHighPrice = async (req, res) => {
 
 exports.highToLowPrice = async (req, res) => {
   try {
-    const productFilter = await productSchema.find({}).sort({ Price: -1 });
+    const productFilter = await productSchema.aggregate([
+      { $sort: { Price: -1 } },
+      { $sort: { "baseBid.Price": -1 } },
+      {
+        $match: {
+          verify: "APPROVED",
+        },
+      },
+    ]);
     if (productFilter) {
       res
         .status(200)
@@ -364,8 +381,9 @@ exports.recommandedProduct = async (req, res) => {
     const products = await productModel
       .find({ category_Id: id })
       .populate("user_Id");
+    const product = products.filter((x) => x.verify == "APPROVED");
     if (products.length > 0) {
-      res.status(200).json(success(res.statusCode, "Success", { products }));
+      res.status(200).json(success(res.statusCode, "Success", { product }));
     } else {
       res.status(201).json(error("No Data Found", res.statusCode));
     }
@@ -380,7 +398,8 @@ exports.subCategoryIdeas = async (req, res) => {
     const ideas = await productModel
       .find({ subCategory_Id: id })
       .populate("user_Id");
-    res.status(200).json(success(res.statusCode, "Success", { ideas }));
+    const product = ideas.filter((x) => x.verify == "APPROVED");
+    res.status(200).json(success(res.statusCode, "Success", { product }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }

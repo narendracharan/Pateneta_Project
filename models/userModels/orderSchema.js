@@ -13,16 +13,16 @@ const schema = new mongoose.Schema({
         type: Number,
         require: true,
       },
-      bids_Id:{
+      bids_Id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "product",
         require: true,
-      }
+      },
     },
   ],
   paymentStatus: {
     type: String,
-    default:"Paid",
+    default: "Paid",
     enum: ["Paid", "Process", "Cancelled"],
   },
   paymentIntent: {
@@ -35,10 +35,22 @@ const schema = new mongoose.Schema({
     ref: "user",
     require: true,
   },
-  total:{
-    type:Number,
-    require:true
-  }
+  name: {
+    type: String,
+    require: true,
+  },
+  email: {
+    type: String,
+    require: true,
+  },
+  mobileNumber: {
+    type: Number,
+    require: true,
+  },
+  total: {
+    type: Number,
+    require: true,
+  },
   //   cardNumber:{
   //     type:Number
   //   },

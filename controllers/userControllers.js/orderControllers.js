@@ -10,7 +10,16 @@ const moment = require("moment");
 
 exports.createOrder = async (req, res) => {
   try {
-    const { product_Id, Price, user_Id, total, bids_Id } = req.body;
+    const {
+      product_Id,
+      Price,
+      user_Id,
+      name,
+      email,
+      mobileNumber,
+      total,
+      bids_Id,
+    } = req.body;
     const product = await productModel.findOne({ _id: product_Id });
 
     if (product.baseBid == "") {
@@ -21,6 +30,9 @@ exports.createOrder = async (req, res) => {
             Price: Price,
           },
         ],
+        name: name,
+        email: email,
+        mobileNumber: mobileNumber,
         user_Id: user_Id,
         total: total,
       });
@@ -35,6 +47,9 @@ exports.createOrder = async (req, res) => {
             bids_Id: bids_Id,
           },
         ],
+        name: name,
+        email: email,
+        mobileNumber: mobileNumber,
         user_Id: user_Id,
         total: total,
       });

@@ -71,6 +71,10 @@ const schema = new mongoose.Schema({
         ref: "user",
         require: true,
       },
+      createdAt: {
+        type: Date,
+        require: true,
+      },
     },
   ],
   urlFile: {
