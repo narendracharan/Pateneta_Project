@@ -9,7 +9,7 @@ app.use(bodyparser.json())
 require("./config/connection")
 const router=require("./routes/userRoutes")
 const adminRouter=require("./routes/adminRoutes")
-process.env["BASE_URL"] = "http://ec2-3-110-182-243.ap-south-1.compute.amazonaws.com:2053";
+process.env["BASE_URL"] = "http://ec2-3-110-182-243.ap-south-1.compute.amazonaws.com:3001";
 app.use(express.static("./public"))
 app.use("/user",router)
 app.use("/admin",adminRouter)
