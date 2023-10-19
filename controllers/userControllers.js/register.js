@@ -413,6 +413,7 @@ exports.logOut = async (req, res) => {
   }
 };
 
+//User Reset Password Api
 exports.userResetPassword = async (req, res) => {
   try {
     const id = req.params.id;
@@ -455,6 +456,7 @@ exports.userResetPassword = async (req, res) => {
   }
 };
 
+// User Details Api
 exports.userDetails = async (req, res) => {
   try {
     const id = req.params.id;

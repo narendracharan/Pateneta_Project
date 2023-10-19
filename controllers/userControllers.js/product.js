@@ -29,6 +29,7 @@ exports.createIdea = async (req, res) => {
   }
 };
 
+// Bussiness Idea Details Api
 exports.bussinessIdeaDetails = async (req, res) => {
   try {
     const id = req.params.id;
@@ -124,11 +125,16 @@ exports.listBussinesIdeas = async (req, res) => {
       {
         $match: {
           verify: "APPROVED",
+          // $or: [
+          //   { 'baseBid.bidsVerify':"Accepted" },
+
+          //  ],
         },
       },
     ]);
     res.status(200).json(success(res.statusCode, "Success", { verify }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Error in Listing", res.statusCode));
   }
 };
@@ -329,6 +335,7 @@ exports.subCategoryListing = async (req, res) => {
   }
 };
 
+//Filter Low Price Api
 exports.lowtoHighPrice = async (req, res) => {
   try {
     const productFilter = await productSchema.aggregate([
@@ -352,6 +359,7 @@ exports.lowtoHighPrice = async (req, res) => {
   }
 };
 
+//Filter High Price Api
 exports.highToLowPrice = async (req, res) => {
   try {
     const productFilter = await productSchema.aggregate([
@@ -375,6 +383,7 @@ exports.highToLowPrice = async (req, res) => {
   }
 };
 
+// Recommanded Product Api
 exports.recommandedProduct = async (req, res) => {
   try {
     const id = req.params.id;
@@ -392,6 +401,7 @@ exports.recommandedProduct = async (req, res) => {
   }
 };
 
+// Sub Category Idea Api
 exports.subCategoryIdeas = async (req, res) => {
   try {
     const id = req.params.id;
@@ -402,5 +412,24 @@ exports.subCategoryIdeas = async (req, res) => {
     res.status(200).json(success(res.statusCode, "Success", { product }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+// Accept Bids Api
+exports.acceptBids = async (req, res) => {
+  try {
+    const approved = "Accepted";
+    var bids_Id = req.body.bids_Id;
+    const ideas = await productModel.findById(req.params.id);
+    var bids = ideas.baseBid.filter(
+      (bids) => String(bids._id) === String(bids_Id)
+    );
+    if (bids.length) {
+      bids[0].bidsVerify = approved;
+    }
+    await ideas.save();
+    res.status(200).json(success(res.statusCode, "Success", { ideas }));
+  } catch (err) {
+    res.status(400).json(error("Error in Approved Bid", res.statusCode));
   }
 };

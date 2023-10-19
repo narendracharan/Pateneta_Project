@@ -197,6 +197,7 @@ exports.subCategorySearch = async (req, res) => {
   }
 };
 
+//category status change api
 exports.categoryStatus = async (req, res) => {
   try {
     const status = req.body.status;
@@ -218,6 +219,7 @@ exports.categoryStatus = async (req, res) => {
   }
 };
 
+//SUbCategory Status Change Api
 exports.subCategoryStatus = async (req, res) => {
   try {
     const status = req.body.status;

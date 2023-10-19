@@ -141,6 +141,8 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
+//Admin Send Mail Api
+
 exports.sendUserResetPassword = async (req, res) => {
   try {
     const { userEmail } = req.body;
@@ -172,6 +174,7 @@ exports.sendUserResetPassword = async (req, res) => {
   }
 };
 
+//Admin Verify OTP Api
 exports.OtpVerify = async (req, res) => {
   try {
     const { userEmail, otp } = req.body;

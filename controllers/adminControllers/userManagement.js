@@ -2,6 +2,7 @@ const userModels = require("../../models/userModels/UserRegister");
 const { error, success } = require("../../responseCode");
 const { transporter } = require("../../services/mailServices");
 
+//User List Api
 exports.userList = async (req, res) => {
   try {
     const { from, to } = req.body;
@@ -21,6 +22,7 @@ exports.userList = async (req, res) => {
   }
 };
 
+//User Details Api
 exports.userDetails = async (req, res) => {
   try {
     const id = req.params.id;
@@ -35,6 +37,7 @@ exports.userDetails = async (req, res) => {
   }
 };
 
+//Approved Docs Api
 exports.approvedDoc = async (req, res) => {
   try {
     const id = req.params.id;
@@ -74,6 +77,7 @@ exports.approvedDoc = async (req, res) => {
   }
 };
 
+//User Decline Docs Api
 exports.declineDoc = async (req, res) => {
   try {
     const id = req.params.id;
@@ -95,6 +99,7 @@ exports.declineDoc = async (req, res) => {
   }
 };
 
+//User Delete Api
 exports.userDelete = async (req, res) => {
   try {
     const id = req.params.id;
@@ -109,6 +114,7 @@ exports.userDelete = async (req, res) => {
   }
 };
 
+//Change Status Api
 exports.changeStatus = async (req, res) => {
   try {
     const id = req.params.id;

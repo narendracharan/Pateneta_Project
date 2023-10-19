@@ -6,6 +6,7 @@ const fs = require("fs");
 const jsonrawtoxlsx = require("jsonrawtoxlsx");
 const moment = require("moment");
 
+//Seller List Api
 exports.sellerList = async (req, res) => {
   try {
     const { from, to } = req.body;
@@ -49,6 +50,7 @@ exports.sellerList = async (req, res) => {
   }
 };
 
+//Edit Seller Api
 exports.editSeller = async (req, res) => {
   try {
     const { fullName_en, companyName_en, Email, commission, createdAt } =
@@ -70,6 +72,7 @@ exports.editSeller = async (req, res) => {
   }
 };
 
+//Seller Details Api
 exports.sellerDetails = async (req, res) => {
   try {
     const id = req.params.id;
@@ -80,6 +83,7 @@ exports.sellerDetails = async (req, res) => {
   }
 };
 
+//Seller Delete Api
 exports.sellerDelete = async (req, res) => {
   try {
     const id = req.params.id;
@@ -90,6 +94,7 @@ exports.sellerDelete = async (req, res) => {
   }
 };
 
+//Selller Search Api
 exports.sellerSearch = async (req, res) => {
   try {
     const search = req.body.search;
@@ -137,7 +142,7 @@ exports.sellerSearch = async (req, res) => {
   }
 };
 
-
+// Buyer Search api
 exports.buyerSearch = async (req, res) => {
   try {
     const search = req.body.search;
@@ -185,6 +190,7 @@ exports.buyerSearch = async (req, res) => {
   }
 };
 
+//BUyer List Api
 exports.buyerUserList = async (req, res) => {
   try {
     const { from, to } = req.body;
@@ -225,6 +231,7 @@ exports.buyerUserList = async (req, res) => {
   }
 };
 
+//Buyer Details Api
 exports.buyerDetails = async (req, res) => {
   try {
     const buyerDetails = await UserRegister.findById(req.params.id);
@@ -235,6 +242,7 @@ exports.buyerDetails = async (req, res) => {
   }
 };
 
+//Delete Buyer Api
 exports.deleteBuyer = async (req, res) => {
   try {
     const deleteBuyer = await UserRegister.findByIdAndDelete(req.params.id);
@@ -247,6 +255,7 @@ exports.deleteBuyer = async (req, res) => {
   }
 };
 
+//Buyer chnage Status
 exports.buyerStatus = async (req, res) => {
   try {
     const status = req.body.status;
@@ -266,6 +275,7 @@ exports.buyerStatus = async (req, res) => {
   }
 };
 
+//Sales User List Api
 exports.salesUserList = async (req, res) => {
   try {
     const { from, to } = req.body;
@@ -290,6 +300,8 @@ exports.salesUserList = async (req, res) => {
     res.status(400).json(error("Error in Sales Listing", res.statusCode));
   }
 };
+
+//Sales User Details Api
 exports.salesUserDetails = async (req, res) => {
   try {
     const details = await orderSchema
@@ -300,7 +312,7 @@ exports.salesUserDetails = async (req, res) => {
     res.status(400).json(error("Error in Sales Details", res.statusCode));
   }
 };
-
+//Search Sales Api
 exports.searchSales = async (req, res) => {
   try {
     const search = req.body.search;
@@ -364,6 +376,7 @@ exports.searchSales = async (req, res) => {
   }
 };
 
+//Sales Order Exports Api
 exports.salesOrderExports = async (req, res) => {
   try {
     const order = await orderSchema
@@ -397,6 +410,7 @@ exports.salesOrderExports = async (req, res) => {
   }
 };
 
+//Set Commission Api
 exports.setCommission = async (req, res) => {
   try {
     const Commission = req.body.Commission;

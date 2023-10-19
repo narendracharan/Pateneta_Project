@@ -1,8 +1,8 @@
 const contentSchema = require("../../models/adminModels/contentModels");
-const { findByIdAndDelete } = require("../../models/userModels/UserRegister");
 const userSupport = require("../../models/userModels/userSupport");
 const { error, success } = require("../../responseCode");
 
+//create Content Api
 exports.createContent = async (req, res) => {
   try {
     const { title_en, Description_en, title_ar, Description_ar } = req.body;
@@ -39,6 +39,7 @@ exports.createContent = async (req, res) => {
   }
 };
 
+//Content List Api
 exports.ContentList = async (req, res) => {
   try {
     const listData = await contentSchema.find({});
@@ -48,6 +49,7 @@ exports.ContentList = async (req, res) => {
   }
 };
 
+// Update Content Api
 exports.updateContent = async (req, res) => {
   try {
     const id = req.params.id;
@@ -64,6 +66,7 @@ exports.updateContent = async (req, res) => {
   }
 };
 
+//Reports List Api
 exports.reportsList = async (req, res) => {
   try {
     const { from, to } = req.body;
@@ -85,6 +88,7 @@ exports.reportsList = async (req, res) => {
   }
 };
 
+//Reports Search Api
 exports.reportsSearch = async (req, res) => {
   try {
     const search = req.body.search;
@@ -105,6 +109,7 @@ exports.reportsSearch = async (req, res) => {
   }
 };
 
+//Reports View Api
 exports.reportsView = async (req, res) => {
   try {
     const id = req.params.id;
@@ -121,6 +126,7 @@ exports.reportsView = async (req, res) => {
   }
 };
 
+//edits Reports Api
 exports.editReports = async (req, res) => {
   try {
     const id = req.params.id;
@@ -143,6 +149,7 @@ exports.editReports = async (req, res) => {
   }
 };
 
+//Delete Reports Api
 exports.deleteReports = async (req, res) => {
   try {
     const id = req.params.id;

@@ -9,9 +9,9 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  status:{
-    type:String,
-    default:true
+  status: {
+    type: String,
+    default: true,
   },
   user_Id: {
     type: mongoose.Schema.Types.ObjectId,

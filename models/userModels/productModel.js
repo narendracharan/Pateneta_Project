@@ -75,17 +75,22 @@ const schema = new mongoose.Schema({
         type: Date,
         require: true,
       },
+      bidsVerify: {
+        type: String,
+        enum: ["PENDING", "Accepted", "Decline"],
+        default: "PENDING",
+      },
     },
   ],
   urlFile: {
     type: String,
     require: true,
   },
-  bidsVerify: {
-    type: String,
-    enum: ["PENDING", "Accepted", "Decline"],
-    default: "PENDING",
-  },
+  // bidsVerify: {
+  //   type: String,
+  //   enum: ["PENDING", "Accepted", "Decline"],
+  //   default: "PENDING",
+  // },
   // highestBid: {
   //   type: Number,
   //   require: true,

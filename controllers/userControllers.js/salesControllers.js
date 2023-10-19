@@ -1,6 +1,8 @@
 const orderSchema = require("../../models/userModels/orderSchema");
 const { error, success } = require("../../responseCode");
 
+
+// Sales List Api
 exports.salesList = async (req, res) => {
   try {
     const salesList = await orderSchema
@@ -12,6 +14,7 @@ exports.salesList = async (req, res) => {
   }
 };
 
+// User Sales Details
 exports.userSalesDetails = async (req, res) => {
   try {
     const salesDeatils = await orderSchema
@@ -23,6 +26,8 @@ exports.userSalesDetails = async (req, res) => {
   }
 };
 
+
+// Sales Search Details Api
 exports.salesSearch = async (req, res) => {
   try {
     const search = req.body.search;

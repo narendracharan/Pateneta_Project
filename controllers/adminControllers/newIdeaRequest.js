@@ -120,6 +120,7 @@ exports.updateStatus = async (req, res) => {
   }
 };
 
+// Delete Bussiness Idea Api
 exports.deleteBussinessIdea = async (req, res) => {
   try {
     const id = req.params.id;
