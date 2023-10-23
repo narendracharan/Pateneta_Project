@@ -47,6 +47,10 @@ const schema = new mongoose.Schema({
     type: Number,
     require: true,
   },
+  status:{
+    type: String,
+    default: "purchase",
+  },
   total: {
     type: Number,
     require: true,

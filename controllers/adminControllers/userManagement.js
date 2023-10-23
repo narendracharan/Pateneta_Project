@@ -1,5 +1,6 @@
 const userModels = require("../../models/userModels/UserRegister");
 const { error, success } = require("../../responseCode");
+const sendMail = require("../../services/EmailSerices");
 const { transporter } = require("../../services/mailServices");
 
 //User List Api
@@ -46,39 +47,54 @@ exports.approvedDoc = async (req, res) => {
     approvedUser.userVerifyDOc = approved;
     await approvedUser.save();
     if (approvedUser.fullName_en) {
-      var mailOptions = {
-        from: "s04450647@gmail.com",
-        to: approvedUser.Email,
-        subject: "Account Verify",
-        text: `Greetings ${approvedUser.fullName_en}
-          Your account has been partially approved by admin.
-          We are delighted to welcome you to Patenta, a platform where each and every idea is valued.
-          Your access to our platform is now hassle-free.
-          
-          Patenta,
-          Contact Information
-  `,
-      };
-      await transporter.sendMail(mailOptions);
+    await sendMail(
+      approvedUser.Email,
+      `Account Verify`,
+      approvedUser.fullName_en,
+      `<br.
+      <br>
+      Your account has been partially approved by admin.<br>
+      <br>
+      <b> We are delighted to welcome you to Patenta, a platform where each and every idea is valued.</b>
+      <br>
+      Your access to our platform is now hassle-free.<br>
+      <br>
+      Please Login Your Account https://patenta-sa.com/login
+      <br>
+      <br>
+      Patenta<br>
+      Customer Service Team<br>
+      91164721
+      `
+    )
     }
+  // 
     if (approvedUser.companyName_en) {
-      var mailOptions = {
-        from: "s04450647@gmail.com",
-        to: approvedUser.Email,
-        subject: "Account Verify",
-        text: `Greetings ${approvedUser.companyName_en}
-        Your account has been partially approved by admin.
-        We are delighted to welcome you to Patenta, a platform where each and every idea is valued.
-        Your access to our platform is now hassle-free.
-          
-        Patenta,
-        Contact Information
-`,
+      await sendMail(
+        approvedUser.Email,
+        `Account Verify`,
+        approvedUser.companyName_en,
+        `<br.
+        <br>
+        Your account has been partially approved by admin.<br>
+        <br>
+        <b> We are delighted to welcome you to Patenta, a platform where each and every idea is valued.</b>
+        <br>
+        Your access to our platform is now hassle-free.<br>
+        <br>
+        Please Login Your Account https://patenta-sa.com/login
+        <br>
+        <br>
+        Patenta<br>
+        Customer Service Team<br>
+        91164721
+        `
+      )
       };
-      await transporter.sendMail(mailOptions);
-    }
+      
     res.status(200).json(success(res.statusCode, "Success", { approvedUser }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

@@ -45,6 +45,7 @@ const {
   createOrder,
   orderDetails,
   downloadUserOrder,
+  myOrder,
 } = require("../controllers/userControllers.js/orderControllers");
 const {
   salesList,
@@ -113,6 +114,7 @@ router.post("/search-my-idea",tokenAuthorisationUser,searchMyIdea)
 router.post("/user-order", tokenAuthorisationUser, createOrder);
 router.post("/order-details/:id", tokenAuthorisationUser, orderDetails);
 router.post("/order-download/:id", tokenAuthorisationUser, downloadUserOrder);
+router.post("/my-order/:id",tokenAuthorisationUser,myOrder)
 
 //---->>selas routes
 router.post("/user-sales-list/:id", tokenAuthorisationUser, salesList);
