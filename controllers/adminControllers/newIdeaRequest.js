@@ -77,15 +77,42 @@ exports.searchIdeaRequest = async (req, res) => {
         .status(201)
         .json(error("Please provide search key", res.statusCode));
     }
-    const searchIdeas = await ideaRequestSchema.find({
-      $and: [
-        { title_en: { $regex: new RegExp(search.trim(), "i") } },
-        { description_en: { $regex: new RegExp(search.trim(), "i") } },
-        { category_en: { $regex: new RegExp(search.trim(), "i") } },
-        { subCategory_en: { $regex: new RegExp(search.trim(), "i") } },
-        { briefDescription_en: { $regex: new RegExp(search.trim(), "i") } },
-      ],
-    });
+    const searchIdeas = await ideaRequestSchema.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "users",
+        },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category_Id",
+          foreignField: "_id",
+          as: "categories",
+        },
+      },
+      { $unwind: "$categories" },
+      { $unwind: "$users" },
+      {
+        $match: {
+          $or: [
+            {
+              "users.fullName_en": { $regex: search, $options: "i" },
+            },
+            {
+              "users.companyName_en": { $regex: search, $options: "i" },
+            },
+            {
+              "categories.categoryName": { $regex: search, $options: "i" },
+            },
+           
+          ],
+        },
+      },
+    ])
     if (searchIdeas.length > 0) {
       return res
         .status(200)

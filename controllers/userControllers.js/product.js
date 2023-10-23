@@ -151,6 +151,14 @@ exports.searchBussinessIdea = async (req, res) => {
     const searchIdeas = await productSchema.aggregate([
       {
         $lookup: {
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "users",
+        },
+      },
+      {
+        $lookup: {
           from: "categories",
           localField: "category_Id",
           foreignField: "_id",
@@ -431,5 +439,78 @@ exports.acceptBids = async (req, res) => {
     res.status(200).json(success(res.statusCode, "Success", { ideas }));
   } catch (err) {
     res.status(400).json(error("Error in Approved Bid", res.statusCode));
+  }
+};
+
+exports.searchMyIdea = async (req, res) => {
+  try {
+    const search = req.body.search;
+    if (!search) {
+      return res
+        .status(201)
+        .json(error("Please provide search key", res.statusCode));
+    }
+    const searchIdeas = await productSchema.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "users",
+        },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category_Id",
+          foreignField: "_id",
+          as: "categories",
+        },
+      },
+      {
+        $lookup: {
+          from: "subcategories",
+          localField: "subCategory_Id",
+          foreignField: "_id",
+          as: "subcategoriess",
+        },
+      },
+      { $unwind: "$categories" },
+      { $unwind: "$subcategoriess" },
+      {
+        $match: {
+          $or: [
+            {
+              title_en: { $regex: search, $options: "i" },
+            },
+            {
+              description_en: { $regex: search, $options: "i" },
+            },
+            {
+              briefDescription_en: { $regex: search, $options: "i" },
+            },
+            {
+              "categories.categoryName": { $regex: search, $options: "i" },
+            },
+            {
+              "subcategoriess.subCategoryName": {
+                $regex: search,
+                $options: "i",
+              },
+            },
+          ],
+        },
+      },
+    ]);
+    if (searchIdeas.length > 0) {
+      return res
+        .status(200)
+        .json(success(res.statusCode, "Success", { searchIdeas }));
+    } else {
+      res.status(201).json(error("Ideas are not Found", res.statusCode));
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };

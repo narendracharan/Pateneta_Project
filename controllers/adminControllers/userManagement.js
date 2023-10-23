@@ -54,6 +54,9 @@ exports.approvedDoc = async (req, res) => {
           Your account has been partially approved by admin.
           We are delighted to welcome you to Patenta, a platform where each and every idea is valued.
           Your access to our platform is now hassle-free.
+          
+          Patenta,
+          Contact Information
   `,
       };
       await transporter.sendMail(mailOptions);
@@ -67,6 +70,9 @@ exports.approvedDoc = async (req, res) => {
         Your account has been partially approved by admin.
         We are delighted to welcome you to Patenta, a platform where each and every idea is valued.
         Your access to our platform is now hassle-free.
+          
+        Patenta,
+        Contact Information
 `,
       };
       await transporter.sendMail(mailOptions);

@@ -51,6 +51,10 @@ const schema = new mongoose.Schema({
     type: Number,
     require: true,
   },
+  baseFare:{
+    type: Number,
+    require: true,
+  },
   ideaLogo: {
     type: String,
     require: true,
