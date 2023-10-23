@@ -94,7 +94,7 @@ exports.updateCategory = async (req, res) => {
     if (req.file) {
       category.category_Pic = `${process.env.BASE_URL}/${req.file.filename}`;
     }
-
+    await category.save();
     res.status(200).json(success(res.statusCode, "Success", { category }));
   } catch (err) {
     console.log(err);

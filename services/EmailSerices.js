@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const config = require("config");
+//const config = require("config");
 
 const sendMail = async (
   to,
@@ -87,7 +87,7 @@ const sendMail = async (
                                     style="text-align: left; font-size: 14px;line-height: 24px;font-weight: 400; color: #000; padding-bottom: 25px;">
                                     If you have any questions or concerns regarding this, please do not hesitate to
                                     reach out to us at
-                                    [<a href="mailto:websupport@starimporters.com">websupport@Patenta.com</a>].
+                                    [<a href="mailto:websupport@Patenta.com">websupport@Patenta.com</a>].
                                  </td>
                               </tr>
                            </table>
