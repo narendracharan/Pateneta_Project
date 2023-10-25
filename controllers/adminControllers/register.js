@@ -92,7 +92,21 @@ exports.loginAdmin = async (req, res) => {
 exports.resetPassword = async (req, res) => {
   try {
     const { newPassword, confirmPassword, userEmail } = req.body;
-    if (newPassword && confirmPassword && Email) {
+    if(!newPassword){
+      return res
+      .status(201)
+      .json(error(" Please Provide newPassword "));
+    }
+    if(!confirmPassword){
+      return res
+      .status(201)
+      .json(error(" Please Provide confirmPassword "));
+    }
+    if(!userEmail){
+      return res
+      .status(201)
+      .json(error(" Please Provide userEmail "));
+    }
       if (newPassword !== confirmPassword) {
         return res
           .status(401)
@@ -109,9 +123,6 @@ exports.resetPassword = async (req, res) => {
           .status(200)
           .json(success(res.statusCode, "Success", { createPassword }));
       }
-    } else {
-      res.status(201).json(error("All Filed are required", res.statusCode));
-    }
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));

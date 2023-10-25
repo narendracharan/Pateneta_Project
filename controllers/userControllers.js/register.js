@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const languageModels = require("../../models/userModels/languageModels");
 const productModel = require("../../models/userModels/productModel");
+const adminSchema=require("../../models/adminModels/userModels")
 //const otpGenerator=require("otp-generator")
 
 // const accountSid = 'AC7898d1cff989f262b5413d25e1038f1b'; // Your Account SID from www.twilio.com/console
@@ -34,6 +35,7 @@ exports.userRegister = async (req, res) => {
         .status(201)
         .json(error("Please enter password", res.statusCode));
     }
+    const admin=await adminSchema.findOne()
     const checkName = await userSchema.findOne({
       fullName_ar: fullName_en,
     });

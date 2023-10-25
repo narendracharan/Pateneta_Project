@@ -9,20 +9,54 @@ const { resetPassword } = require("./register");
 //---------> create bussiness idea api
 exports.createIdea = async (req, res) => {
   try {
-    const idea = new productSchema(req.body);
+    const {
+      title_en,
+      title_ar,
+      description_en,
+      description_ar,
+      category_Id,
+      subCategory_Id,
+      briefDescription_en,
+      briefDescription_ar,
+      Price,
+      selectDocument,
+      user_Id,
+      baseFare,
+    } = req.body;
+    const userVerify = await userSchema.findOne({ _id: user_Id });
+    if (userVerify.userVerifyDOc != "APPROVED") {
+      return res
+        .status(201)
+        .json(error("Please Complete Your Kyc", res.statusCode));
+    }
+
+    let newIdeas = new productSchema({
+      title_en: title_en,
+      title_ar: title_ar,
+      description_en: description_en,
+      description_ar: description_ar,
+      category_Id: category_Id,
+      subCategory_Id: subCategory_Id,
+      briefDescription_ar: briefDescription_ar,
+      briefDescription_en: briefDescription_en,
+      Price: Price,
+      user_Id: user_Id,
+      baseFare: baseFare,
+      selectDocument:selectDocument
+    });
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "productPic") {
-          idea.productPic.push(
+          newIdeas.productPic.push(
             `${process.env.BASE_URL}/${req.files[i].filename}`
           );
         }
         if (req.files[i].fieldname == "ideaLogo") {
-          idea.ideaLogo = `${process.env.BASE_URL}/${req.files[i].filename}`;
+          newIdeas.ideaLogo = `${process.env.BASE_URL}/${req.files[i].filename}`;
         }
       }
     }
-    const saveIdea = await idea.save();
+    const saveIdea = await newIdeas.save();
     res.status(201).json(success(res.statusCode, "Success", { saveIdea }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
