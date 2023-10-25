@@ -24,7 +24,7 @@ exports.createIdea = async (req, res) => {
       baseFare,
     } = req.body;
     const userVerify = await userSchema.findOne({ _id: user_Id });
-    if (userVerify.userVerifyDOc != "APPROVED") {
+    if (userVerify.verifyDocument != "APPROVED") {
       return res
         .status(201)
         .json(error("Please Complete Your Kyc", res.statusCode));

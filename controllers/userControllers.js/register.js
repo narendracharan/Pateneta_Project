@@ -93,7 +93,7 @@ exports.userLogin = async (req, res) => {
         .status(201)
         .json(error("mobileNumber is Not Register", res.statusCode));
     }
-    if (verifyUser.userVerifyDOc != "APPROVED") {
+    if (verifyUser.userVerify != "APPROVED") {
       res.status(201).json(error("Your Are Not Approved User", res.statusCode));
     }
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;

@@ -54,7 +54,12 @@ const schema = new mongoose.Schema({
   otpExpriTime: {
     type: Date,
   },
-  userVerifyDOc: {
+  verifyDocument:{
+    type: String,
+    enum: ["PENDING", "APPROVED", "REJECTED"],
+    default: "PENDING",
+  },
+  userVerify: {
     type: String,
     enum: ["PENDING", "APPROVED", "REJECTED"],
     default: "PENDING",

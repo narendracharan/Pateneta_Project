@@ -44,14 +44,14 @@ exports.approvedDoc = async (req, res) => {
     const id = req.params.id;
     const approved = "APPROVED";
     const approvedUser = await userModels.findById(id);
-    approvedUser.userVerifyDOc = approved;
+    approvedUser.userVerify = approved;
     await approvedUser.save();
     if (approvedUser.fullName_en) {
-    await sendMail(
-      approvedUser.Email,
-      `Account Verify`,
-      approvedUser.fullName_en,
-      `<br.
+      await sendMail(
+        approvedUser.Email,
+        `Account Verify`,
+        approvedUser.fullName_en,
+        `<br.
       <br>
       Your account has been partially approved by admin.<br>
       <br>
@@ -66,9 +66,9 @@ exports.approvedDoc = async (req, res) => {
       Customer Service Team<br>
       91164721
       `
-    )
+      );
     }
-  // 
+    //
     if (approvedUser.companyName_en) {
       await sendMail(
         approvedUser.Email,
@@ -89,9 +89,9 @@ exports.approvedDoc = async (req, res) => {
         Customer Service Team<br>
         91164721
         `
-      )
-      };
-      
+      );
+    }
+
     res.status(200).json(success(res.statusCode, "Success", { approvedUser }));
   } catch (err) {
     console.log(err);
@@ -106,7 +106,7 @@ exports.declineDoc = async (req, res) => {
     const status = "REJECTED";
     const decline = req.body.decline;
     const declinedUser = await userModels.findById(id);
-    declinedUser.userVerifyDOc = status;
+    declinedUser.userVerify = status;
     declinedUser.declineDoc = decline;
     await declinedUser.save();
     if (declinedUser) {
@@ -158,5 +158,17 @@ exports.changeStatus = async (req, res) => {
     }
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.verifyDocument = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const approved = "APPROVED";
+    const approvedUser = await userModels.findById(id);
+    approvedUser.verifyDocument = approved;
+    await approvedUser.save();
+  } catch (err) {
+    res.status(400).json(error("Error In VerifyDocument", res.statusCode));
   }
 };
