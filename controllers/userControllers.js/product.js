@@ -4,7 +4,9 @@ const userSchema = require("../../models/userModels/UserRegister");
 const categoryModels = require("../../models/adminModels/categoryModels");
 const subCategoryModel = require("../../models/adminModels/subCategoryModel");
 const productModel = require("../../models/userModels/productModel");
+const adminSchema = require("../../models/adminModels/userModels");
 const { resetPassword } = require("./register");
+const sendMail = require("../../services/EmailSerices");
 
 //---------> create bussiness idea api
 exports.createIdea = async (req, res) => {
@@ -29,7 +31,6 @@ exports.createIdea = async (req, res) => {
         .status(201)
         .json(error("Please Complete Your Kyc", res.statusCode));
     }
-
     let newIdeas = new productSchema({
       title_en: title_en,
       title_ar: title_ar,
@@ -42,7 +43,7 @@ exports.createIdea = async (req, res) => {
       Price: Price,
       user_Id: user_Id,
       baseFare: baseFare,
-      selectDocument:selectDocument
+      selectDocument: selectDocument,
     });
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
@@ -54,9 +55,32 @@ exports.createIdea = async (req, res) => {
         if (req.files[i].fieldname == "ideaLogo") {
           newIdeas.ideaLogo = `${process.env.BASE_URL}/${req.files[i].filename}`;
         }
+        if (req.files[i].fieldname == "selectDocument") {
+          newIdeas.selectDocument.push(
+            `${process.env.BASE_URL}/${req.files[i].filename}`
+          );
+        }
       }
     }
     const saveIdea = await newIdeas.save();
+    await sendMail(
+      "narendracharan25753@gmail.com",
+      `New Idea`,
+      "Narendra Charan",
+      `<br.
+    <br>
+    New idea has been added on the Platform<br>
+    <br>
+
+    <br>
+    Please Login Your Account https://admin.patenta-sa.com/
+    <br>
+    <br>
+    Patenta<br>
+    Customer Service Team<br>
+    91164721
+    `
+    );
     res.status(201).json(success(res.statusCode, "Success", { saveIdea }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

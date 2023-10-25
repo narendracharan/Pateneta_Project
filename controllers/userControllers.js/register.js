@@ -5,7 +5,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const languageModels = require("../../models/userModels/languageModels");
 const productModel = require("../../models/userModels/productModel");
-const adminSchema=require("../../models/adminModels/userModels")
+const adminSchema = require("../../models/adminModels/userModels");
+const sendMail = require("../../services/EmailSerices");
 //const otpGenerator=require("otp-generator")
 
 // const accountSid = 'AC7898d1cff989f262b5413d25e1038f1b'; // Your Account SID from www.twilio.com/console
@@ -35,7 +36,7 @@ exports.userRegister = async (req, res) => {
         .status(201)
         .json(error("Please enter password", res.statusCode));
     }
-    const admin=await adminSchema.findOne()
+    const admin = await adminSchema.findOne();
     const checkName = await userSchema.findOne({
       fullName_ar: fullName_en,
     });
@@ -63,8 +64,27 @@ exports.userRegister = async (req, res) => {
       // type: "User",
     });
     const user = await newUser.save();
+    await sendMail(
+      "narendracharan25753@gmail.com",
+      `New User`,
+      "Narendra Charan",
+      `<br.
+      <br>
+      New User has been registered on the Platform <br>
+      <br>
+  
+      <br>
+      Please Login Your Account https://admin.patenta-sa.com/
+      <br>
+      <br>
+      Patenta<br>
+      Customer Service Team<br>
+      91164721
+      `
+    );
     res.status(200).json(success(res.statusCode, "Success", { user, otp }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -292,7 +312,7 @@ exports.userEditProfile = async (req, res) => {
       DOB,
       address,
     } = req.body;
-   // const passwordHash = await bcrypt.hash(password, 10);
+    // const passwordHash = await bcrypt.hash(password, 10);
     const userprofile = await userSchema.findById(req.params.id);
     if (fullName_en) {
       userprofile.fullName_en = fullName_en;

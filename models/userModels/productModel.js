@@ -32,7 +32,7 @@ const schema = new mongoose.Schema({
   //   require: true,
   // },
   selectDocument: {
-    type: String,
+    type: Array,
     require: true,
   },
   productPic: {

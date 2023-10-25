@@ -168,7 +168,9 @@ exports.verifyDocument = async (req, res) => {
     const approvedUser = await userModels.findById(id);
     approvedUser.verifyDocument = approved;
     await approvedUser.save();
+    res.status(200).json(success(res.statusCode, "Veirfy Document"));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Error In VerifyDocument", res.statusCode));
   }
 };
