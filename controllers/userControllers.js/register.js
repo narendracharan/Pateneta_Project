@@ -67,13 +67,12 @@ exports.userRegister = async (req, res) => {
       Email: Email,
       mobileNumber: mobileNumber,
       password: passwordHash,
-      // type: "User",
     });
     const user = await newUser.save();
     await sendMail(
-      "narendracharan25753@gmail.com",
+      admin.userEmail,
       `New User`,
-      "Narendra Charan",
+      admin.userName,
       `<br.
       <br>
       New User has been registered on the Platform <br>
@@ -191,6 +190,7 @@ exports.companySignup = async (req, res) => {
         .status(201)
         .json(error("Email is already register", res.statusCode));
     }
+    const admin=await adminSchema.findOne()
     const passwordHash = await bcrypt.hash(password, 10);
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
     const newUser = new userSchema({
@@ -202,6 +202,24 @@ exports.companySignup = async (req, res) => {
       // type: "User",
     });
     const company = await newUser.save();
+    await sendMail(
+      admin.userEmail,
+      `New User`,
+      admin.userName,
+      `<br.
+      <br>
+      New User has been registered on the Platform <br>
+      <br>
+  
+      <br>
+      Please Login Your Account https://admin.patenta-sa.com/
+      <br>
+      <br>
+      Patenta<br>
+      Customer Service Team<br>
+      91164721
+      `
+    );
     res.status(201).json(success(res.statusCode, "Success", { company, otp }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

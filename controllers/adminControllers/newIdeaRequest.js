@@ -1,5 +1,6 @@
 const ideaRequestSchema = require("../../models/userModels/productModel");
 const { error, success } = require("../../responseCode");
+const sendMail = require("../../services/EmailSerices");
 
 //------->  new IdeaRequest Api
 exports.ideaRequestList = async (req, res) => {
@@ -29,11 +30,59 @@ exports.approvedIdea = async (req, res) => {
       id,
       { verify: status },
       { new: true }
-    );
+    ).populate("user_Id")
+    console.log(appreovedIdea.user_Id.fullName_en);
+    if (appreovedIdea.user_Id.fullName_en) {
+      await sendMail(
+        appreovedIdea.user_Id.Email,
+        `Verify Idea`,
+        appreovedIdea.user_Id.fullName_en,
+        `<br.
+      <br>
+      Your Idea has been partially approved by admin.<br>
+      <br>
+      <b> We are delighted to welcome you to Patenta, a platform where each and every idea is valued.</b>
+      <br>
+      Your access to our platform is now hassle-free.<br>
+      <br>
+      Please Login Your Account https://patenta-sa.com/login
+      <br>
+      <br>
+      Patenta<br>
+      Customer Service Team<br>
+      91164721
+      `
+      );
+    }
+    //
+    if (appreovedIdea.user_Id.companyName_en) {
+      await sendMail(
+        appreovedIdea.user_Id.Email,
+        `Account Verify`,
+        appreovedIdea.user_Id.companyName_en,
+        `<br.
+        <br>
+        Your account has been partially approved by admin.<br>
+        <br>
+        <b> We are delighted to welcome you to Patenta, a platform where each and every idea is valued.</b>
+        <br>
+        Your access to our platform is now hassle-free.<br>
+        <br>
+        Please Login Your Account https://patenta-sa.com/login
+        <br>
+        <br>
+        Patenta<br>
+        Customer Service Team<br>
+        91164721
+        `
+      );
+    }
+
     res
       .status(200)
       .json(success(res.statusCode, "Approved idea", { appreovedIdea }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };

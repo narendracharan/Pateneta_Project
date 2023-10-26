@@ -26,6 +26,7 @@ exports.createIdea = async (req, res) => {
       urlFile,
       present,
     } = req.body;
+    const admin = await adminSchema.findOne();
     const userVerify = await userSchema.findOne({ _id: user_Id });
     const idea = await productSchema.findOne({ title_en: title_en });
     if (idea) {
@@ -75,9 +76,9 @@ exports.createIdea = async (req, res) => {
     }
     const saveIdea = await newIdeas.save();
     await sendMail(
-      "narendracharan25753@gmail.com",
+      admin.userEmail,
       `New Idea`,
-      "Narendra Charan",
+      admin.userName,
       `<br.
     <br>
     New idea has been added on the Platform<br>
