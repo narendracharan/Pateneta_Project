@@ -27,10 +27,6 @@ const schema = new mongoose.Schema({
     ref: "subCategory",
     require: true,
   },
-  // subCategory_ar: {
-  //   type: String,
-  //   require: true,
-  // },
   selectDocument: {
     type: Array,
     require: true,
