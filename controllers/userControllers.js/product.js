@@ -5,7 +5,6 @@ const categoryModels = require("../../models/adminModels/categoryModels");
 const subCategoryModel = require("../../models/adminModels/subCategoryModel");
 const productModel = require("../../models/userModels/productModel");
 const adminSchema = require("../../models/adminModels/userModels");
-const { resetPassword } = require("./register");
 const sendMail = require("../../services/EmailSerices");
 
 //---------> create bussiness idea api
