@@ -22,10 +22,6 @@ var schema = new mongoose.Schema({
     enum: ["PENDING", "Accepted", "Decline"],
     default: "PENDING",
   },
-  type: {
-    type: String,
-    require: true,
-  },
 });
 schema.set("timestamps", true);
 module.exports = mongoose.model("bids", schema);
