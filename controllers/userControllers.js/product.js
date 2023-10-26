@@ -26,7 +26,7 @@ exports.createIdea = async (req, res) => {
       user_Id,
       baseFare,
       urlFile,
-      present
+      present,
     } = req.body;
     const userVerify = await userSchema.findOne({ _id: user_Id });
     const idea = await productSchema.findOne({ title_en: title_en });
@@ -53,10 +53,10 @@ exports.createIdea = async (req, res) => {
       user_Id: user_Id,
       baseFare: baseFare,
       urlFile: urlFile,
-      present:present,
+      present: present,
       selectDocument: selectDocument,
     });
-   console.log(req.files);
+    console.log(req.files);
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "productPic") {
@@ -71,7 +71,7 @@ exports.createIdea = async (req, res) => {
           newIdeas.selectDocument.push(
             `${process.env.BASE_URL}/${req.files[i].filename}`
           );
-          newIdeas.docSize.push(req.files[i].size)
+          newIdeas.docSize.push(req.files[i].size);
         }
       }
     }
