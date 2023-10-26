@@ -6,6 +6,7 @@ const subCategoryModel = require("../../models/adminModels/subCategoryModel");
 const productModel = require("../../models/userModels/productModel");
 const adminSchema = require("../../models/adminModels/userModels");
 const { resetPassword } = require("./register");
+const fs = require("fs");
 const sendMail = require("../../services/EmailSerices");
 
 //---------> create bussiness idea api
@@ -24,8 +25,16 @@ exports.createIdea = async (req, res) => {
       selectDocument,
       user_Id,
       baseFare,
+      urlFile,
+      present
     } = req.body;
     const userVerify = await userSchema.findOne({ _id: user_Id });
+    const idea = await productSchema.findOne({ title_en: title_en });
+    if (idea) {
+      return res
+        .status(201)
+        .json(error("Title Name is already register", res.statusCode));
+    }
     if (userVerify.verifyDocument != "APPROVED") {
       return res
         .status(201)
@@ -43,8 +52,11 @@ exports.createIdea = async (req, res) => {
       Price: Price,
       user_Id: user_Id,
       baseFare: baseFare,
+      urlFile: urlFile,
+      present:present,
       selectDocument: selectDocument,
     });
+   console.log(req.files);
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "productPic") {
@@ -59,6 +71,7 @@ exports.createIdea = async (req, res) => {
           newIdeas.selectDocument.push(
             `${process.env.BASE_URL}/${req.files[i].filename}`
           );
+          newIdeas.docSize.push(req.files[i].size)
         }
       }
     }
@@ -83,6 +96,7 @@ exports.createIdea = async (req, res) => {
     );
     res.status(201).json(success(res.statusCode, "Success", { saveIdea }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
@@ -117,7 +131,6 @@ exports.updateBussinessIdea = async (req, res) => {
       briefDescription_en,
       briefDescription_ar,
       Price,
-      ideaLogo,
       baseBid,
     } = req.body;
     const product = await productSchema.findById(id);
@@ -158,6 +171,9 @@ exports.updateBussinessIdea = async (req, res) => {
         }
         if (req.files[i].fieldname == "ideaLogo") {
           product.ideaLogo = `${process.env.BASE_URL}/${req.files[i].filename}`;
+        }
+        if (req.files[i].fieldname == "selectDocument") {
+          product.selectDocument = `${process.env.BASE_URL}/${req.files[i].filename}`;
         }
       }
     }

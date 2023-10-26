@@ -38,20 +38,26 @@ exports.userRegister = async (req, res) => {
     }
     const admin = await adminSchema.findOne();
     const checkName = await userSchema.findOne({
-      fullName_ar: fullName_en,
+      fullName_en: fullName_en,
     });
     if (checkName) {
-      return res.status(201).json(error("Name is already register"));
+      return res
+        .status(201)
+        .json(error("Name is already register", res.statusCode));
     }
     const checkNumber = await userSchema.findOne({
       mobileNumber: mobileNumber,
     });
     if (checkNumber) {
-      return res.status(201).json(error("mobileNumber is already register"));
+      return res
+        .status(201)
+        .json(error("mobileNumber is already register", res.statusCode));
     }
     const checkMail = await userSchema.findOne({ Email: Email });
     if (checkMail) {
-      return res.status(201).json(error("Email is already register"));
+      return res
+        .status(201)
+        .json(error("Email is already register", res.statusCode));
     }
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
     const passwordHash = await bcrypt.hash(password, 10);
@@ -167,17 +173,23 @@ exports.companySignup = async (req, res) => {
       companyName_en: companyName_en,
     });
     if (checkName) {
-      return res.status(201).json(error("companyName is already register"));
+      return res
+        .status(201)
+        .json(error("companyName is already register", res.statusCode));
     }
     const checkNumber = await userSchema.findOne({
       mobileNumber: mobileNumber,
     });
     if (checkNumber) {
-      return res.status(201).json(error("mobileNumber is already register"));
+      return res
+        .status(201)
+        .json(error("mobileNumber is already register", res.statusCode));
     }
     const checkMail = await userSchema.findOne({ Email: Email });
     if (checkMail) {
-      return res.status(201).json(error("Email is already register"));
+      return res
+        .status(201)
+        .json(error("Email is already register", res.statusCode));
     }
     const passwordHash = await bcrypt.hash(password, 10);
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;

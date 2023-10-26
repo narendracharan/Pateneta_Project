@@ -35,6 +35,10 @@ const schema = new mongoose.Schema({
     type: Array,
     require: true,
   },
+  docSize: {
+    type: Array,
+    require: true,
+  },
   productPic: {
     type: Array,
     require: true,
@@ -51,7 +55,11 @@ const schema = new mongoose.Schema({
     type: Number,
     require: true,
   },
-  baseFare:{
+  present:{
+    type: Number,
+    require: true,
+  },
+  baseFare: {
     type: Number,
     require: true,
   },
