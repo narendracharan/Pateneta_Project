@@ -168,6 +168,50 @@ exports.verifyDocument = async (req, res) => {
     const approvedUser = await userModels.findById(id);
     approvedUser.verifyDocument = approved;
     await approvedUser.save();
+    if (approvedUser.fullName_en) {
+      await sendMail(
+        approvedUser.Email,
+        `Verify Kyc`,
+        approvedUser.fullName_en,
+        `<br.
+      <br>
+      Your KYC has been partially approved by admin.<br>
+      <br>
+      <b> We are delighted to welcome you to Patenta, a platform where each and every idea is valued.</b>
+      <br>
+      Your access to our platform is now hassle-free.<br>
+      <br>
+      Please Login Your Account https://patenta-sa.com/login
+      <br>
+      <br>
+      Patenta<br>
+      Customer Service Team<br>
+      91164721
+      `
+      );
+    }
+    if (approvedUser.companyName_en) {
+      await sendMail(
+        approvedUser.Email,
+        `Verify Kyc`,
+        approvedUser.companyName_en,
+        `<br.
+        <br>
+        Your KYC has been partially approved by admin.<br>
+        <br>
+        <b> We are delighted to welcome you to Patenta, a platform where each and every idea is valued.</b>
+        <br>
+        Your access to our platform is now hassle-free.<br>
+        <br>
+        Please Login Your Account https://patenta-sa.com/login
+        <br>
+        <br>
+        Patenta<br>
+        Customer Service Team<br>
+        91164721
+        `
+      );
+    }
     res.status(200).json(success(res.statusCode, "Veirfy Document"));
   } catch (err) {
     console.log(err);
