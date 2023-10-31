@@ -94,7 +94,7 @@ exports.createIdea = async (req, res) => {
     91164721
     `
     );
-    res.status(201).json(success(res.statusCode, "Success", { saveIdea }));
+    res.status(201).json(success(res.statusCode, "Idea Uploaded Successfully", {}));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
@@ -513,13 +513,13 @@ exports.acceptBids = async (req, res) => {
       if (bids[0].user_Id.fullName_en) {
         await sendMail(
           bids[0].user_Id.Email,
-          `New Idea`,
+          ` Idea`,
           bids[0].user_Id.fullName_en,
-          `<br.
+          `Accepted Bids<br.
          <br>
          Your BIds has been Accepted on the Platform<br>
          <br>
-         
+
          <br>
          Please Login Your Account https://patenta-sa.com/login
          <br>
@@ -533,7 +533,7 @@ exports.acceptBids = async (req, res) => {
       if (bids[0].user_Id.companyName_en) {
         await sendMail(
           bids[0].user_Id.Email,
-          `New Idea`,
+          `Accepted Bids`,
           bids[0].user_Id.companyName_en,
           `<br.
          <br>
