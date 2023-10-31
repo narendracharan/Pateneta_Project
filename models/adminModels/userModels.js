@@ -29,6 +29,26 @@ const schema = new mongoose.Schema({
   expireOtp: {
     type: Date,
   },
+  bankName:{
+    type: String,
+    require: true,
+  },
+  country:{
+    type: String,
+    require: true,
+  },
+  address:{
+    type: String,
+    require: true,
+  },
+  IBAN:{
+    type: String,
+    require: true,
+  },
+  commission:{
+    type: Number,
+    require: true,
+  }
 });
 schema.methods.AdminAuthToken = function () {
   const token = jwt.sign({ _id: this._id }, "ultra-security", {

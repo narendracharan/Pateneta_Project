@@ -91,7 +91,7 @@ const schema = new mongoose.Schema({
     },
   ],
   urlFile: {
-    type: String,
+    type: Array,
     require: true,
   },
   // bidsVerify: {

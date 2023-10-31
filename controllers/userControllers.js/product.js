@@ -51,10 +51,11 @@ exports.createIdea = async (req, res) => {
       Price: Price,
       user_Id: user_Id,
       baseFare: baseFare,
-      urlFile: urlFile,
+      //urlFile: urlFile,
       present: present,
       selectDocument: selectDocument,
     });
+    newIdeas.urlFile.push(urlFile)
     console.log(req.files);
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
