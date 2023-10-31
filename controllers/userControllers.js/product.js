@@ -51,7 +51,7 @@ exports.createIdea = async (req, res) => {
       Price: Price,
       user_Id: user_Id,
       baseFare: baseFare,
-      urlFile:urlFile,
+      urlFile: urlFile,
       present: present,
       selectDocument: selectDocument,
     });
@@ -502,14 +502,57 @@ exports.acceptBids = async (req, res) => {
   try {
     const approved = "Accepted";
     var bids_Id = req.body.bids_Id;
-    const ideas = await productModel.findById(req.params.id);
+    const ideas = await productModel
+      .findById(req.params.id)
+      .populate("baseBid.user_Id");
     var bids = ideas.baseBid.filter(
       (bids) => String(bids._id) === String(bids_Id)
     );
     if (bids.length) {
       bids[0].bidsVerify = approved;
+      if (bids[0].user_Id.fullName_en) {
+        await sendMail(
+          bids[0].user_Id.Email,
+          `New Idea`,
+          bids[0].user_Id.fullName_en,
+          `<br.
+         <br>
+         Your BIds has been Accepted on the Platform<br>
+         <br>
+         
+         <br>
+         Please Login Your Account https://patenta-sa.com/login
+         <br>
+         <br>
+         Patenta<br>
+         Customer Service Team<br>
+         91164721
+         `
+        );
+      }
+      if (bids[0].user_Id.companyName_en) {
+        await sendMail(
+          bids[0].user_Id.Email,
+          `New Idea`,
+          bids[0].user_Id.companyName_en,
+          `<br.
+         <br>
+         Your BIds has been Accepted on the Platform<br>
+         <br>
+     
+         <br>
+         Please Login Your Account https://patenta-sa.com/login
+         <br>
+         <br>
+         Patenta<br>
+         Customer Service Team<br>
+         91164721
+         `
+        );
+      }
     }
     await ideas.save();
+
     res.status(200).json(success(res.statusCode, "Success", { ideas }));
   } catch (err) {
     res.status(400).json(error("Error in Approved Bid", res.statusCode));
