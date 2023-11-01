@@ -34,6 +34,7 @@ const {
   subCategoryIdeas,
   acceptBids,
   searchMyIdea,
+  searchBids,
 } = require("../controllers/userControllers.js/product");
 const {
   pushNotification,
@@ -126,6 +127,7 @@ router.post("/bids-add/:id", tokenAuthorisationUser, addBids);
 router.post("/list-Bids/:id", tokenAuthorisationUser, baseBidList);
 router.post("/bids-view/:id", tokenAuthorisationUser, bidsView);
 router.post("/accept-bids/:id",acceptBids)
+router.post("/search-bids/:id",tokenAuthorisationUser,searchBids)
 
 //----category Routes
 router.post("/category-list", tokenAuthorisationUser, CategoryListing);

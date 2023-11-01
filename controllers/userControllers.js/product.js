@@ -133,7 +133,7 @@ exports.updateBussinessIdea = async (req, res) => {
       briefDescription_en,
       briefDescription_ar,
       Price,
-      baseFare
+      baseFare,
     } = req.body;
     const product = await productSchema.findById(id);
     if (title_en) {
@@ -370,7 +370,9 @@ exports.myBussinessIdea = async (req, res) => {
     res.status(200).json(success(res.statusCode, "Success", { myIdeas }));
   } catch (err) {
     console.log(err);
-    res.status(400).json(error("Error In Bussiness Idea Listing", res.statusCode));
+    res
+      .status(400)
+      .json(error("Error In Bussiness Idea Listing", res.statusCode));
   }
 };
 
@@ -518,6 +520,7 @@ exports.acceptBids = async (req, res) => {
           `Accepted Bids`,
           bids[0].user_Id.fullName_en,
           `<br.
+
          <br>
          Your BIds Amount ${bids[0].Price} has been Accepted on the Platform<br>
          <br>
@@ -631,5 +634,40 @@ exports.searchMyIdea = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Error In Searching", res.statusCode));
+  }
+};
+
+exports.searchBids = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const search = req.body.search;
+    if (!search) {
+      return res
+        .status(201)
+        .json(error("Please Provide Search Key", res.statusCode));
+    }
+    const list = await productSchema
+      .find({
+        $and: [{ title_en: { $regex: new RegExp(search.trim(), "i") } }],
+      })
+      .populate("user_Id");
+    let Bids = [];
+    for (let i = 0; i < list.length; i++) {
+      var baseBide = list[i].baseBid.filter(
+        (baseBide) => String(baseBide.user_Id) === String(id)
+      );
+      let obj = {
+        baseBide: baseBide,
+        title: list[i].title_en,
+        title_ar: list[i].title_ar,
+        bidStatus: list[i].bidsVerify,
+        user: list[i].user_Id.fullName_en,
+        date: list[i].createdAt,
+      };
+      Bids.push(obj);
+    }
+    res.status(200).json(success(res.statusCode, "Success", { Bids }));
+  } catch (err) {
+    res.status(400).json(error("Error In Listing", res.statusCode));
   }
 };
