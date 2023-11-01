@@ -516,10 +516,10 @@ exports.acceptBids = async (req, res) => {
         await sendMail(
           bids[0].user_Id.Email,
           `Accepted Bids`,
-          bids[0].user_Id.companyName_en,
+          bids[0].user_Id.fullName_en,
           `<br.
          <br>
-         Your BIdsAmount ${bids[0].Price} has been Accepted on the Platform<br>
+         Your BIds Amount ${bids[0].Price} has been Accepted on the Platform<br>
          <br>
      
          <br>
