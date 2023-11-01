@@ -94,10 +94,12 @@ exports.createIdea = async (req, res) => {
     91164721
     `
     );
-    res.status(201).json(success(res.statusCode, "Idea Uploaded Successfully", {}));
+    res
+      .status(201)
+      .json(success(res.statusCode, "Idea Uploaded Successfully", {}));
   } catch (err) {
     console.log(err);
-    res.status(400).json(error("Failed", res.statusCode));
+    res.status(400).json(error("Error in Upload Idea", res.statusCode));
   }
 };
 
@@ -131,7 +133,7 @@ exports.updateBussinessIdea = async (req, res) => {
       briefDescription_en,
       briefDescription_ar,
       Price,
-      baseBid,
+      baseFare
     } = req.body;
     const product = await productSchema.findById(id);
     if (title_en) {
@@ -161,8 +163,8 @@ exports.updateBussinessIdea = async (req, res) => {
     if (Price) {
       product.Price = Price;
     }
-    if (baseBid) {
-      product.baseBid = baseBid;
+    if (baseFare) {
+      product.baseFare = baseFare;
     }
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
@@ -180,7 +182,7 @@ exports.updateBussinessIdea = async (req, res) => {
     await product.save();
     res.status(200).json(success(res.statusCode, "Success", { product }));
   } catch (err) {
-    res.status(400).json(error("Failed", res.statusCode));
+    res.status(400).json(error("Error In Update Idea", res.statusCode));
   }
 };
 
@@ -297,7 +299,7 @@ exports.searchBussinessIdea = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.status(400).json(error("Failed", res.statusCode));
+    res.status(400).json(error("Error In Searching", res.statusCode));
   }
 };
 
@@ -328,7 +330,7 @@ exports.addBids = async (req, res) => {
     const newProduct = await product.save();
     res.status(200).json(success(res.statusCode, "Success", { newProduct }));
   } catch (err) {
-    res.status(200).json(error("Failed", res.statusCode));
+    res.status(200).json(error("Error In Add Bids", res.statusCode));
   }
 };
 
@@ -354,7 +356,7 @@ exports.baseBidList = async (req, res) => {
     }
     res.status(200).json(success(res.statusCode, "Success", { Bids }));
   } catch (err) {
-    res.status(400).json(error("Failed", res.statusCode));
+    res.status(400).json(error("Error In Listing", res.statusCode));
   }
 };
 
@@ -368,7 +370,7 @@ exports.myBussinessIdea = async (req, res) => {
     res.status(200).json(success(res.statusCode, "Success", { myIdeas }));
   } catch (err) {
     console.log(err);
-    res.status(400).json(error("Failed", res.statusCode));
+    res.status(400).json(error("Error In Bussiness Idea Listing", res.statusCode));
   }
 };
 
@@ -429,7 +431,7 @@ exports.lowtoHighPrice = async (req, res) => {
         },
       },
     ]);
-    if (productFilter) {
+    if (productFilter.length > 0) {
       res
         .status(200)
         .json(success(res.statusCode, "Success", { productFilter }));
@@ -453,12 +455,12 @@ exports.highToLowPrice = async (req, res) => {
         },
       },
     ]);
-    if (productFilter) {
+    if (productFilter.length > 0) {
       res
         .status(200)
         .json(success(res.statusCode, "Success", { productFilter }));
     } else {
-      res.status(201).json(error("Failed", res.statusCode));
+      res.status(201).json(error("No Data Found", res.statusCode));
     }
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -513,13 +515,13 @@ exports.acceptBids = async (req, res) => {
       if (bids[0].user_Id.fullName_en) {
         await sendMail(
           bids[0].user_Id.Email,
-          ` Idea`,
-          bids[0].user_Id.fullName_en,
-          `Accepted Bids<br.
+          `Accepted Bids`,
+          bids[0].user_Id.companyName_en,
+          `<br.
          <br>
-         Your BIds has been Accepted on the Platform<br>
+         Your BIdsAmount ${bids[0].Price} has been Accepted on the Platform<br>
          <br>
-
+     
          <br>
          Please Login Your Account https://patenta-sa.com/login
          <br>
@@ -537,7 +539,7 @@ exports.acceptBids = async (req, res) => {
           bids[0].user_Id.companyName_en,
           `<br.
          <br>
-         Your BIds has been Accepted on the Platform<br>
+         Your BIds Amount ${bids[0].Price} has been Accepted on the Platform<br>
          <br>
      
          <br>
@@ -628,6 +630,6 @@ exports.searchMyIdea = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.status(400).json(error("Failed", res.statusCode));
+    res.status(400).json(error("Error In Searching", res.statusCode));
   }
 };

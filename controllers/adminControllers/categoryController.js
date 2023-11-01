@@ -22,7 +22,7 @@ exports.createCategory = async (req, res) => {
     res.status(200).json(success(res.statusCode, "Success", { categoryData }));
   } catch (err) {
     console.log(err);
-    res.status(400).json(error("Failed", res.statusCode));
+    res.status(400).json(error("Error In Add Category", res.statusCode));
   }
 };
 
@@ -49,7 +49,7 @@ exports.createSubCategory = async (req, res) => {
       .status(200)
       .json(success(res.statusCode, "Success", { subCategoryData }));
   } catch (err) {
-    res.status(400).json(error("Failed", res.statusCode));
+    res.status(400).json(error("Error In  Add SubCategory ", res.statusCode));
   }
 };
 
@@ -63,7 +63,7 @@ exports.categoryList = async (req, res) => {
       res.status(201).json(error("List are not found", res.statusCode));
     }
   } catch (err) {
-    res.status(400).json(error("Failed", res.statusCode));
+    res.status(400).json(error("Error In Category List", res.statusCode));
   }
 };
 
@@ -77,7 +77,7 @@ exports.subCategoryList = async (req, res) => {
       res.status(201).json(error("List are not found", res.statusCode));
     }
   } catch (err) {
-    res.status(400).json(error("Failed", res.statusCode));
+    res.status(400).json(error("Error In SubCategory List", res.statusCode));
   }
 };
 
