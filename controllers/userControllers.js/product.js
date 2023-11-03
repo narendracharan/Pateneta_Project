@@ -522,7 +522,7 @@ exports.acceptBids = async (req, res) => {
           `<br.
 
          <br>
-         Your BIds Amount ${bids[0].Price} has been Accepted on the Platform<br>
+         Your BIds Amount ${parseInt(bids[0].Price)} has been Accepted on the Platform<br>
          <br>
      
          <br>
@@ -542,7 +542,7 @@ exports.acceptBids = async (req, res) => {
           bids[0].user_Id.companyName_en,
           `<br.
          <br>
-         Your BIds Amount ${bids[0].Price} has been Accepted on the Platform<br>
+         Your BIds Amount ${parseInt(bids[0].Price)} has been Accepted on the Platform<br>
          <br>
      
          <br>
@@ -585,9 +585,8 @@ exports.RejectBids = async (req, res) => {
           `Reject Bids`,
           bids[0].user_Id.fullName_en,
           `<br.
-
          <br>
-         Your BIds Amount ${bids[0].Price} has been Decline on the Platform<br>
+         Your BIds Amount ${parseInt(bids[0].Price)} has been Decline on the Platform<br>
          <br>
          Reject Reasons:${bids[0].bidsReject}
          <br>
@@ -608,7 +607,7 @@ exports.RejectBids = async (req, res) => {
           bids[0].user_Id.companyName_en,
           `<br.
          <br>
-         Your BIds Amount ${bids[0].Price} has been Decline on the Platform<br>
+         Your BIds Amount ${parseInt(bids[0].Price)} has been Decline on the Platform<br>
          <br>
          Reject Reasons: ${bids[0].bidsReject}
          <br>
