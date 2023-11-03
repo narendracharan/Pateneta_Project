@@ -568,7 +568,7 @@ exports.acceptBids = async (req, res) => {
 exports.RejectBids = async (req, res) => {
   try {
     const approved = "Decline";
-    const rejectReasons=req.body.rejectReasons
+    const rejectReasons = req.body.rejectReasons;
     var bids_Id = req.body.bids_Id;
     const ideas = await productModel
       .findById(req.params.id)
@@ -578,18 +578,19 @@ exports.RejectBids = async (req, res) => {
     );
     if (bids.length) {
       bids[0].bidsVerify = approved;
-      bids[0].bidsReject=rejectReasons
+      bids[0].bidsReject = rejectReasons;
       if (bids[0].user_Id.fullName_en) {
         await sendMail(
           bids[0].user_Id.Email,
-          `Accepted Bids`,
+          `Reject Bids`,
           bids[0].user_Id.fullName_en,
           `<br.
 
          <br>
          Your BIds Amount ${bids[0].Price} has been Decline on the Platform<br>
          <br>
-     
+         Reject Reasons:${bids[0].bidsReject}
+         <br>
          <br>
          Please Login Your Account https://patenta-sa.com/login
          <br>
@@ -603,13 +604,14 @@ exports.RejectBids = async (req, res) => {
       if (bids[0].user_Id.companyName_en) {
         await sendMail(
           bids[0].user_Id.Email,
-          `Accepted Bids`,
+          `Reject Bids`,
           bids[0].user_Id.companyName_en,
           `<br.
          <br>
          Your BIds Amount ${bids[0].Price} has been Decline on the Platform<br>
          <br>
-     
+         Reject Reasons: ${bids[0].bidsReject}
+         <br>
          <br>
          Please Login Your Account https://patenta-sa.com/login
          <br>
@@ -628,19 +630,6 @@ exports.RejectBids = async (req, res) => {
     res.status(400).json(error("Error in Approved Bid", res.statusCode));
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 exports.searchMyIdea = async (req, res) => {
   try {
