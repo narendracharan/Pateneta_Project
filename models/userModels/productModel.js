@@ -88,6 +88,9 @@ const schema = new mongoose.Schema({
         enum: ["PENDING", "Accepted", "Decline"],
         default: "PENDING",
       },
+      bidsReject:{
+        type:String,
+      }
     },
   ],
   urlFile: {

@@ -35,6 +35,7 @@ const {
   acceptBids,
   searchMyIdea,
   searchBids,
+  RejectBids,
 } = require("../controllers/userControllers.js/product");
 const {
   pushNotification,
@@ -127,6 +128,7 @@ router.post("/bids-add/:id", tokenAuthorisationUser, addBids);
 router.post("/list-Bids/:id", tokenAuthorisationUser, baseBidList);
 router.post("/bids-view/:id", tokenAuthorisationUser, bidsView);
 router.post("/accept-bids/:id",acceptBids)
+router.post("/Decline-bids/:id",tokenAuthorisationUser,RejectBids)
 router.post("/search-bids/:id",tokenAuthorisationUser,searchBids)
 
 //----category Routes
