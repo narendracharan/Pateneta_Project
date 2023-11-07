@@ -90,6 +90,7 @@ const schema = new mongoose.Schema({
       },
       bidsReject: {
         type: String,
+        require: true,
       },
       bids: {
         type: String,
