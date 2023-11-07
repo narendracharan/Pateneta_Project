@@ -110,7 +110,7 @@ router.post(
   tokenAuthorisationUser,
   subCategoryIdeas
 );
-router.post("/search-my-idea",tokenAuthorisationUser,searchMyIdea)
+router.post("/search-my-idea/:id",tokenAuthorisationUser,searchMyIdea)
 
 //----> user Order
 router.post("/user-order", tokenAuthorisationUser, createOrder);

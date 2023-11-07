@@ -514,8 +514,8 @@ exports.acceptBids = async (req, res) => {
     );
     if (bids.length) {
       bids[0].bidsVerify = approved;
-      bids[0].aceptbid=aceptbid
-     // bids[0].bids = bids;
+      bids[0].aceptbid = aceptbid;
+      // bids[0].bids = bids;
       if (bids[0].user_Id.fullName_en) {
         await sendMail(
           bids[0].user_Id.Email,
@@ -648,62 +648,18 @@ exports.searchMyIdea = async (req, res) => {
         .status(201)
         .json(error("Please provide search key", res.statusCode));
     }
-    const searchIdeas = await productSchema.aggregate([
-      {
-        $lookup: {
-          from: "users",
-          localField: "user_Id",
-          foreignField: "_id",
-          as: "users",
-        },
-      },
-      {
-        $lookup: {
-          from: "categories",
-          localField: "category_Id",
-          foreignField: "_id",
-          as: "categories",
-        },
-      },
-      {
-        $lookup: {
-          from: "subcategories",
-          localField: "subCategory_Id",
-          foreignField: "_id",
-          as: "subcategoriess",
-        },
-      },
-      { $unwind: "$categories" },
-      { $unwind: "$subcategoriess" },
-      {
-        $match: {
-          $or: [
-            {
-              title_en: { $regex: search, $options: "i" },
-            },
-            {
-              description_en: { $regex: search, $options: "i" },
-            },
-            {
-              briefDescription_en: { $regex: search, $options: "i" },
-            },
-            {
-              "categories.categoryName": { $regex: search, $options: "i" },
-            },
-            {
-              "subcategoriess.subCategoryName": {
-                $regex: search,
-                $options: "i",
-              },
-            },
-          ],
-        },
-      },
-    ]);
-    if (searchIdeas.length > 0) {
+    const searchIdeas = await productSchema
+      .find({
+        $and: [{ title_en: { $regex: new RegExp(search.trim(), "i") } }],
+      })
+      .populate("");
+    const searchData = searchIdeas.filter(
+      (user_Id) => String(user_Id.user_Id) === String(req.params.id)
+    );
+    if (searchData.length > 0) {
       return res
         .status(200)
-        .json(success(res.statusCode, "Success", { searchIdeas }));
+        .json(success(res.statusCode, "Success", { searchData }));
     } else {
       res.status(201).json(error("Ideas are not Found", res.statusCode));
     }
