@@ -505,7 +505,7 @@ exports.subCategoryIdeas = async (req, res) => {
 exports.acceptBids = async (req, res) => {
   try {
     const approved = "Accepted";
-    const { bids_Id, aaceptbid } = req.body;
+    const { bids_Id, aceptbid } = req.body;
     const ideas = await productModel
       .findById(req.params.id)
       .populate("baseBid.user_Id");
@@ -514,6 +514,7 @@ exports.acceptBids = async (req, res) => {
     );
     if (bids.length) {
       bids[0].bidsVerify = approved;
+      bids[0].aceptbid=aceptbid
      // bids[0].bids = bids;
       if (bids[0].user_Id.fullName_en) {
         await sendMail(
