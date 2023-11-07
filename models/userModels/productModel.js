@@ -92,10 +92,10 @@ const schema = new mongoose.Schema({
         type: String,
         require: true,
       },
-      bids: {
-        type: String,
-        default: false,
-      },
+      // bids: {
+      //   type: String,
+      //   default: false,
+      // },
     },
   ],
   urlFile: {
