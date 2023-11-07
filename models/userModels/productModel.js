@@ -51,7 +51,7 @@ const schema = new mongoose.Schema({
     type: Number,
     require: true,
   },
-  present:{
+  present: {
     type: Number,
     require: true,
   },
@@ -88,9 +88,13 @@ const schema = new mongoose.Schema({
         enum: ["PENDING", "Accepted", "Decline"],
         default: "PENDING",
       },
-      bidsReject:{
-        type:String,
-      }
+      bidsReject: {
+        type: String,
+      },
+      bids: {
+        type: String,
+        default: false,
+      },
     },
   ],
   urlFile: {
