@@ -509,10 +509,9 @@ exports.acceptBids = async (req, res) => {
     const ideas = await productModel
       .findById(req.params.id)
       .populate("baseBid.user_Id");
-      if(ideas.baseBid.length){
-        ideas.baseBid[0].aceptbid=aceptbid
-      }
-      console.log(ideas);
+    for (let i = 0; i < ideas.baseBid.length; i++) {
+      ideas.baseBid[i].aceptbid = aceptbid;
+    }
     var bids = ideas.baseBid.filter(
       (bids) => String(bids._id) === String(bids_Id)
     );
@@ -582,13 +581,15 @@ exports.RejectBids = async (req, res) => {
     const ideas = await productModel
       .findById(req.params.id)
       .populate("baseBid.user_Id");
+    for (let i = 0; i < ideas.baseBid.length; i++) {
+      ideas.baseBid[i].aceptbid = aceptbid;
+    }
     var bids = ideas.baseBid.filter(
       (bids) => String(bids._id) === String(bids_Id)
     );
     if (bids.length) {
       bids[0].bidsVerify = approved;
       bids[0].bidsReject = rejectReasons;
-      bids[0].aceptbid = aceptbid;
       if (bids[0].user_Id.fullName_en) {
         await sendMail(
           bids[0].user_Id.Email,
