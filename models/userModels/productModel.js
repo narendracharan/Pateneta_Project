@@ -93,7 +93,8 @@ const schema = new mongoose.Schema({
         require: true,
       },
       aceptbid: {
-        type: String
+        type: String,
+        default:false
       },
     },
   ],

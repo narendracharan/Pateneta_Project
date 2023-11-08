@@ -24,17 +24,17 @@ exports.sellerList = async (req, res) => {
           $and: [
             from
               ? {
-                createdAt: {
-                  $gte: new Date(moment(new Date(from)).startOf("day")),
-                },
-              }
+                  createdAt: {
+                    $gte: new Date(moment(new Date(from)).startOf("day")),
+                  },
+                }
               : {},
             to
               ? {
-                createdAt: {
-                  $lte: new Date(moment(new Date(to)).endOf("day")),
-                },
-              }
+                  createdAt: {
+                    $lte: new Date(moment(new Date(to)).endOf("day")),
+                  },
+                }
               : {},
           ],
         },
@@ -128,7 +128,7 @@ exports.sellerSearch = async (req, res) => {
           ],
         },
       },
-    ])
+    ]);
     if (searchIdeas.length > 0) {
       return res
         .status(200)
@@ -176,7 +176,7 @@ exports.buyerSearch = async (req, res) => {
           ],
         },
       },
-    ])
+    ]);
     if (searchIdeas.length > 0) {
       return res
         .status(200)
@@ -208,17 +208,17 @@ exports.buyerUserList = async (req, res) => {
           $and: [
             from
               ? {
-                createdAt: {
-                  $gte: new Date(moment(new Date(from)).startOf("day")),
-                },
-              }
+                  createdAt: {
+                    $gte: new Date(moment(new Date(from)).startOf("day")),
+                  },
+                }
               : {},
             to
               ? {
-                createdAt: {
-                  $lte: new Date(moment(new Date(to)).endOf("day")),
-                },
-              }
+                  createdAt: {
+                    $lte: new Date(moment(new Date(to)).endOf("day")),
+                  },
+                }
               : {},
           ],
         },
