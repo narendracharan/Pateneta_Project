@@ -13,7 +13,7 @@ exports.ideaRequestList = async (req, res) => {
           to ? { createdAt: { $lte: new Date(`${to}T23:59:59`) } } : {},
         ],
       })
-      .populate(["user_Id","category_Id","subCategory_Id"])
+      .populate(["user_Id", "category_Id", "subCategory_Id"])
       .sort({ createdAt: -1 });
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch {
@@ -26,11 +26,9 @@ exports.approvedIdea = async (req, res) => {
   try {
     const id = req.params.id;
     var status = "APPROVED";
-    const appreovedIdea = await ideaRequestSchema.findByIdAndUpdate(
-      id,
-      { verify: status },
-      { new: true }
-    ).populate("user_Id")
+    const appreovedIdea = await ideaRequestSchema
+      .findByIdAndUpdate(id, { verify: status }, { new: true })
+      .populate("user_Id");
     console.log(appreovedIdea.user_Id.fullName_en);
     if (appreovedIdea.user_Id.fullName_en) {
       await sendMail(
@@ -157,11 +155,10 @@ exports.searchIdeaRequest = async (req, res) => {
             {
               "categories.categoryName": { $regex: search, $options: "i" },
             },
-           
           ],
         },
       },
-    ])
+    ]);
     if (searchIdeas.length > 0) {
       return res
         .status(200)

@@ -165,12 +165,11 @@ exports.downloadUserOrder = async (req, res) => {
   }
 };
 
-
 exports.myOrder = async (req, res) => {
   try {
     const orderDetails = await orderSchema
-      .find({user_Id:req.params.id})
-      .populate(["user_Id","products.product_Id"]);
+      .find({ user_Id: req.params.id })
+      .populate(["user_Id", "products.product_Id"]);
     res.status(200).json(success(res.statusCode, "Success", { orderDetails }));
   } catch (err) {
     res.status(400).json(error("Error in Order Details", res.statusCode));

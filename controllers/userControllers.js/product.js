@@ -575,7 +575,7 @@ exports.RejectBids = async (req, res) => {
   try {
     const approved = "Decline";
     const rejectReasons = req.body.rejectReasons;
-    var bids_Id = req.body.bids_Id;
+    const {bids_Id,aceptbid} = req.body;
     const ideas = await productModel
       .findById(req.params.id)
       .populate("baseBid.user_Id");
@@ -585,6 +585,7 @@ exports.RejectBids = async (req, res) => {
     if (bids.length) {
       bids[0].bidsVerify = approved;
       bids[0].bidsReject = rejectReasons;
+      bids[0].aceptbid=aceptbid
       if (bids[0].user_Id.fullName_en) {
         await sendMail(
           bids[0].user_Id.Email,

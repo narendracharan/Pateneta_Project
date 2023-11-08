@@ -190,7 +190,7 @@ exports.companySignup = async (req, res) => {
         .status(201)
         .json(error("Email is already register", res.statusCode));
     }
-    const admin=await adminSchema.findOne()
+    const admin = await adminSchema.findOne();
     const passwordHash = await bcrypt.hash(password, 10);
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
     const newUser = new userSchema({
@@ -234,7 +234,12 @@ exports.resetPassword = async (req, res) => {
       if (newPassword !== confirmPassword) {
         return res
           .status(401)
-          .json(error("newPassword Or confirmPassword Could Not Be Same"));
+          .json(
+            error(
+              "newPassword Or confirmPassword Could Not Be Same",
+              res.statusCode
+            )
+          );
       } else {
         const passwordHash = await bcrypt.hash(newPassword, 10);
         const createPassword = await userSchema.findOneAndUpdate(
@@ -262,7 +267,9 @@ exports.userKyc = async (req, res) => {
     const id = req.params.id;
     const { docFile, IdNumber } = req.body;
     if (!docFile && !IdNumber) {
-      return res.status(201).json(error("All Filed are required"));
+      return res
+        .status(201)
+        .json(error("All Filed are required", res.statusCode));
     }
     if (req.files.length) {
       if (
@@ -298,7 +305,9 @@ exports.companyKyc = async (req, res) => {
     const id = req.params.id;
     const { docFile, companyNumber } = req.body;
     if (!docFile && !companyNumber) {
-      return res.status(201).json(error("All Filed are required"));
+      return res
+        .status(201)
+        .json(error("All Filed are required", res.statusCode));
     }
     if (req.files.length) {
       if (
