@@ -123,6 +123,16 @@ const schema = new mongoose.Schema({
     type: String,
     default: true,
   },
+  buyStatus:{
+    type:String,
+    enum: ["PENDING", "PURCHASE"],
+    default:"PENDING"
+  },
+  buyer_Id:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+    require: true,
+  }
 });
 schema.set("timestamps", true);
 module.exports = mongoose.model("product", schema);

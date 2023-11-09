@@ -21,7 +21,10 @@ exports.createOrder = async (req, res) => {
       bids_Id,
     } = req.body;
     const product = await productModel.findOne({ _id: product_Id });
-
+    const status = "PURCHASE";
+    product.buyStatus = status;
+    product.buyer_Id = user_Id;
+    await product.save();
     if (product.baseBid == "") {
       const newOrder = new orderSchema({
         products: [

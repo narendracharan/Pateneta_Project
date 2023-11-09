@@ -109,7 +109,7 @@ exports.bussinessIdeaDetails = async (req, res) => {
     const id = req.params.id;
     const detailsIdea = await productSchema
       .findById(id)
-      .populate(["baseBid.user_Id", "user_Id"]);
+      .populate(["baseBid.user_Id", "user_Id","buyer_Id"]);
     res.status(200).json(success(res.statusCode, "Success", { detailsIdea }));
   } catch (err) {
     res
