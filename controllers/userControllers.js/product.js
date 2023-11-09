@@ -350,6 +350,7 @@ exports.baseBidList = async (req, res) => {
         title_ar: list[i].title_ar,
         bidStatus: list[i].bidsVerify,
         user: list[i].user_Id.fullName_en,
+        product_Id:list[i]._id,
         date: list[i].createdAt,
       };
       Bids.push(obj);
