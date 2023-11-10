@@ -7,6 +7,7 @@ const {
   updateProfile,
   sendUserResetPassword,
   OtpVerify,
+  adminDetails,
 } = require("../controllers/adminControllers/register");
 const upload = require("../middleware/multer");
 const {
@@ -77,6 +78,7 @@ router.post("/admin-login", loginAdmin);
 router.post("/admin-resetpassword", resetPassword);
 router.post("/send-Email", sendUserResetPassword);
 router.post("/verify-otp", OtpVerify);
+router.post("/admin-details/:id",adminAuthorisationUser,adminDetails)
 router.post(
   "/update-profile/:id",
   adminAuthorisationUser,

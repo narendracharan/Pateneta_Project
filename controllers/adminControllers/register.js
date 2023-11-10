@@ -27,11 +27,15 @@ exports.adminRegister = async (req, res) => {
     }
     const checkName = await adminSchema.findOne({ userName: userName });
     if (checkName) {
-      return res.status(201).json(error("userName are already register",res.statusCode));
+      return res
+        .status(201)
+        .json(error("userName are already register", res.statusCode));
     }
     const checkMail = await adminSchema.findOne({ userEmail: userEmail });
     if (checkMail) {
-      return res.status(201).json(error("userEmail are already register",res.statusCode));
+      return res
+        .status(201)
+        .json(error("userEmail are already register", res.statusCode));
     }
     const passwordHash = await bcrypt.hash(password, 10);
     const newUser = new adminSchema({
@@ -95,18 +99,29 @@ exports.resetPassword = async (req, res) => {
   try {
     const { newPassword, confirmPassword, userEmail } = req.body;
     if (!newPassword) {
-      return res.status(201).json(error(" Please Provide newPassword ",res.statusCode));
+      return res
+        .status(201)
+        .json(error(" Please Provide newPassword ", res.statusCode));
     }
     if (!confirmPassword) {
-      return res.status(201).json(error(" Please Provide confirmPassword ",res.statusCode));
+      return res
+        .status(201)
+        .json(error(" Please Provide confirmPassword ", res.statusCode));
     }
     if (!userEmail) {
-      return res.status(201).json(error(" Please Provide userEmail ",res.statusCode));
+      return res
+        .status(201)
+        .json(error(" Please Provide userEmail ", res.statusCode));
     }
     if (newPassword !== confirmPassword) {
       return res
         .status(401)
-        .json(error("newPassword Or confirmPassword Could Not Be Same",res.statusCode));
+        .json(
+          error(
+            "newPassword Or confirmPassword Could Not Be Same",
+            res.statusCode
+          )
+        );
     } else {
       const passwordHash = await bcrypt.hash(newPassword, 10);
       const createPassword = await adminSchema.findOneAndUpdate(
@@ -204,5 +219,17 @@ exports.OtpVerify = async (req, res) => {
     }
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.adminDetails = async (req, res) => {
+  try {
+    const admim = await adminSchema.findById(req.params.id);
+    if (!admim) {
+      return res.status(201).json(error("No Admin Found", res.statusCode));
+    }
+    res.status(200).json(success(res.statusCode, "Success", { admim }));
+  } catch (err) {
+    res.status(400).json(error("Error In Admin Details", res.statusCode));
   }
 };
