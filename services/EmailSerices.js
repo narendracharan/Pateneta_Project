@@ -9,12 +9,13 @@ const sendMail = async (
   adminDocs,
   attachments
 ) => {
-  const user = fullName_en === undefined ? "" : fullName_en.length ? fullName_en : "";
+  const user =
+    fullName_en === undefined ? "" : fullName_en.length ? fullName_en : "";
   const documents =
     adminDocs === undefined ? "" : adminDocs.length ? adminDocs : "";
   //   console.log(user);
   const transporter = nodemailer.createTransport({
-   service:"gmail",
+    service: "gmail",
     // host: config.get("mailServerHost"),
     // port: config.get("mailPort"),
     //   secure: false,
@@ -22,8 +23,8 @@ const sendMail = async (
     //   ignoreTLS: false,
     //   requireTLS: false,
     auth: {
-        user:"s04450647@gmail.com",
-        pass:"rpdncvlikrlckuip"
+      user: "s04450647@gmail.com",
+      pass: "rpdncvlikrlckuip",
     },
   });
   //   console.log(config.get("mailServerPassword"));
@@ -33,7 +34,7 @@ const sendMail = async (
   //   console.debug("Body " + body);
 
   var mailOptions = {
-    from:"s04450647@gmail.com",
+    from: "s04450647@gmail.com",
     to: to,
     subject: subject,
     text: body,

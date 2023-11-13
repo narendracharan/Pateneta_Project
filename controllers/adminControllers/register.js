@@ -230,6 +230,7 @@ exports.adminDetails = async (req, res) => {
     }
     res.status(200).json(success(res.statusCode, "Success", { admim }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Error In Admin Details", res.statusCode));
   }
 };

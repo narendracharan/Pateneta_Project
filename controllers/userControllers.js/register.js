@@ -51,7 +51,7 @@ exports.userRegister = async (req, res) => {
     if (checkNumber) {
       return res
         .status(201)
-        .json(error("mobileNumber is already register", res.statusCode));
+        .json(error("mobile Number is already register", res.statusCode));
     }
     const checkMail = await userSchema.findOne({ Email: Email });
     if (checkMail) {
@@ -102,7 +102,7 @@ exports.userLogin = async (req, res) => {
     if (!mobileNumber) {
       return res
         .status(201)
-        .json(error("Please Provide MobileNumber", res.statusCode));
+        .json(error("Please Provide Mobile Number", res.statusCode));
     }
     if (!password) {
       return res
@@ -116,7 +116,7 @@ exports.userLogin = async (req, res) => {
     if (!verifyUser) {
       return res
         .status(201)
-        .json(error("mobileNumber is Not Register", res.statusCode));
+        .json(error("mobile Number is Not Register", res.statusCode));
     }
     if (verifyUser.userVerify != "APPROVED") {
       res.status(201).json(error("Your Are Not Approved User", res.statusCode));
@@ -161,7 +161,7 @@ exports.companySignup = async (req, res) => {
     if (!mobileNumber) {
       return res
         .status(201)
-        .json(error("Please enter mobileNumber", res.statusCode));
+        .json(error("Please enter mobile Number", res.statusCode));
     }
     if (!password) {
       return res
@@ -182,7 +182,7 @@ exports.companySignup = async (req, res) => {
     if (checkNumber) {
       return res
         .status(201)
-        .json(error("mobileNumber is already register", res.statusCode));
+        .json(error("mobile Number is already register", res.statusCode));
     }
     const checkMail = await userSchema.findOne({ Email: Email });
     if (checkMail) {
