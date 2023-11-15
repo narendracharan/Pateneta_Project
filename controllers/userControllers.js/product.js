@@ -199,6 +199,22 @@ exports.listBussinesIdeas = async (req, res) => {
         },
       },
       {
+        $lookup: {
+          from: "categories",
+          localField: "category_Id",
+          foreignField: "_id",
+          as: "categories",
+        },
+      },
+      {
+        $lookup: {
+          from: "subcategories",
+          localField: "subCategory_Id",
+          foreignField: "_id",
+          as: "subcategoriess",
+        },
+      },
+      {
         $match: {
           verify: "APPROVED",
           // $or: [
