@@ -80,10 +80,9 @@ router.post("/update-language/:id", updateLanguage);
 
 ///---> carete idea routes
 router.post("/create-idea", tokenAuthorisationUser, upload.any(), createIdea);
-router.post("/list-bussiness-ideas", tokenAuthorisationUser, listBussinesIdeas);
+router.post("/list-bussiness-ideas", listBussinesIdeas);
 router.post(
   "/search-bussiness-ideas",
-  tokenAuthorisationUser,
   searchBussinessIdea
 );
 router.post("/low-to-high", tokenAuthorisationUser, lowtoHighPrice);
@@ -132,10 +131,9 @@ router.post("/Decline-bids/:id",tokenAuthorisationUser,RejectBids)
 router.post("/search-bids/:id",tokenAuthorisationUser,searchBids)
 
 //----category Routes
-router.post("/category-list", tokenAuthorisationUser, CategoryListing);
+router.post("/category-list", CategoryListing);
 router.post(
   "/sub-category-list/:id",
-  tokenAuthorisationUser,
   subCategoryListing
 );
 
