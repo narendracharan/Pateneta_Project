@@ -3,6 +3,7 @@ const productSchema = require("../../models/userModels/productModel");
 const userModels = require("../../models/userModels/UserRegister");
 const { error, success } = require("../../responseCode");
 const moment = require("moment");
+const admin = require("../../models/adminModels/userModels");
 
 exports.homeDashboards = async (req, res) => {
   try {
@@ -71,12 +72,15 @@ exports.homeDashboards = async (req, res) => {
         },
       },
     ]);
+    const Commission = await admin.findOne();
+    const totalCommission = Commission.commission;
     res.status(200).json(
       success(res.statusCode, "Success", {
         totalBuyerCount,
         totalSallerCount,
         saleOfMonth,
         pendingRequest,
+        totalCommission,
       })
     );
   } catch (err) {

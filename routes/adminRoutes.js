@@ -73,7 +73,9 @@ const {
   verifyDocument,
 } = require("../controllers/adminControllers/userManagement");
 const adminAuthorisationUser = require("../middleware/adminAuthentication");
-const { homeDashboards } = require("../controllers/adminControllers/dashboards");
+const {
+  homeDashboards,
+} = require("../controllers/adminControllers/dashboards");
 
 //-admin register
 router.post("/create-admin", adminRegister);
@@ -81,16 +83,20 @@ router.post("/admin-login", loginAdmin);
 router.post("/admin-resetpassword", resetPassword);
 router.post("/send-Email", sendUserResetPassword);
 router.post("/verify-otp", OtpVerify);
-router.post("/admin-details/:id",adminAuthorisationUser,adminDetails)
+router.post("/admin-details/:id", adminAuthorisationUser, adminDetails);
 router.post(
   "/update-profile/:id",
   adminAuthorisationUser,
   upload.single("profile"),
   updateProfile
 );
-router.post("/add-Commission/:id",adminAuthorisationUser,addCommission)
-router.post("/add-Bank-Details/:id",adminAuthorisationUser,addBankDeatils)
-router.post("/approved-request/:id",adminAuthorisationUser,withdrawalApproved)
+router.post("/add-Commission/:id", adminAuthorisationUser, addCommission);
+router.post("/add-Bank-Details/:id", adminAuthorisationUser, addBankDeatils);
+router.post(
+  "/approved-request/:id",
+  adminAuthorisationUser,
+  withdrawalApproved
+);
 
 //-----categoryRoutes
 router.post(
@@ -128,8 +134,8 @@ router.post(
 ///-------> Category Routes
 router.post("/category-search", adminAuthorisationUser, categorySearch);
 router.post("/subCategory-search", adminAuthorisationUser, subCategorySearch);
-router.post("/category-status-change/:id",categoryStatus)
-router.post("/subCategory-status-change/:id",subCategoryStatus)
+router.post("/category-status-change/:id", categoryStatus);
+router.post("/subCategory-status-change/:id", subCategoryStatus);
 
 //--idea Request Routes
 router.post("/idea-request-list", adminAuthorisationUser, ideaRequestList);
@@ -151,17 +157,18 @@ router.post("/edit-seller/:id", adminAuthorisationUser, editSeller);
 router.post("/seller-Details/:id", adminAuthorisationUser, sellerDetails);
 router.post("/seller-delete/:id", adminAuthorisationUser, sellerDelete);
 router.post("/seller-search", adminAuthorisationUser, sellerSearch);
-router.post("/user-sales-list",adminAuthorisationUser,salesUserList)
-router.post("/salesUserDetails/:id",adminAuthorisationUser,salesUserDetails)
-router.post("/sales-exports",adminAuthorisationUser,salesOrderExports)
-router.post("/search-sales",adminAuthorisationUser,searchSales)
-router.post("/buyer-list",adminAuthorisationUser,buyerUserList)
-router.post("/buyer-search",adminAuthorisationUser,buyerSearch)
-router.post("/buyer-delete/:id",adminAuthorisationUser,deleteBuyer)
-router.post("/change-status/:id",adminAuthorisationUser,buyerStatus)
-router.post("/buyer-details/:id",adminAuthorisationUser,buyerDetails)
-router.post("/home-dashboard",adminAuthorisationUser,homeDashboards)
-router.post("/set-commission",adminAuthorisationUser,setCommission)
+router.post("/user-sales-list", adminAuthorisationUser, salesUserList);
+router.post("/salesUserDetails/:id", adminAuthorisationUser, salesUserDetails);
+router.post("/sales-exports", adminAuthorisationUser, salesOrderExports);
+router.post("/search-sales", adminAuthorisationUser, searchSales);
+router.post("/buyer-list", adminAuthorisationUser, buyerUserList);
+router.post("/buyer-search", adminAuthorisationUser, buyerSearch);
+router.post("/buyer-delete/:id", adminAuthorisationUser, deleteBuyer);
+router.post("/change-status/:id", adminAuthorisationUser, buyerStatus);
+router.post("/buyer-details/:id", adminAuthorisationUser, buyerDetails);
+router.post("/home-dashboard", adminAuthorisationUser, homeDashboards);
+router.post("/set-commission", adminAuthorisationUser, setCommission);
+
 
 //reports
 router.post("/reports-list", adminAuthorisationUser, reportsList);
@@ -177,5 +184,5 @@ router.post("/delete-user/:id", adminAuthorisationUser, userDelete);
 router.post("/change-status/:id", adminAuthorisationUser, changeStatus);
 router.post("/approved-user/:id", adminAuthorisationUser, approvedDoc);
 router.post("/decline-user/:id", adminAuthorisationUser, declineDoc);
-router.post("/approved-kyc/:id",adminAuthorisationUser,verifyDocument)
+router.post("/approved-kyc/:id", adminAuthorisationUser, verifyDocument);
 module.exports = router;

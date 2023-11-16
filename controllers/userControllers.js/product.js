@@ -48,7 +48,7 @@ exports.createIdea = async (req, res) => {
       subCategory_Id: subCategory_Id,
       briefDescription_ar: briefDescription_ar,
       briefDescription_en: briefDescription_en,
-      Price: Price,
+      Price: Price * (1 + admin.commission / 100),
       user_Id: user_Id,
       baseFare: baseFare,
       urlFile: urlFile,
@@ -56,7 +56,6 @@ exports.createIdea = async (req, res) => {
       selectDocument: selectDocument,
     });
     //newIdeas.urlFile.push(urlFile)
-    console.log(req.files);
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "productPic") {
@@ -109,7 +108,13 @@ exports.bussinessIdeaDetails = async (req, res) => {
     const id = req.params.id;
     const detailsIdea = await productSchema
       .findById(id)
-      .populate(["baseBid.user_Id", "user_Id","buyer_Id","category_Id","subCategory_Id"]);
+      .populate([
+        "baseBid.user_Id",
+        "user_Id",
+        "buyer_Id",
+        "category_Id",
+        "subCategory_Id",
+      ]);
     res.status(200).json(success(res.statusCode, "Success", { detailsIdea }));
   } catch (err) {
     res
@@ -366,7 +371,7 @@ exports.baseBidList = async (req, res) => {
         title_ar: list[i].title_ar,
         bidStatus: list[i].bidsVerify,
         user: list[i].user_Id.fullName_en,
-        product_Id:list[i]._id,
+        product_Id: list[i]._id,
         date: list[i].createdAt,
       };
       Bids.push(obj);
