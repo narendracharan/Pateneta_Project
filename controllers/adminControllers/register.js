@@ -234,3 +234,59 @@ exports.adminDetails = async (req, res) => {
     res.status(400).json(error("Error In Admin Details", res.statusCode));
   }
 };
+
+exports.addCommission = async (req, res) => {
+  try {
+    const commission = req.body.commission;
+    const admin = await adminSchema.findById(req.params.id);
+    if (!commission) {
+      return res
+        .status(201)
+        .json(error("Please Provide Commission", res.statusCode));
+    }
+    if (commission) {
+      admin.commission = commission;
+    }
+    await admin.save();
+    res.status(200).json(success(res.statusCode, "Commission Added", {}));
+  } catch (err) {
+    res.status(400).json(error("Error In Add Commission", res.statusCode));
+  }
+};
+
+exports.addBankDeatils = async (req, res) => {
+  try {
+    const { bankName, country, address, IBAN } = req.body;
+    const admin = await adminSchema.findById(req.params.id);
+    if (!bankName) {
+      res.status(201).json("Please Provide BankName", res.statusCode);
+    }
+    if (!country) {
+      res.status(201).json("Please Provide country", res.statusCode);
+    }
+    if (!address) {
+      res.status(201).json("Please Provide address", res.statusCode);
+    }
+    if (!IBAN) {
+      res.status(201).json("Please Provide IBAN", res.statusCode);
+    }
+    if (bankName) {
+      admin.bankName = bankName;
+    }
+    if (country) {
+      admin.country = country;
+    }
+    if (address) {
+      admin.address = address;
+    }
+    if (IBAN) {
+      admin.IBAN = IBAN;
+    }
+    await admin.save();
+    res
+      .status(200)
+      .json(success(res.statusCode, "Bank Details Added", res.statusCode));
+  } catch (err) {
+    res.status(400).json(error("Error In Add Bank", res.statusCode));
+  }
+};

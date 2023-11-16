@@ -8,6 +8,8 @@ const {
   sendUserResetPassword,
   OtpVerify,
   adminDetails,
+  addCommission,
+  addBankDeatils,
 } = require("../controllers/adminControllers/register");
 const upload = require("../middleware/multer");
 const {
@@ -85,6 +87,8 @@ router.post(
   upload.single("profile"),
   updateProfile
 );
+router.post("/add-Commission/:id",adminAuthorisationUser,addCommission)
+router.post("/add-Bank-Details/:id",adminAuthorisationUser,addBankDeatils)
 
 //-----categoryRoutes
 router.post(
