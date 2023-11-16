@@ -39,6 +39,7 @@ exports.createIdea = async (req, res) => {
         .status(201)
         .json(error("Please Complete Your Kyc", res.statusCode));
     }
+
     let newIdeas = new productSchema({
       title_en: title_en,
       title_ar: title_ar,
@@ -48,7 +49,7 @@ exports.createIdea = async (req, res) => {
       subCategory_Id: subCategory_Id,
       briefDescription_ar: briefDescription_ar,
       briefDescription_en: briefDescription_en,
-      Price: Price * (1 + admin.commission / 100),
+      Price: Price,
       user_Id: user_Id,
       baseFare: baseFare,
       urlFile: urlFile,
@@ -75,6 +76,7 @@ exports.createIdea = async (req, res) => {
       }
     }
     const saveIdea = await newIdeas.save();
+    console.log(saveIdea);
     await sendMail(
       admin.userEmail,
       `New Idea`,
@@ -745,7 +747,9 @@ exports.RecivedDocument = async (req, res) => {
       product.documentPic.typedocument = type;
     }
     await product.save();
-    res.status(200).json(success(res.statusCode, "Success Received", { product }));
+    res
+      .status(200)
+      .json(success(res.statusCode, "Success Received", { product }));
   } catch (err) {
     res.status(400).json(error("Error In Recieved Document", res.statusCode));
   }
