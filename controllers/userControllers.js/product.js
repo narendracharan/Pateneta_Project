@@ -59,15 +59,15 @@ exports.createIdea = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "productPic") {
-          newIdeas.productPic.push(
+          newIdeas.pic.productPic.push(
             `${process.env.BASE_URL}/${req.files[i].filename}`
           );
         }
         if (req.files[i].fieldname == "ideaLogo") {
-          newIdeas.ideaLogo = `${process.env.BASE_URL}/${req.files[i].filename}`;
+          newIdeas.logoPic.ideaLogo = `${process.env.BASE_URL}/${req.files[i].filename}`;
         }
         if (req.files[i].fieldname == "selectDocument") {
-          newIdeas.selectDocument.push(
+          newIdeas.documentPic.selectDocument.push(
             `${process.env.BASE_URL}/${req.files[i].filename}`
           );
           newIdeas.docSize.push(req.files[i].size);
@@ -174,13 +174,13 @@ exports.updateBussinessIdea = async (req, res) => {
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
         if (req.files[i].fieldname == "productPic") {
-          product.productPic = `${process.env.BASE_URL}/${req.files[i].filename}`;
+          product.pic.productPic = `${process.env.BASE_URL}/${req.files[i].filename}`;
         }
         if (req.files[i].fieldname == "ideaLogo") {
-          product.ideaLogo = `${process.env.BASE_URL}/${req.files[i].filename}`;
+          product.logoPic.ideaLogo = `${process.env.BASE_URL}/${req.files[i].filename}`;
         }
         if (req.files[i].fieldname == "selectDocument") {
-          product.selectDocument = `${process.env.BASE_URL}/${req.files[i].filename}`;
+          product.documentPic.selectDocument = `${process.env.BASE_URL}/${req.files[i].filename}`;
         }
       }
     }
@@ -728,5 +728,25 @@ exports.searchBids = async (req, res) => {
     res.status(200).json(success(res.statusCode, "Success", { Bids }));
   } catch (err) {
     res.status(400).json(error("Error In Listing", res.statusCode));
+  }
+};
+
+exports.RecivedDocument = async (req, res) => {
+  try {
+    const type = req.body.type;
+    const product = await productSchema.findById(req.params.id);
+    if (type) {
+      product.logoPic.typelogo = type;
+    }
+    if (type) {
+      product.pic.typePic = type;
+    }
+    if (type) {
+      product.documentPic.typedocument = type;
+    }
+    await product.save();
+    res.status(200).json(success(res.statusCode, "Success", { product }));
+  } catch (err) {
+    res.status(400).json(error("Error In Recieved Document", res.statusCode));
   }
 };

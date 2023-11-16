@@ -27,18 +27,33 @@ const schema = new mongoose.Schema({
     ref: "subCategory",
     require: true,
   },
-  selectDocument: {
-    type: Array,
-    require: true,
+  documentPic: {
+    selectDocument: {
+      type: Array,
+      require: true,
+    },
+    typedocument: {
+      type: String,
+      default: "PENDING",
+      enum: ["PENDING", "RECEIVED"],
+    },
   },
   docSize: {
     type: Array,
     require: true,
   },
-  productPic: {
-    type: Array,
-    require: true,
+  pic: {
+    productPic: {
+      type: Array,
+      require: true,
+    },
+    typePic: {
+      type: String,
+      default: "PENDING",
+      enum: ["PENDING", "RECEIVED"],
+    },
   },
+
   briefDescription_en: {
     type: String,
     require: true,
@@ -59,9 +74,16 @@ const schema = new mongoose.Schema({
     type: Number,
     require: true,
   },
-  ideaLogo: {
-    type: String,
-    require: true,
+  logoPic: {
+    ideaLogo: {
+      type: String,
+      require: true,
+    },
+    typelogo: {
+      type: String,
+      default: "PENDING",
+      enum: ["PENDING", "RECEIVED"],
+    },
   },
   user_Id: {
     type: mongoose.Schema.Types.ObjectId,
@@ -94,7 +116,7 @@ const schema = new mongoose.Schema({
       },
       aceptbid: {
         type: String,
-        default:false
+        default: false,
       },
     },
   ],
@@ -123,16 +145,16 @@ const schema = new mongoose.Schema({
     type: String,
     default: true,
   },
-  buyStatus:{
-    type:String,
+  buyStatus: {
+    type: String,
     enum: ["PENDING", "PURCHASE"],
-    default:"PENDING"
+    default: "PENDING",
   },
-  buyer_Id:{
+  buyer_Id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
     require: true,
-  }
+  },
 });
 schema.set("timestamps", true);
 module.exports = mongoose.model("product", schema);

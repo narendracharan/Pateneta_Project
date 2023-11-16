@@ -36,6 +36,7 @@ const {
   searchMyIdea,
   searchBids,
   RejectBids,
+  RecivedDocument,
 } = require("../controllers/userControllers.js/product");
 const {
   pushNotification,
@@ -110,6 +111,8 @@ router.post(
   subCategoryIdeas
 );
 router.post("/search-my-idea/:id",tokenAuthorisationUser,searchMyIdea)
+router.post("/received-idea/:id",tokenAuthorisationUser,RecivedDocument)
+
 
 //----> user Order
 router.post("/user-order", tokenAuthorisationUser, createOrder);
