@@ -54,7 +54,7 @@ const schema = new mongoose.Schema({
   otpExpriTime: {
     type: Date,
   },
-  verifyDocument:{
+  verifyDocument: {
     type: String,
     enum: ["PENDING", "APPROVED", "REJECTED"],
     default: "PENDING",
@@ -95,9 +95,14 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  commission:{
-    type:Number
-  }
+  commission: {
+    type: Number,
+  },
+  withdrawalRequest: {
+    type: String,
+    default: "PENDING",
+    enum: ["PENDING", "APPROVED"],
+  },
 });
 schema.methods.checkPassword = async function (plainPassword, hashedPassword) {
   return await bcrypt.compare(plainPassword, hashedPassword);

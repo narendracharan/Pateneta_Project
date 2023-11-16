@@ -61,6 +61,7 @@ const {
   salesOrderExports,
   setCommission,
   buyerSearch,
+  withdrawalApproved,
 } = require("../controllers/adminControllers/sellerContoller");
 const {
   userList,
@@ -89,6 +90,7 @@ router.post(
 );
 router.post("/add-Commission/:id",adminAuthorisationUser,addCommission)
 router.post("/add-Bank-Details/:id",adminAuthorisationUser,addBankDeatils)
+router.post("/approved-request/:id",adminAuthorisationUser,withdrawalApproved)
 
 //-----categoryRoutes
 router.post(

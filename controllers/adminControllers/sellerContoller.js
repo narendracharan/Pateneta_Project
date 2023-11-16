@@ -425,3 +425,19 @@ exports.setCommission = async (req, res) => {
     res.status(400).json(error("Error in Set Commission", res.statusCode));
   }
 };
+
+//withdrawalApproved
+
+exports.withdrawalApproved = async (req, res) => {
+  try {
+    var status = "APPROVED";
+    const user = await UserRegister.findById(req.params.id);
+    if (status) {
+      user.withdrawalRequest = status;
+    }
+    await user.save();
+    res.status(200).json(success(res.statusCode, "Withdrawn Approved", {}));
+  } catch (err) {
+    res.status(400).json(error("Error In Approved Request", res.statusCode));
+  }
+};
