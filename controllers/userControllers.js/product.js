@@ -745,7 +745,7 @@ exports.RecivedDocument = async (req, res) => {
       product.documentPic.typedocument = type;
     }
     await product.save();
-    res.status(200).json(success(res.statusCode, "Success", { product }));
+    res.status(200).json(success(res.statusCode, "Success Received", { product }));
   } catch (err) {
     res.status(400).json(error("Error In Recieved Document", res.statusCode));
   }
