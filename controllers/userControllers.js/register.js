@@ -94,6 +94,91 @@ exports.userRegister = async (req, res) => {
   }
 };
 
+
+
+
+
+
+//---> Register User Api
+exports.sellerRegister = async (req, res) => {
+  try {
+    const { fullName_en, fullName_ar, Email, mobileNumber, password } =
+      req.body;
+    // if (!fullName_en || !fullName_ar) {
+    //   return res.status(201).json(error("Please enter  name", res.statusCode));
+    // }
+    if (!validator.isEmail(Email)) {
+      return res.status(201).json(error("Please enter  Email", res.statusCode));
+    }
+    if (!mobileNumber) {
+      return res
+        .status(201)
+        .json(error("Please enter mobileNumber", res.statusCode));
+    }
+    if (!password) {
+      return res
+        .status(201)
+        .json(error("Please enter password", res.statusCode));
+    }
+    const admin = await adminSchema.findOne();
+    const checkName = await userSchema.findOne({
+      fullName_en: fullName_en,
+    });
+    if (checkName) {
+      return res
+        .status(201)
+        .json(error("Name is already register", res.statusCode));
+    }
+    const checkNumber = await userSchema.findOne({
+      mobileNumber: mobileNumber,
+    });
+    if (checkNumber) {
+      return res
+        .status(201)
+        .json(error("mobile Number is already register", res.statusCode));
+    }
+    const checkMail = await userSchema.findOne({ Email: Email });
+    if (checkMail) {
+      return res
+        .status(201)
+        .json(error("Email is already register", res.statusCode));
+    }
+    const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
+    const passwordHash = await bcrypt.hash(password, 10);
+    const newUser = new userSchema({
+      fullName_en: fullName_en,
+      fullName_ar: fullName_ar,
+      Email: Email,
+      mobileNumber: mobileNumber,
+      password: passwordHash,
+      userType:"SELLER"
+    });
+    const user = await newUser.save();
+    await sendMail(
+      admin.userEmail,
+      `New User`,
+      admin.userName,
+      `<br.
+      <br>
+      New User has been registered on the Platform <br>
+      <br>
+  
+      <br>
+      Please Login Your Account https://admin.patenta-sa.com/
+      <br>
+      <br>
+      Patenta<br>
+      Customer Service Team<br>
+      91164721
+      `
+    );
+    res.status(200).json(success(res.statusCode, "Success", { user, otp }));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
 // -----> Login Api
 exports.userLogin = async (req, res) => {
   try {

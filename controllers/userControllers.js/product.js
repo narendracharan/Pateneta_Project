@@ -875,3 +875,17 @@ exports.RecivedDocument = async (req, res) => {
     res.status(400).json(error("Error In Recieved Document", res.statusCode));
   }
 };
+
+exports.verifyKyc = async (req, res) => {
+  try {
+    const userVerify = await userSchema.findById(req.params.id);
+    if (userVerify.verifyDocument != "APPROVED") {
+      return res
+        .status(201)
+        .json(error("Please Complete Your Kyc", res.statusCode));
+    }
+    res.status(200).json(success(res.statusCode, "Approved User", {}));
+  } catch (err) {
+    res.status(400).json(error("Error In Kyc", res.statusCode));
+  }
+};

@@ -13,6 +13,7 @@ const {
   updateLanguage,
   userResetPassword,
   userDetails,
+  sellerRegister,
 } = require("../controllers/userControllers.js/register");
 const upload = require("../middleware/multer");
 const tokenAuthorisationUser = require("../middleware/userAuthentication");
@@ -38,6 +39,7 @@ const {
   RejectBids,
   RecivedDocument,
   createAuctionIdea,
+  verifyKyc,
 } = require("../controllers/userControllers.js/product");
 const {
   pushNotification,
@@ -60,6 +62,7 @@ const router = express.Router();
 
 ///---->user register Routes
 router.post("/register-user", userRegister);
+router.post("/seller-register",sellerRegister)
 router.post("/register-company", companySignup);
 router.post("/user-login", userLogin);
 router.post("/send-otp", sendOtpPassword);
@@ -68,6 +71,7 @@ router.post("/create-user_kyc/:id", upload.any(), userKyc);
 router.post("/user-details/:id", userDetails);
 router.post("/create-compny_kyc/:id", upload.any(), companyKyc);
 router.post("/verify-user/:id", verifyUser);
+router.post("/verify-kyc/:id",verifyKyc)
 router.post(
   "/updated-profile/:id",
   tokenAuthorisationUser,

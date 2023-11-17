@@ -98,6 +98,11 @@ const schema = new mongoose.Schema({
   commission: {
     type: Number,
   },
+  userType:{
+    type: String,
+    default:"BUYER",
+    enum:["BUYER","SELLER"]
+  },
   withdrawalRequest: {
     type: String,
     default: "PENDING",
