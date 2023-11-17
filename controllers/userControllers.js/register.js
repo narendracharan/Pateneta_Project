@@ -40,11 +40,11 @@ exports.userRegister = async (req, res) => {
     const checkName = await userSchema.findOne({
       fullName_en: fullName_en,
     });
-    if (checkName) {
-      return res
-        .status(201)
-        .json(error("Name is already register", res.statusCode));
-    }
+    // if (checkName) {
+    //   return res
+    //     .status(201)
+    //     .json(error("Name is already register", res.statusCode));
+    // }
     const checkNumber = await userSchema.findOne({
       mobileNumber: mobileNumber,
     });
@@ -121,14 +121,14 @@ exports.sellerRegister = async (req, res) => {
         .json(error("Please enter password", res.statusCode));
     }
     const admin = await adminSchema.findOne();
-    const checkName = await userSchema.findOne({
-      fullName_en: fullName_en,
-    });
-    if (checkName) {
-      return res
-        .status(201)
-        .json(error("Name is already register", res.statusCode));
-    }
+    // const checkName = await userSchema.findOne({
+    //   fullName_en: fullName_en,
+    // });
+    // if (checkName) {
+    //   return res
+    //     .status(201)
+    //     .json(error("Name is already register", res.statusCode));
+    // }
     const checkNumber = await userSchema.findOne({
       mobileNumber: mobileNumber,
     });
@@ -151,7 +151,7 @@ exports.sellerRegister = async (req, res) => {
       Email: Email,
       mobileNumber: mobileNumber,
       password: passwordHash,
-      userType:"SELLER"
+      userType:"Seller"
     });
     const user = await newUser.save();
     await sendMail(

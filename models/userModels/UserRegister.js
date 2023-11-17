@@ -100,8 +100,8 @@ const schema = new mongoose.Schema({
   },
   userType:{
     type: String,
-    default:"BUYER",
-    enum:["BUYER","SELLER"]
+    default:"Buyer",
+    enum:["Buyer","Seller"]
   },
   withdrawalRequest: {
     type: String,
