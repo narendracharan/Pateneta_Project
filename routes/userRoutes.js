@@ -37,6 +37,7 @@ const {
   searchBids,
   RejectBids,
   RecivedDocument,
+  createAuctionIdea,
 } = require("../controllers/userControllers.js/product");
 const {
   pushNotification,
@@ -81,6 +82,7 @@ router.post("/update-language/:id", updateLanguage);
 
 ///---> carete idea routes
 router.post("/create-idea", tokenAuthorisationUser, upload.any(), createIdea);
+router.post("/create-auction-idea",tokenAuthorisationUser,upload.any(),createAuctionIdea)
 router.post("/list-bussiness-ideas", listBussinesIdeas);
 router.post(
   "/search-bussiness-ideas",

@@ -49,9 +49,9 @@ exports.createIdea = async (req, res) => {
       subCategory_Id: subCategory_Id,
       briefDescription_ar: briefDescription_ar,
       briefDescription_en: briefDescription_en,
-      Price: Price,
+      Price: Price * (1 + admin.commission / 100),
       user_Id: user_Id,
-      baseFare: baseFare,
+     // baseFare: baseFare,
       urlFile: urlFile,
       present: present,
       selectDocument: selectDocument,
@@ -101,6 +101,123 @@ exports.createIdea = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Error in Upload Idea", res.statusCode));
+  }
+};
+
+exports.createAuctionIdea = async (req, res) => {
+  try {
+    const {
+      title_en,
+      title_ar,
+      description_en,
+      description_ar,
+      category_Id,
+      subCategory_Id,
+      briefDescription_en,
+      briefDescription_ar,
+      Price,
+      selectDocument,
+      user_Id,
+      baseFare,
+      urlFile,
+      present,
+    } = req.body;
+    const admin = await adminSchema.findOne();
+    const userVerify = await userSchema.findOne({ _id: user_Id });
+    const idea = await productSchema.findOne({ title_en: title_en });
+    if (idea) {
+      return res
+        .status(201)
+        .json(error("Title Name is already register", res.statusCode));
+    }
+    if (userVerify.verifyDocument != "APPROVED") {
+      return res
+        .status(201)
+        .json(error("Please Complete Your Kyc", res.statusCode));
+    }
+
+    let newIdeas = new productSchema({
+      title_en: title_en,
+      title_ar: title_ar,
+      description_en: description_en,
+      description_ar: description_ar,
+      category_Id: category_Id,
+      subCategory_Id: subCategory_Id,
+      briefDescription_ar: briefDescription_ar,
+      briefDescription_en: briefDescription_en,
+   //   Price: Price,
+      user_Id: user_Id,
+      baseFare: baseFare * (1 + admin.commission / 100),
+      urlFile: urlFile,
+      present: present,
+      selectDocument: selectDocument,
+    });
+    //newIdeas.urlFile.push(urlFile)
+    if (req.files) {
+      for (let i = 0; i < req.files.length; i++) {
+        if (req.files[i].fieldname == "productPic") {
+          newIdeas.pic.productPic.push(
+            `${process.env.BASE_URL}/${req.files[i].filename}`
+          );
+        }
+        if (req.files[i].fieldname == "ideaLogo") {
+          newIdeas.logoPic.ideaLogo = `${process.env.BASE_URL}/${req.files[i].filename}`;
+        }
+        if (req.files[i].fieldname == "selectDocument") {
+          newIdeas.documentPic.selectDocument.push(
+            `${process.env.BASE_URL}/${req.files[i].filename}`
+          );
+          newIdeas.docSize.push(req.files[i].size);
+        }
+      }
+    }
+    const saveIdea = await newIdeas.save();
+    console.log(saveIdea);
+    await sendMail(
+      admin.userEmail,
+      `New Idea`,
+      admin.userName,
+      `<br.
+    <br>
+    New idea has been added on the Platform<br>
+    <br>
+
+    <br>
+    Please Login Your Account https://admin.patenta-sa.com/
+    <br>
+    <br>
+    Patenta<br>
+    Customer Service Team<br>
+    91164721
+    `
+    );
+    res
+      .status(201)
+      .json(success(res.statusCode, "Idea Uploaded Successfully", {}));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("Error in Upload Idea", res.statusCode));
+  }
+};
+
+// Bussiness Idea Details Api
+exports.bussinessIdeaDetails = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const detailsIdea = await productSchema
+      .findById(id)
+      .populate([
+        "baseBid.user_Id",
+        "user_Id",
+        "buyer_Id",
+        "category_Id",
+        "subCategory_Id",
+      ]);
+    res.status(200).json(success(res.statusCode, "Success", { detailsIdea }));
+  } catch (err) {
+    res
+      .status(400)
+      .json(error("Error in Bussiness Idea Details", res.statusCode));
   }
 };
 
