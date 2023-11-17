@@ -95,10 +95,6 @@ exports.userRegister = async (req, res) => {
 };
 
 
-
-
-
-
 //---> Register User Api
 exports.sellerRegister = async (req, res) => {
   try {

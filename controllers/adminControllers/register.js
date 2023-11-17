@@ -222,6 +222,8 @@ exports.OtpVerify = async (req, res) => {
   }
 };
 
+
+//------> Admin Details Api
 exports.adminDetails = async (req, res) => {
   try {
     const admim = await adminSchema.findById(req.params.id);
@@ -234,6 +236,8 @@ exports.adminDetails = async (req, res) => {
     res.status(400).json(error("Error In Admin Details", res.statusCode));
   }
 };
+
+//-----> Add Commission Api
 
 exports.addCommission = async (req, res) => {
   try {
@@ -254,6 +258,7 @@ exports.addCommission = async (req, res) => {
   }
 };
 
+///-----> Add Bank Details Api
 exports.addBankDeatils = async (req, res) => {
   try {
     const { bankName, country, address, IBAN } = req.body;

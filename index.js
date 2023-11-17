@@ -15,7 +15,11 @@ const router=require("./routes/userRoutes")
 const adminRouter=require("./routes/adminRoutes")
 process.env["BASE_URL"] = "https://patenta-sa.com:2053";
 app.use(express.static("./public"))
+
+//----> User Routes
 app.use("/user",router)
+
+//----> Admin Routes
 app.use("/admin",adminRouter)
 
 app.get("/", (req, res) => {

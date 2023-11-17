@@ -161,6 +161,7 @@ exports.changeStatus = async (req, res) => {
   }
 };
 
+///-------> Verify Document Api
 exports.verifyDocument = async (req, res) => {
   try {
     const id = req.params.id;

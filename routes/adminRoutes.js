@@ -131,6 +131,9 @@ router.post(
   adminAuthorisationUser,
   deleteSubCategory
 );
+
+
+
 ///-------> Category Routes
 router.post("/category-search", adminAuthorisationUser, categorySearch);
 router.post("/subCategory-search", adminAuthorisationUser, subCategorySearch);

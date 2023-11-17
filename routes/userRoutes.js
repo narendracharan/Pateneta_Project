@@ -61,8 +61,9 @@ const {
 const router = express.Router();
 
 ///---->user register Routes
+
 router.post("/register-user", userRegister);
-router.post("/seller-register",sellerRegister)
+router.post("/seller-register", sellerRegister);
 router.post("/register-company", companySignup);
 router.post("/user-login", userLogin);
 router.post("/send-otp", sendOtpPassword);
@@ -71,7 +72,7 @@ router.post("/create-user_kyc/:id", upload.any(), userKyc);
 router.post("/user-details/:id", userDetails);
 router.post("/create-compny_kyc/:id", upload.any(), companyKyc);
 router.post("/verify-user/:id", verifyUser);
-router.post("/verify-kyc/:id",verifyKyc)
+router.post("/verify-kyc/:id", verifyKyc);
 router.post(
   "/updated-profile/:id",
   tokenAuthorisationUser,
@@ -81,17 +82,21 @@ router.post(
 router.post("/change-password/:id", tokenAuthorisationUser, userResetPassword);
 
 ///--->language routes
+
 router.post("/add-language", addLanguage);
 router.post("/update-language/:id", updateLanguage);
 
 ///---> carete idea routes
+
 router.post("/create-idea", tokenAuthorisationUser, upload.any(), createIdea);
-router.post("/create-auction-idea",tokenAuthorisationUser,upload.any(),createAuctionIdea)
-router.post("/list-bussiness-ideas", listBussinesIdeas);
 router.post(
-  "/search-bussiness-ideas",
-  searchBussinessIdea
+  "/create-auction-idea",
+  tokenAuthorisationUser,
+  upload.any(),
+  createAuctionIdea
 );
+router.post("/list-bussiness-ideas", listBussinesIdeas);
+router.post("/search-bussiness-ideas", searchBussinessIdea);
 router.post("/low-to-high", tokenAuthorisationUser, lowtoHighPrice);
 router.post("/high-to-low", tokenAuthorisationUser, highToLowPrice);
 router.post(
@@ -116,15 +121,15 @@ router.post(
   tokenAuthorisationUser,
   subCategoryIdeas
 );
-router.post("/search-my-idea/:id",tokenAuthorisationUser,searchMyIdea)
-router.post("/received-idea/:id",tokenAuthorisationUser,RecivedDocument)
-
+router.post("/search-my-idea/:id", tokenAuthorisationUser, searchMyIdea);
+router.post("/received-idea/:id", tokenAuthorisationUser, RecivedDocument);
 
 //----> user Order
+
 router.post("/user-order", tokenAuthorisationUser, createOrder);
 router.post("/order-details/:id", tokenAuthorisationUser, orderDetails);
 router.post("/order-download/:id", tokenAuthorisationUser, downloadUserOrder);
-router.post("/my-order/:id",tokenAuthorisationUser,myOrder)
+router.post("/my-order/:id", tokenAuthorisationUser, myOrder);
 
 //---->>selas routes
 router.post("/user-sales-list/:id", tokenAuthorisationUser, salesList);
@@ -135,16 +140,13 @@ router.post("/search-sales", tokenAuthorisationUser, salesSearch);
 router.post("/bids-add/:id", tokenAuthorisationUser, addBids);
 router.post("/list-Bids/:id", tokenAuthorisationUser, baseBidList);
 router.post("/bids-view/:id", tokenAuthorisationUser, bidsView);
-router.post("/accept-bids/:id",acceptBids)
-router.post("/Decline-bids/:id",tokenAuthorisationUser,RejectBids)
-router.post("/search-bids/:id",tokenAuthorisationUser,searchBids)
+router.post("/accept-bids/:id", acceptBids);
+router.post("/Decline-bids/:id", tokenAuthorisationUser, RejectBids);
+router.post("/search-bids/:id", tokenAuthorisationUser, searchBids);
 
 //----category Routes
 router.post("/category-list", CategoryListing);
-router.post(
-  "/sub-category-list/:id",
-  subCategoryListing
-);
+router.post("/sub-category-list/:id", subCategoryListing);
 
 ///--> Privacy Routes
 //router.post("/push-notification", pushNotification);

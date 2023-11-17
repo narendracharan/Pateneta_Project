@@ -8,6 +8,8 @@ const fs = require("fs");
 const jsonrawtoxlsx = require("jsonrawtoxlsx");
 const moment = require("moment");
 
+
+///-----------> Create Order APi
 exports.createOrder = async (req, res) => {
   try {
     const {
@@ -65,6 +67,8 @@ exports.createOrder = async (req, res) => {
   }
 };
 
+
+///-------> Create Order Api
 exports.orderDetails = async (req, res) => {
   try {
     const orderDetails = await orderSchema
@@ -130,6 +134,7 @@ exports.orderDetails = async (req, res) => {
 //   }
 // };
 
+//------> Download User Order
 exports.downloadUserOrder = async (req, res) => {
   try {
     const order = await orderSchema
@@ -168,6 +173,7 @@ exports.downloadUserOrder = async (req, res) => {
   }
 };
 
+//---> My Order Api
 exports.myOrder = async (req, res) => {
   try {
     const orderDetails = await orderSchema

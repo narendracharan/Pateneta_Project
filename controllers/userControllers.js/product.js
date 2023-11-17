@@ -106,6 +106,9 @@ exports.createIdea = async (req, res) => {
   }
 };
 
+
+
+//---->Create Auction Idea
 exports.createAuctionIdea = async (req, res) => {
   try {
     const {
@@ -790,6 +793,8 @@ exports.RejectBids = async (req, res) => {
   }
 };
 
+
+//----> Search My Idea Api
 exports.searchMyIdea = async (req, res) => {
   try {
     const search = req.body.search;
@@ -819,6 +824,7 @@ exports.searchMyIdea = async (req, res) => {
   }
 };
 
+//----> Search Bids Api
 exports.searchBids = async (req, res) => {
   try {
     const id = req.params.id;
@@ -854,6 +860,7 @@ exports.searchBids = async (req, res) => {
   }
 };
 
+///-------> Recived Document Api
 exports.RecivedDocument = async (req, res) => {
   try {
     const type = req.body.type;
@@ -876,6 +883,8 @@ exports.RecivedDocument = async (req, res) => {
   }
 };
 
+
+//--------> Verify Kyc Api
 exports.verifyKyc = async (req, res) => {
   try {
     const userVerify = await userSchema.findById(req.params.id);
