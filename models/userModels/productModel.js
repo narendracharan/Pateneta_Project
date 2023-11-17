@@ -17,6 +17,10 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  documentName:{
+    type: String,
+    require: true
+  },
   category_Id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "category",
