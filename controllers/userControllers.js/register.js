@@ -67,6 +67,7 @@ exports.userRegister = async (req, res) => {
       Email: Email,
       mobileNumber: mobileNumber,
       password: passwordHash,
+      userType:"Buyer"
     });
     const user = await newUser.save();
     await sendMail(
@@ -280,7 +281,7 @@ exports.companySignup = async (req, res) => {
       Email: Email,
       mobileNumber: mobileNumber,
       password: passwordHash,
-      // type: "User",
+      companyType:"Seller"
     });
     const company = await newUser.save();
     await sendMail(

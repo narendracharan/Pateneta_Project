@@ -168,6 +168,7 @@ exports.verifyDocument = async (req, res) => {
     const approved = "APPROVED";
     const approvedUser = await userModels.findById(id);
     approvedUser.verifyDocument = approved;
+    approvedUser.companyType="Seller"
     await approvedUser.save();
     if (approvedUser.fullName_en) {
       await sendMail(
