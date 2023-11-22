@@ -1,5 +1,5 @@
 const contentSchema = require("../../models/adminModels/contentModels");
-const userSupport = require("../../models/userModels/userSupport");
+const userSupport = require("../../models/userModels/userSupportSchema");
 const { error, success } = require("../../responseCode");
 
 //create Content Api
@@ -130,20 +130,17 @@ exports.reportsView = async (req, res) => {
 exports.editReports = async (req, res) => {
   try {
     const id = req.params.id;
-    const { name, query, status } = req.body;
+    const { name, message, status } = req.body;
     if (!status) {
       res.status(201).json(error("please provide status", res.statusCode));
     }
     const updateData = await userSupport.findByIdAndUpdate(
       id,
-      { name: name, query: query, status: status },
+      { name: name, message: message, status: status },
       { new: true }
     );
-    if (updateData) {
-      res.status(200).json(success(res.statusCode, "Success", { updateData }));
-    } else {
-      res.status(201).json(error("No Data Found", res.statusCode));
-    }
+
+    res.status(200).json(success(res.statusCode, "Success", { updateData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -154,13 +151,8 @@ exports.deleteReports = async (req, res) => {
   try {
     const id = req.params.id;
     const deleteReport = await userSupport.findByIdAndDelete(id);
-    if (deleteReport) {
-      res
-        .status(200)
-        .json(success(res.statusCode, "Success", { deleteReport }));
-    } else {
-      res.status(201).json(error("No Data Found", res.statusCode));
-    }
+
+    res.status(200).json(success(res.statusCode, "Success", { deleteReport }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }

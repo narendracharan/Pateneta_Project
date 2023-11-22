@@ -43,9 +43,7 @@ const {
 } = require("../controllers/userControllers.js/product");
 const {
   pushNotification,
-  PrivacyUser,
-  createReports,
-} = require("../controllers/userControllers.js/notification");
+  PrivacyUser} = require("../controllers/userControllers.js/notification");
 const {
   createPayment,
   createOrder,
@@ -58,6 +56,7 @@ const {
   userSalesDetails,
   salesSearch,
 } = require("../controllers/userControllers.js/salesControllers");
+const { createReports } = require("../controllers/userControllers.js/supportControllers");
 const router = express.Router();
 
 ///---->user register Routes
@@ -152,5 +151,5 @@ router.post("/sub-category-list/:id", subCategoryListing);
 //router.post("/push-notification", pushNotification);
 router.post("/privacy-list", tokenAuthorisationUser, PrivacyUser);
 //router.post("/create-payment", createPayment);
-router.post("/user-report", tokenAuthorisationUser, createReports);
+router.post("/user-report", tokenAuthorisationUser,createReports );
 module.exports = router;

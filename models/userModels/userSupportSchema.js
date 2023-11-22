@@ -5,14 +5,14 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  query: {
+  message: {
     type: String,
     require: true,
   },
   status: {
     type: String,
     default: "Pending",
-    enum: ["Pending", "Inprogress", "Solve"],
+    enum: ["Pending", "InProgress", "Solve"],
   },
   user_Id: {
     type: mongoose.Schema.Types.ObjectId,
@@ -21,4 +21,4 @@ const schema = new mongoose.Schema({
   },
 });
 schema.set("timestamps", true);
-module.exports = mongoose.model("userSupports", schema);
+module.exports = mongoose.model("userSupport", schema);
