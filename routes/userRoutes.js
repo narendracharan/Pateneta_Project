@@ -152,6 +152,6 @@ router.post("/sub-category-list/:id", subCategoryListing);
 //router.post("/push-notification", pushNotification);
 router.post("/privacy-list", tokenAuthorisationUser, PrivacyUser);
 router.post("/create-payment", hyperPayStep1);
-router.post("/create-payment-step2", hyperPayStep2);
+router.get("/create-payment-step2", hyperPayStep2);
 router.post("/user-report", tokenAuthorisationUser,createReports );
 module.exports = router;
