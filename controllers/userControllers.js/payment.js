@@ -58,6 +58,8 @@ exports.hyperPayStep1 = async (request, response) => {
       amount: request.body.amount,
       currency: request.body.currency,
       paymentType: request.body.paymentType,
+      user_Id: request.body.user_Id,
+      product_Id:request.body.product_Id
     });
     console.log(data);
     var options = {
