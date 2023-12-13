@@ -55,9 +55,9 @@ exports.hyperPayStep1 = async (request, response) => {
 
     const data = queryString.stringify({
       entityId: "8a8294174d0595bb014d05d829cb01cd",
-      amount: "92.00",
-      currency: "SAR",
-      paymentType: "DB",
+      amount: request.body.amount,
+      currency: request.body.currency,
+      paymentType: request.body.paymentType,
     });
     console.log(data);
     var options = {
