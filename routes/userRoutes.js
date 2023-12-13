@@ -45,7 +45,7 @@ const {
   pushNotification,
   PrivacyUser} = require("../controllers/userControllers.js/notification");
 const {
-  createPayment,
+  //createPayment,
   createOrder,
   orderDetails,
   downloadUserOrder,
@@ -57,6 +57,7 @@ const {
   salesSearch,
 } = require("../controllers/userControllers.js/salesControllers");
 const { createReports } = require("../controllers/userControllers.js/supportControllers");
+const { payment, hyperPayStep1, hyperPayStep2 } = require("../controllers/userControllers.js/payment");
 const router = express.Router();
 
 ///---->user register Routes
@@ -150,6 +151,7 @@ router.post("/sub-category-list/:id", subCategoryListing);
 ///--> Privacy Routes
 //router.post("/push-notification", pushNotification);
 router.post("/privacy-list", tokenAuthorisationUser, PrivacyUser);
-//router.post("/create-payment", createPayment);
+router.post("/create-payment", hyperPayStep1);
+router.post("/create-payment-step2", hyperPayStep2);
 router.post("/user-report", tokenAuthorisationUser,createReports );
 module.exports = router;

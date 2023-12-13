@@ -206,6 +206,7 @@ exports.userLogin = async (req, res) => {
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
 
     const isMatch = await bcrypt.compare(password, verifyUser.password);
+    console.log(isMatch);
     if (!isMatch) {
       return res
         .status(201)
