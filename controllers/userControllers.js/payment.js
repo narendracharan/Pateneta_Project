@@ -65,7 +65,7 @@ exports.hyperPayStep1 = async (request, response) => {
     var options = {
       port: 443,
       // host:'test.oppwa.com',
-      host: "oppwa.com",
+      host: "eu-test.oppwa.com",
       path: path,
       method: "POST",
       headers: {
