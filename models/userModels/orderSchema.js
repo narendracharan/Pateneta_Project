@@ -53,7 +53,6 @@ const schema = new mongoose.Schema({
   },
   total: {
     type: Number,
-    require: true,
   },
     tran_ref:{
       type:String
