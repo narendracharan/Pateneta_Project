@@ -56,7 +56,7 @@ const schema = new mongoose.Schema({
     require: true,
   },
     tran_ref:{
-      type:Number
+      type:String
     },
   //   securityCode:{
 

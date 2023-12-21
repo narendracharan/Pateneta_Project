@@ -181,7 +181,7 @@ exports.orderPayment = async (request, respose) => {
     };
     const url = {
       response: "https://patenta-sa.com/payment-success",
-      callback: "https://patenta-sa.com/payment-success",
+      callback: "https://patenta-sa.com/index-page",
     };
     let paymentMethods = ["all"];
 
