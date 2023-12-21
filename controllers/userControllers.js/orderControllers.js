@@ -21,6 +21,7 @@ exports.createOrder = async (req, res) => {
       mobileNumber,
       total,
       bids_Id,
+      tran_ref
     } = req.body;
     const product = await productModel.findOne({ _id: product_Id });
     const status = "PURCHASE";
@@ -40,6 +41,7 @@ exports.createOrder = async (req, res) => {
         mobileNumber: mobileNumber,
         user_Id: user_Id,
         total: total,
+        tran_ref:tran_ref
       });
       await newOrder.save();
       res.status(200).json(success(res.statusCode, "Success", { newOrder }));
@@ -57,6 +59,7 @@ exports.createOrder = async (req, res) => {
         mobileNumber: mobileNumber,
         user_Id: user_Id,
         total: total,
+        tran_ref:tran_ref
       });
       await newOrder.save();
       res.status(200).json(success(res.statusCode, "Success", { newOrder }));

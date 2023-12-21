@@ -57,7 +57,7 @@ const {
   salesSearch,
 } = require("../controllers/userControllers.js/salesControllers");
 const { createReports } = require("../controllers/userControllers.js/supportControllers");
-const { payment, hyperPayStep1, hyperPayStep2 } = require("../controllers/userControllers.js/payment");
+const { payment, hyperPayStep1, hyperPayStep2, orderPayment } = require("../controllers/userControllers.js/payment");
 const router = express.Router();
 
 ///---->user register Routes
@@ -154,4 +154,5 @@ router.post("/privacy-list", tokenAuthorisationUser, PrivacyUser);
 router.post("/create-payment", hyperPayStep1);
 router.post("/create-payment-step2", hyperPayStep2);
 router.post("/user-report", tokenAuthorisationUser,createReports );
+router.post("/order-payment",orderPayment)
 module.exports = router;
