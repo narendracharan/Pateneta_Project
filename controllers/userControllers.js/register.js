@@ -191,17 +191,17 @@ exports.userLogin = async (req, res) => {
         .json(error("Please Provide Passwprd", res.statusCode));
     }
 
-    // const verifyUser = await userSchema.findOne({
-    //   mobileNumber: mobileNumber,
-    // });
-    // if (!verifyUser) {
-    //   return res
-    //     .status(201)
-    //     .json(error("mobile Number is Not Register", res.statusCode));
-    // }
-    // if (verifyUser.userVerify != "APPROVED") {
-    //   res.status(201).json(error("Your Are Not Approved User", res.statusCode));
-    // }
+    const verifyUser = await userSchema.findOne({
+      mobileNumber: mobileNumber,
+    });
+    if (!verifyUser) {
+      return res
+        .status(201)
+        .json(error("mobile Number is Not Register", res.statusCode));
+    }
+    if (verifyUser.userVerify != "APPROVED") {
+      res.status(201).json(error("Your Are Not Approved User", res.statusCode));
+    }
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
 
     const isMatch = await bcrypt.compare(password, verifyUser.password);
@@ -218,7 +218,7 @@ exports.userLogin = async (req, res) => {
       .status(201)
       .json(
         success(res.statusCode, "login SuccessFully", {
-       //   verifyUser,
+          verifyUser,
           token,
           otp,
         })
