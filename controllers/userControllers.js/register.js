@@ -218,7 +218,7 @@ exports.userLogin = async (req, res) => {
       .status(201)
       .json(
         success(res.statusCode, "login SuccessFully", {
-          verifyUser,
+       //   verifyUser,
           token,
           otp,
         })
