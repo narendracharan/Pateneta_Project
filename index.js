@@ -13,7 +13,7 @@ app.use(bodyparser.json())
 require("./config/connection")
 const router=require("./routes/userRoutes")
 const adminRouter=require("./routes/adminRoutes")
-process.env["BASE_URL"] = "https://ec2-52-66-186-107.ap-south-1.compute.amazonaws.com:2053";
+process.env["BASE_URL"] = "https://patenta-sa.com:2053";
 app.use(express.static("./public"))
 
 //----> User Routes
