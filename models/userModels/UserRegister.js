@@ -101,6 +101,9 @@ const schema = new mongoose.Schema({
   userType:{
     type: String,
   },
+  deviceId:{
+    type:String
+  },
   companyType:{
     type: String,
     

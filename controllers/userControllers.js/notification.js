@@ -1,22 +1,66 @@
 const contentModels = require("../../models/adminModels/contentModels");
-const notifySchema = require("../../models/userModels/webNotification");
 const { error, success } = require("../../responseCode");
+// const admin=require("firebase-admin")
+// const service=require("../../config/firebase.json")
 
-exports.pushNotification = async (req, res) => {
-  try {
-    const { message, user_Id } = req.body;
-    const newNotification = new notifySchema({
-      user_Id: user_Id,
-    });
-    newNotification.message.push(message);
-    await newNotification.save();
-    res
-      .status(200)
-      .json(success(res.statusCode, "Success", { newNotification }));
-  } catch (err) {
-    res.status(400).json(error("Failed", res.statusCode));
-  }
-};
+// admin.initializeApp({
+//   credential:admin.credential.cert(service)
+// })
+
+// exports.notification=async(deviceId,type,name,data)=>{
+//   try{
+//     const options = {
+//       priority: "high",
+//       timeToLive: 60 * 60 * 24,
+//     };
+//     let title = "";
+//     let body = "";
+//     if (type === "Signup") {
+//       body = `${name}New User has been registered on the Platform`;
+//       title = "New User has been registered on the Platform";
+//     }
+//     const payload = {
+//       notification: {
+//         title: title,
+//         body: body,
+//         sound: "default",
+//       },
+//       data: { ...data },
+//     };
+//     admin.messaging().sendToDevice(deviceId, payload, options)
+//     .then((response) => {
+//       console.log(response.results);
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+//   return;
+//   }catch(err){
+//     console.log(err);
+//    return
+//   }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 exports.PrivacyUser = async (req, res) => {
   try {

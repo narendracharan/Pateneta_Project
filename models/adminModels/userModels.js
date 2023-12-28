@@ -14,6 +14,9 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  token:{
+    type:String
+  },
   mobileNumber: {
     type: Number,
     require: true,

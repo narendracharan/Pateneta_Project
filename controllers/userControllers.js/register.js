@@ -7,6 +7,19 @@ const languageModels = require("../../models/userModels/languageModels");
 const productModel = require("../../models/userModels/productModel");
 const adminSchema = require("../../models/adminModels/userModels");
 const sendMail = require("../../services/EmailSerices");
+const {notification}=require("./notification")
+const admin=require("firebase-admin")
+const service=require("../../config/firebase.json")
+
+admin.initializeApp({
+  credential:admin.credential.cert(service)
+})
+
+
+
+
+
+
 //const otpGenerator=require("otp-generator")
 
 // const accountSid = 'AC7898d1cff989f262b5413d25e1038f1b'; // Your Account SID from www.twilio.com/console
@@ -70,6 +83,28 @@ exports.userRegister = async (req, res) => {
       userType:"Buyer"
     });
     const user = await newUser.save();
+    const message = {
+      notification: {
+        title: "New User has been registered on the Platform",
+        body: `New User has been registered on the Platform`,
+      },
+           token:admin.token,
+         data:{
+         // orderKey: `${orderAssign._id}`,
+          redirect_to: "Notification"
+        }
+    };
+ 
+    admin
+      .messaging()
+      .send(message)
+      .then((response) => {
+        console.log("Successfully sent notification:", response);
+      })
+      .catch((error) => {
+        console.log("Error sending notification:", error);
+      });
+
     await sendMail(
       admin.userEmail,
       `New User`,
