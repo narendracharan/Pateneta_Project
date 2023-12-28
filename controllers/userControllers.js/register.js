@@ -8,11 +8,11 @@ const productModel = require("../../models/userModels/productModel");
 const adminSchema = require("../../models/adminModels/userModels");
 const sendMail = require("../../services/EmailSerices");
 const {notification}=require("./notification")
-const admin=require("firebase-admin")
+const firebase=require("firebase-admin")
 const service=require("../../config/firebase.json")
 
 admin.initializeApp({
-  credential:admin.credential.cert(service)
+  credential:firebase.credential.cert(service)
 })
 
 
@@ -88,14 +88,14 @@ exports.userRegister = async (req, res) => {
         title: "New User has been registered on the Platform",
         body: `New User has been registered on the Platform`,
       },
-           token:admin.token,
+           token:firebase.token,
          data:{
          // orderKey: `${orderAssign._id}`,
           redirect_to: "Notification"
         }
     };
  
-    admin
+    firebase
       .messaging()
       .send(message)
       .then((response) => {

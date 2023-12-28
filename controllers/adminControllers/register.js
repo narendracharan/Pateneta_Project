@@ -52,7 +52,7 @@ exports.adminRegister = async (req, res) => {
 //------> admin Login Api
 exports.loginAdmin = async (req, res) => {
   try {
-    const { userName, password,fcmToken } = req.body;
+    const { userName, password } = req.body;
     if (!userName) {
       return res
         .status(201)
@@ -63,10 +63,7 @@ exports.loginAdmin = async (req, res) => {
         .status(201)
         .json(error("please provide password", res.statusCode));
     }
-    const verifyUser = await adminSchema.findOne({
-      userName: userName,
-    });
-    verifyUser.token=fcmToken
+
     await verifyUser.save()
     if (!verifyUser) {
       return res
