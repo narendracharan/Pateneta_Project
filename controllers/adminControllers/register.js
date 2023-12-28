@@ -63,8 +63,9 @@ exports.loginAdmin = async (req, res) => {
         .status(201)
         .json(error("please provide password", res.statusCode));
     }
-
-    await verifyUser.save()
+    const verifyUser = await adminSchema.findOne({
+      userName: userName,
+    });
     if (!verifyUser) {
       return res
         .status(201)
@@ -90,6 +91,18 @@ exports.loginAdmin = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.updateToken = async (req, res) => {
+  try {
+    const token = req.body.token;
+    const admin = await adminSchema.findById(req.params.id);
+    admin.token = token;
+    await admin.save();
+    res.status(200).json(success(res.statusCode, "Success", { admin }));
+  } catch (err) {
+    res.status(400).json(error("Error", res.statusCode));
   }
 };
 
@@ -220,7 +233,6 @@ exports.OtpVerify = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
 
 //------> Admin Details Api
 exports.adminDetails = async (req, res) => {

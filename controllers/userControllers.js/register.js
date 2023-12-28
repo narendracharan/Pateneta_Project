@@ -11,7 +11,7 @@ const {notification}=require("./notification")
 const firebase=require("firebase-admin")
 const service=require("../../config/firebase.json")
 
-admin.initializeApp({
+firebase.initializeApp({
   credential:firebase.credential.cert(service)
 })
 

@@ -10,6 +10,7 @@ const {
   adminDetails,
   addCommission,
   addBankDeatils,
+  updateToken,
 } = require("../controllers/adminControllers/register");
 const upload = require("../middleware/multer");
 const {
@@ -188,4 +189,7 @@ router.post("/change-status/:id", adminAuthorisationUser, changeStatus);
 router.post("/approved-user/:id", adminAuthorisationUser, approvedDoc);
 router.post("/decline-user/:id", adminAuthorisationUser, declineDoc);
 router.post("/approved-kyc/:id", adminAuthorisationUser, verifyDocument);
+
+
+router.post("/update-token/:id",updateToken)
 module.exports = router;
