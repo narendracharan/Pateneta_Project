@@ -7,18 +7,13 @@ const languageModels = require("../../models/userModels/languageModels");
 const productModel = require("../../models/userModels/productModel");
 const adminSchema = require("../../models/adminModels/userModels");
 const sendMail = require("../../services/EmailSerices");
-const {notification}=require("./notification")
-const firebase=require("firebase-admin")
-const service=require("../../config/firebase.json")
+const { notification } = require("./notification");
+const firebase = require("firebase-admin");
+const service = require("../../config/firebase.json");
 
 firebase.initializeApp({
-  credential:firebase.credential.cert(service)
-})
-
-
-
-
-
+  credential: firebase.credential.cert(service),
+});
 
 //const otpGenerator=require("otp-generator")
 
@@ -80,7 +75,7 @@ exports.userRegister = async (req, res) => {
       Email: Email,
       mobileNumber: mobileNumber,
       password: passwordHash,
-      userType:"Buyer"
+      userType: "Buyer",
     });
     const user = await newUser.save();
     const message = {
@@ -88,13 +83,12 @@ exports.userRegister = async (req, res) => {
         title: "New User has been registered on the Platform",
         body: `New User has been registered on the Platform`,
       },
-           token:firebase.token,
-         data:{
-         // orderKey: `${orderAssign._id}`,
-          redirect_to: "Notification"
-        }
+      token: admin.token,
+      //  data:{
+      //  // orderKey: `${orderAssign._id}`,
+      //   redirect_to: "Notification"
+      // }
     };
- 
     firebase
       .messaging()
       .send(message)
@@ -129,7 +123,6 @@ exports.userRegister = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
-
 
 //---> Register User Api
 exports.sellerRegister = async (req, res) => {
@@ -183,7 +176,7 @@ exports.sellerRegister = async (req, res) => {
       Email: Email,
       mobileNumber: mobileNumber,
       password: passwordHash,
-      userType:"Seller"
+      userType: "Seller",
     });
     const user = await newUser.save();
     await sendMail(
@@ -316,7 +309,7 @@ exports.companySignup = async (req, res) => {
       Email: Email,
       mobileNumber: mobileNumber,
       password: passwordHash,
-      companyType:"Seller"
+      companyType: "Seller",
     });
     const company = await newUser.save();
     await sendMail(

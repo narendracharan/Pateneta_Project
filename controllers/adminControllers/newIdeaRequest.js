@@ -159,13 +159,7 @@ exports.searchIdeaRequest = async (req, res) => {
         },
       },
     ]);
-    if (searchIdeas.length > 0) {
-      return res
-        .status(200)
-        .json(success(res.statusCode, "Success", { searchIdeas }));
-    } else {
-      res.status(201).json(error("Ideas are not Found", res.statusCode));
-    }
+    res.status(200).json(success(res.statusCode, "Success", { searchIdeas }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
