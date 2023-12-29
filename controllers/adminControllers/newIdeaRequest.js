@@ -203,3 +203,35 @@ exports.deleteBussinessIdea = async (req, res) => {
     res.status(400).json(error("Failed", res.statusCode));
   }
 };
+
+
+//how to firebase notification implement in node js?
+
+// const admin = require('firebase-admin');
+
+// const serviceAccount = require('./path/to/serviceAccountKey.json');
+
+// admin.initializeApp({
+//  credential: admin.credential.cert(serviceAccount),
+//  databaseURL: 'https://your-database-name.firebaseio.com'
+// });
+
+// async function sendNotification(registrationToken, message) {
+//   try {
+//      const response = await admin.messaging().sendToDevice(registrationToken, {
+//        notification: {
+//          title: message.title,
+//          body: message.body
+//        }
+//      });
+//      console.log('Successfully sent message:', response);
+//   } catch (error) {
+//      console.log('Error sending message:', error);
+//   }
+//  }
+
+
+//  sendNotification('registration-token-here', {
+//   title: 'Test Notification',
+//   body: 'This is a test notification.'
+//  });
