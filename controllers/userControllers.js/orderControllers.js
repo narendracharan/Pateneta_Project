@@ -190,7 +190,7 @@ exports.myOrder = async (req, res) => {
 
 exports.addRatings = async (req, res) => {
   try {
-    const { star, ratingby } = req.body;
+    const { star, ratingby,idea_Id } = req.body;
     if (!star) {
       return res.status(201).json(error("Please Provide Star", res.statusCode));
     }
@@ -199,7 +199,7 @@ exports.addRatings = async (req, res) => {
         .status(201)
         .json(error("Please Provide ratingby", res.statusCode));
     }
-    const ideas = await productModel.findById(req.params.id);
+    const ideas = await productModel.findById(idea_Id);
     ideas.ratings.push({
       star: star,
       ratingby: ratingby,
@@ -209,7 +209,6 @@ exports.addRatings = async (req, res) => {
       .status(200)
       .json(success(res.statusCode, "Rating Added Successfully", { ideas }));
   } catch (err) {
-    console.log(err);
     res.status(400).json(error("Error In Add Ratings", res.statusCode));
   }
 };
