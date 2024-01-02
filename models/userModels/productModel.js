@@ -128,15 +128,16 @@ const schema = new mongoose.Schema({
     type: Array,
     require: true,
   },
-  // bidsVerify: {
-  //   type: String,
-  //   enum: ["PENDING", "Accepted", "Decline"],
-  //   default: "PENDING",
-  // },
-  // highestBid: {
-  //   type: Number,
-  //   require: true,
-  // },
+  ratings: [
+    {
+      star: Number,
+      ratingby: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+        require: true,
+      },
+    },
+  ],
   verify: {
     type: String,
     enum: ["PENDING", "APPROVED", "REJECTED"],

@@ -8,7 +8,6 @@ const fs = require("fs");
 const jsonrawtoxlsx = require("jsonrawtoxlsx");
 const moment = require("moment");
 
-
 ///-----------> Create Order APi
 exports.createOrder = async (req, res) => {
   try {
@@ -21,7 +20,7 @@ exports.createOrder = async (req, res) => {
       mobileNumber,
       total,
       bids_Id,
-      tran_ref
+      tran_ref,
     } = req.body;
     const product = await productModel.findOne({ _id: product_Id });
     const status = "PURCHASE";
@@ -41,7 +40,7 @@ exports.createOrder = async (req, res) => {
         mobileNumber: mobileNumber,
         user_Id: user_Id,
         total: total,
-        tran_ref:tran_ref
+        tran_ref: tran_ref,
       });
       await newOrder.save();
       res.status(200).json(success(res.statusCode, "Success", { newOrder }));
@@ -59,7 +58,7 @@ exports.createOrder = async (req, res) => {
         mobileNumber: mobileNumber,
         user_Id: user_Id,
         total: total,
-        tran_ref:tran_ref
+        tran_ref: tran_ref,
       });
       await newOrder.save();
       res.status(200).json(success(res.statusCode, "Success", { newOrder }));
@@ -69,7 +68,6 @@ exports.createOrder = async (req, res) => {
     res.status(400).json(error("Error in Create Order", res.statusCode));
   }
 };
-
 
 ///-------> Create Order Api
 exports.orderDetails = async (req, res) => {
@@ -185,5 +183,33 @@ exports.myOrder = async (req, res) => {
     res.status(200).json(success(res.statusCode, "Success", { orderDetails }));
   } catch (err) {
     res.status(400).json(error("Error in Order Details", res.statusCode));
+  }
+};
+
+///---------> Add Ratings Api
+
+exports.addRatings = async (req, res) => {
+  try {
+    const { star, ratingby } = req.body;
+    if (!star) {
+      return res.status(201).json(error("Please Provide Star", res.statusCode));
+    }
+    if (!ratingby) {
+      return res
+        .status(201)
+        .json(error("Please Provide ratingby", res.statusCode));
+    }
+    const ideas = await productModel.findById(req.params.id);
+    ideas.ratings.push({
+      star: star,
+      ratingby: ratingby,
+    });
+    await ideas.save();
+    res
+      .status(200)
+      .json(success(res.statusCode, "Rating Added Successfully", { ideas }));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("Error In Add Ratings", res.statusCode));
   }
 };
