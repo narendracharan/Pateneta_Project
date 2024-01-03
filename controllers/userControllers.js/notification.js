@@ -27,7 +27,7 @@ const { error, success } = require("../../responseCode");
 //       },
 //       data: { ...data },
 //     };
-//     admin.messaging().sendToDevice(deviceId, payload, options)
+//     admin.messaging().sendToDevice("ekojqcIE3pEPJPYS8lVs6d:APA91bGrtSCYtumjy-hG8VA-_UpBE9qfR-ktwdnlkREgOjIJwfKKboT-3utylFUuF0iXcETr3z35ZT2tY4XNc80Q7f0hAHf0IusfkV2A1peKszFi-p2LagVUiXk6myjTO9MNhRwq5vDG", payload, options)
 //     .then((response) => {
 //       console.log(response.results);
 //     })

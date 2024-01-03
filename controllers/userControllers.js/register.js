@@ -8,12 +8,12 @@ const productModel = require("../../models/userModels/productModel");
 const adminSchema = require("../../models/adminModels/userModels");
 const sendMail = require("../../services/EmailSerices");
 const { notification } = require("./notification");
-const firebase = require("firebase-admin");
-const service = require("../../config/firebase.json");
+// const firebase = require("firebase-admin");
+// const service = require("../../config/firebase.json");
 
-firebase.initializeApp({
-  credential: firebase.credential.cert(service),
-});
+// firebase.initializeApp({
+//   credential: firebase.credential.cert(service),
+// });
 
 //const otpGenerator=require("otp-generator")
 
@@ -78,26 +78,37 @@ exports.userRegister = async (req, res) => {
       userType: "Buyer",
     });
     const user = await newUser.save();
-    const message = {
-      notification: {
-        title: "New User has been registered on the Platform",
-        body: `New User has been registered on the Platform`,
-      },
-      token: admin.token,
-      //  data:{
-      //  // orderKey: `${orderAssign._id}`,
-      //   redirect_to: "Notification"
-      // }
-    };
-    firebase
-      .messaging()
-      .send(message)
-      .then((response) => {
-        console.log("Successfully sent notification:", response);
-      })
-      .catch((error) => {
-        console.log("Error sending notification:", error);
-      });
+    // await notification(
+    //   "Signup",
+    //   `${newUser.fullName_en} `,
+    //   {
+    //     user: String(newUser._id),
+    //     type: "Signup",
+    //     url: "url",
+    //   },
+    //   // registerd.deviceId
+    // );
+    // const message = {
+    //   notification: {
+    //     title: "New User has been registered on the Platform ",
+    //     body: `New User has been registered on the Platform `,
+    //   },
+    //        token:"cUoKSzI8W653eCcx-X7l16:APA91bGikS52Sj8kewOgr4NMJtyBZrkjKSq1XYTDLTXPuYPmIQpOir1V6UFFo_mGMhsKfFm4Mb7V3WUIKhChhw6ARTTT9dAfACrNjEEM90m-7vrf8t_P2hG39r1Y4nqjR5IfyTQQu3lA",
+    //     //  data:{
+    //     //   orderKey: `${orderAssign._id}`,
+    //     //   redirect_to: "Notification"
+    //     // }
+    // };
+ 
+    // firebase
+    //   .messaging()
+    //   .send(message)
+    //   .then((response) => {
+    //     console.log("Successfully sent notification:", response);
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error sending notification:", error);
+    //   });
 
     await sendMail(
       admin.userEmail,

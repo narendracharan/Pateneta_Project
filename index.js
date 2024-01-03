@@ -15,7 +15,8 @@ const router=require("./routes/userRoutes")
 const adminRouter=require("./routes/adminRoutes")
 process.env["BASE_URL"] = "https://patenta-sa.com:2053";
 app.use(express.static("./public"))
-
+// app.set("views", __dirname + "views");
+// app.set("view engine", "ejs");
 //----> User Routes
 app.use("/user",router)
 
@@ -27,6 +28,10 @@ app.get("/", (req, res) => {
     res.status(200).send("Welcome to Patenta");
   });
 
+  app.get('/success',function(req, res) {
+    res.sendFile(__dirname + '/views.html');
+   // res.send()
+});
 app.listen(process.env.PORT,()=>{
     console.log(`Server is running port no:${process.env.PORT}`);
 })
