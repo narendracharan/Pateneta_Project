@@ -1,19 +1,18 @@
 const mongoose = require("mongoose");
 
 const chatSchema = new mongoose.Schema({
-    chatId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
-        require: true,
-      },
+  chatId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+    require: true,
+  },
   text: {
     type: String,
     require: true,
   },
-  
   isRead: {
     type: Boolean,
-    default: false
+    default: false,
   },
 });
 chatSchema.set("timestamps", true);

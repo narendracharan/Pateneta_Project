@@ -67,6 +67,7 @@ const {
   hyperPayStep2,
   orderPayment,
 } = require("../controllers/userControllers.js/payment");
+const { userList } = require("../controllers/userControllers.js/chatControllers");
 const router = express.Router();
 
 ///---->user register Routes
@@ -89,6 +90,8 @@ router.post(
   userEditProfile
 );
 router.post("/change-password/:id", tokenAuthorisationUser, userResetPassword);
+router.get("/user-list",tokenAuthorisationUser,userList)
+
 
 ///--->language routes
 
