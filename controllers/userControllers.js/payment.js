@@ -180,8 +180,8 @@ exports.orderPayment = async (request, respose) => {
       street: Street,
     };
     const url = {
-      response: "https://webhook.site/d852520f-5006-4e48-9499-0ca733a2d5e8",
-      callback: "https://patenta-sa.com:2053/success",
+      response: "https://webhook.site/4f2a17c9-da4e-4d60-97b5-8b976bb1e2d3",
+      callback: "https://webhook.site/4f2a17c9-da4e-4d60-97b5-8b976bb1e2d3",
     };
     let paymentMethods = ["all"];
 
