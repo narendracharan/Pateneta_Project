@@ -99,7 +99,7 @@ exports.mySalesSearch = async (req, res) => {
           localField: "products.product_Id",
           foreignField: "_id",
           as: "products",
-          pipeline:[ { $project: { title_en: 1, user_Id:1 } },
+          pipeline:[ { $project: { title_en: 1, user_Id:1,documentPic:1,pic:1 ,logoPic:1} },
             {
               $lookup: {
                 from: "users",
