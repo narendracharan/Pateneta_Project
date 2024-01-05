@@ -22,7 +22,7 @@ process.env["BASE_URL"] = "https://patenta-sa.com:2053";
 app.use(express.static("./public"))
 // app.set("views", __dirname + "views");
 // app.set("view engine", "ejs");
-//----> User Routes
+//----> User Routes 
 app.use("/user",router)
 
 //----> Admin Routes
@@ -37,6 +37,10 @@ app.get("/", (req, res) => {
     res.sendFile(__dirname + '/views.html');
    // res.send()
 });
+
+///---------------> Socket.io Connection
+
+
 io.on("connection", async (socket) => {
   console.log(`⚡: ${socket.id} user just connected!`);
   // socket.on("sendNotification", (data) => {

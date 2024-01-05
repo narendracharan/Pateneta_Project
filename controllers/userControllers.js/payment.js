@@ -180,8 +180,8 @@ exports.orderPayment = async (request, respose) => {
       street: Street,
     };
     const url = {
-      response: "https://webhook.site/4f2a17c9-da4e-4d60-97b5-8b976bb1e2d3",
-      callback: "https://webhook.site/4f2a17c9-da4e-4d60-97b5-8b976bb1e2d3",
+      response: "https://webhook.site/32008376-3fe0-4d8e-89a5-ee5480e87277",
+      callback: "https://webhook.site/32008376-3fe0-4d8e-89a5-ee5480e87277",
     };
     let paymentMethods = ["all"];
 

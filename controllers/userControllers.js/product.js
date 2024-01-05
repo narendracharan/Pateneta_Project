@@ -6,6 +6,7 @@ const subCategoryModel = require("../../models/adminModels/subCategoryModel");
 const productModel = require("../../models/userModels/productModel");
 const adminSchema = require("../../models/adminModels/userModels");
 const sendMail = require("../../services/EmailSerices");
+const { default: mongoose } = require("mongoose");
 
 //---------> create bussiness idea api
 exports.createIdea = async (req, res) => {
@@ -803,21 +804,23 @@ exports.searchMyIdea = async (req, res) => {
         .status(201)
         .json(error("Please provide search key", res.statusCode));
     }
-    const searchIdeas = await productSchema
-      .find({
-        $and: [{ title_en: { $regex: new RegExp(search.trim(), "i") } }],
-      })
-      .populate(["category_Id", "subCategory_Id"]);
-    const searchData = searchIdeas.filter(
-      (user_Id) => String(user_Id.user_Id) === String(req.params.id)
-    );
-    if (searchData.length > 0) {
-      return res
-        .status(200)
-        .json(success(res.statusCode, "Success", { searchData }));
-    } else {
-      res.status(201).json(error("Ideas are not Found", res.statusCode));
-    }
+    const searchIdeas = await productSchema.aggregate([
+      {
+        $match: {
+          user_Id: new mongoose.Types.ObjectId(req.params.id),
+        },
+      },
+      {
+        $match: {
+          $or: [
+            {
+            title_en  : { $regex: search, $options: "i" },
+            },
+          ],
+        },
+      },
+    ])
+   res.status(200).json(success(res.statusCode, "Success", { searchIdeas }))
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Error In Searching", res.statusCode));
