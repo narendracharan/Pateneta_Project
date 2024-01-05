@@ -57,6 +57,7 @@ const {
   salesList,
   userSalesDetails,
   salesSearch,
+  mySalesSearch,
 } = require("../controllers/userControllers.js/salesControllers");
 const {
   createReports,
@@ -142,6 +143,7 @@ router.post("/user-order", tokenAuthorisationUser, createOrder);
 router.post("/order-details/:id", tokenAuthorisationUser, orderDetails);
 router.post("/order-download/:id", tokenAuthorisationUser, downloadUserOrder);
 router.post("/my-order/:id", tokenAuthorisationUser, myOrder);
+router.post("/search-my-order/:id",tokenAuthorisationUser,mySalesSearch)
 
 //---->>selas routes
 router.post("/user-sales-list/:id", tokenAuthorisationUser, salesList);
