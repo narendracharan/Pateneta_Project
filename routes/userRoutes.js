@@ -108,13 +108,12 @@ router.post(
   upload.any(),
   createAuctionIdea
 );
-router.post("/list-bussiness-ideas", tokenAuthorisationUser,listBussinesIdeas);
-router.post("/search-bussiness-ideas", tokenAuthorisationUser,searchBussinessIdea);
+router.post("/list-bussiness-ideas",listBussinesIdeas);
+router.post("/search-bussiness-ideas",searchBussinessIdea);
 router.post("/low-to-high", tokenAuthorisationUser, lowtoHighPrice);
 router.post("/high-to-low", tokenAuthorisationUser, highToLowPrice);
 router.post(
   "/bussines-idea-details/:id",
-  tokenAuthorisationUser,
   bussinessIdeaDetails
 );
 router.post("/my-bussiness-idea/:id", tokenAuthorisationUser, myBussinessIdea);
@@ -131,7 +130,6 @@ router.post(
 );
 router.post(
   "/sub-category-ideas/:id",
-  tokenAuthorisationUser,
   subCategoryIdeas
 );
 router.post("/search-my-idea/:id", tokenAuthorisationUser, searchMyIdea);
@@ -159,10 +157,9 @@ router.post("/Decline-bids/:id", tokenAuthorisationUser, RejectBids);
 router.post("/search-bids/:id", tokenAuthorisationUser, searchBids);
 
 //----category Routes
-router.post("/category-list", tokenAuthorisationUser, CategoryListing);
+router.post("/category-list", CategoryListing);
 router.post(
   "/sub-category-list/:id",
-  tokenAuthorisationUser,
   subCategoryListing
 );
 

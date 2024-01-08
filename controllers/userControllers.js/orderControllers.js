@@ -7,6 +7,7 @@ const stripe = require("stripe")(
 const fs = require("fs");
 const jsonrawtoxlsx = require("jsonrawtoxlsx");
 const moment = require("moment");
+const notificationSchema = require("../../models/userModels/notificationSchema");
 
 ///-----------> Create Order APi
 exports.createOrder = async (req, res) => {
@@ -23,6 +24,10 @@ exports.createOrder = async (req, res) => {
       tran_ref,
     } = req.body;
     const product = await productModel.findOne({ _id: product_Id });
+    new notificationSchema({
+      user_Id: product.user_Id,
+      title: "Your Idea Has Been Buy",
+    }).save();
     const status = "PURCHASE";
     product.buyStatus = status;
     product.buyer_Id = user_Id;
@@ -190,7 +195,7 @@ exports.myOrder = async (req, res) => {
 
 exports.addRatings = async (req, res) => {
   try {
-    const { star, ratingby,idea_Id } = req.body;
+    const { star, ratingby, idea_Id } = req.body;
     if (!star) {
       return res.status(201).json(error("Please Provide Star", res.statusCode));
     }

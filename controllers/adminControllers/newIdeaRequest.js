@@ -1,3 +1,4 @@
+const notificationSchema = require("../../models/userModels/notificationSchema");
 const ideaRequestSchema = require("../../models/userModels/productModel");
 const { error, success } = require("../../responseCode");
 const sendMail = require("../../services/EmailSerices");
@@ -29,7 +30,10 @@ exports.approvedIdea = async (req, res) => {
     const appreovedIdea = await ideaRequestSchema
       .findByIdAndUpdate(id, { verify: status }, { new: true })
       .populate("user_Id");
-    console.log(appreovedIdea.user_Id.fullName_en);
+    new notificationSchema({
+      user_Id: appreovedIdea.user_Id,
+      title: "Your Idea has been partially approved by admin"
+    }).save()
     if (appreovedIdea.user_Id.fullName_en) {
       await sendMail(
         appreovedIdea.user_Id.Email,
@@ -97,6 +101,11 @@ exports.DeclineIdea = async (req, res) => {
     const declineData = await ideaRequestSchema.findByIdAndUpdate(id, data, {
       new: true,
     });
+
+    new notificationSchema({
+      user_Id: declineData.user_Id,
+      title: "Your Idea Has Been REJECTED"
+    }).save()
     res.status(200).json(success(res.statusCode, "Success", { declineData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
