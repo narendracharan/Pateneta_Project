@@ -46,6 +46,9 @@ io.on("connection", async (socket) => {
   // socket.on("sendNotification", (data) => {
   //   socket.broadcast.emit("getNotification", data);
   // });
+  const Message = await getMessages();
+  io.emit("allMessageList", Message);
+
   socket.on("createRoom", async (chatId) => {
     console.log("createRoom", chatId);
     socket.join(chatId);
