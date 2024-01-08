@@ -14,6 +14,11 @@ const chatSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  senderId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+    require: true,
+  },
 });
 chatSchema.set("timestamps", true);
 module.exports = mongoose.model("chatMessage", chatSchema);

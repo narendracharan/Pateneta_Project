@@ -44,6 +44,7 @@ const {
 const {
   pushNotification,
   PrivacyUser,
+  notificationList,
 } = require("../controllers/userControllers.js/notification");
 const {
   //createPayment,
@@ -68,7 +69,9 @@ const {
   hyperPayStep2,
   orderPayment,
 } = require("../controllers/userControllers.js/payment");
-const { userList } = require("../controllers/userControllers.js/chatControllers");
+const {
+  userList,
+} = require("../controllers/userControllers.js/chatControllers");
 const router = express.Router();
 
 ///---->user register Routes
@@ -91,8 +94,7 @@ router.post(
   userEditProfile
 );
 router.post("/change-password/:id", tokenAuthorisationUser, userResetPassword);
-router.get("/user-list",tokenAuthorisationUser,userList)
-
+router.get("/user-list", tokenAuthorisationUser, userList);
 
 ///--->language routes
 
@@ -108,14 +110,11 @@ router.post(
   upload.any(),
   createAuctionIdea
 );
-router.post("/list-bussiness-ideas",listBussinesIdeas);
-router.post("/search-bussiness-ideas",searchBussinessIdea);
+router.post("/list-bussiness-ideas", listBussinesIdeas);
+router.post("/search-bussiness-ideas", searchBussinessIdea);
 router.post("/low-to-high", tokenAuthorisationUser, lowtoHighPrice);
 router.post("/high-to-low", tokenAuthorisationUser, highToLowPrice);
-router.post(
-  "/bussines-idea-details/:id",
-  bussinessIdeaDetails
-);
+router.post("/bussines-idea-details/:id", bussinessIdeaDetails);
 router.post("/my-bussiness-idea/:id", tokenAuthorisationUser, myBussinessIdea);
 router.post(
   "/recommanded-ideas/:id",
@@ -128,10 +127,7 @@ router.post(
   upload.any(),
   updateBussinessIdea
 );
-router.post(
-  "/sub-category-ideas/:id",
-  subCategoryIdeas
-);
+router.post("/sub-category-ideas/:id", subCategoryIdeas);
 router.post("/search-my-idea/:id", tokenAuthorisationUser, searchMyIdea);
 router.post("/received-idea/:id", tokenAuthorisationUser, RecivedDocument);
 
@@ -141,7 +137,7 @@ router.post("/user-order", tokenAuthorisationUser, createOrder);
 router.post("/order-details/:id", tokenAuthorisationUser, orderDetails);
 router.post("/order-download/:id", tokenAuthorisationUser, downloadUserOrder);
 router.post("/my-order/:id", tokenAuthorisationUser, myOrder);
-router.post("/search-my-order/:id",tokenAuthorisationUser,mySalesSearch)
+router.post("/search-my-order/:id", tokenAuthorisationUser, mySalesSearch);
 
 //---->>selas routes
 router.post("/user-sales-list/:id", tokenAuthorisationUser, salesList);
@@ -158,14 +154,12 @@ router.post("/search-bids/:id", tokenAuthorisationUser, searchBids);
 
 //----category Routes
 router.post("/category-list", CategoryListing);
-router.post(
-  "/sub-category-list/:id",
-  subCategoryListing
-);
+router.post("/sub-category-list/:id", subCategoryListing);
 
 ///--> Privacy Routes
 //router.post("/push-notification", pushNotification);
 router.post("/privacy-list", tokenAuthorisationUser, PrivacyUser);
+router.get("/notification-list/:id", notificationList);
 router.post("/ratings-added", tokenAuthorisationUser, addRatings);
 router.post("/create-payment", hyperPayStep1);
 router.post("/create-payment-step2", hyperPayStep2);

@@ -1,5 +1,18 @@
 const contentModels = require("../../models/adminModels/contentModels");
+const notificationSchema = require("../../models/userModels/notificationSchema");
 const { error, success } = require("../../responseCode");
+
+
+//------> notification List APi 
+exports.notificationList = async (req, res) => {
+  try {
+    const list = await notificationSchema.find({ user_Id: req.param.id });
+    res.status(200).json(success(res.statusCode, "Success", { list }));
+  } catch (err) {
+    res.status(400).json(error("Error In List", res.statusCode));
+  }
+};
+
 // const admin=require("firebase-admin")
 // const service=require("../../config/firebase.json")
 
@@ -41,27 +54,6 @@ const { error, success } = require("../../responseCode");
 //   }
 // }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 exports.PrivacyUser = async (req, res) => {
   try {
     const listPrivacy = await contentModels.find({});
@@ -73,4 +65,3 @@ exports.PrivacyUser = async (req, res) => {
     res.status(400).json(success("Failed", res.statusCode));
   }
 };
-
