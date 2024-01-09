@@ -118,7 +118,6 @@ router.post("/bussines-idea-details/:id", bussinessIdeaDetails);
 router.post("/my-bussiness-idea/:id", tokenAuthorisationUser, myBussinessIdea);
 router.post(
   "/recommanded-ideas/:id",
-  tokenAuthorisationUser,
   recommandedProduct
 );
 router.post(
