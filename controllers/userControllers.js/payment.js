@@ -3,8 +3,8 @@ const queryString = require("querystring");
 const { success } = require("../../responseCode");
 const { error } = require("console");
 const paytabs=require("paytabs_pt2")
-let profileID = "105265",
-  serverKey = "STJN6W2MZH-JHG2BDB6DG-KLJHRR9ZT2",
+let profileID = "107560",
+  serverKey = "S6JNHJKLL2-JHMT6L29NJ-JJMWHHZWJ6",
   region = "SAU";
 paytabs.setConfig(profileID, serverKey, region);
 
