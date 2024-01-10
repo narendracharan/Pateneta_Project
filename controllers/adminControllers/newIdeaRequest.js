@@ -32,8 +32,8 @@ exports.approvedIdea = async (req, res) => {
       .populate("user_Id");
     new notificationSchema({
       user_Id: appreovedIdea.user_Id,
-      title: "Your Idea has been partially approved by admin"
-    }).save()
+      title: "Your Idea has been partially approved by admin",
+    }).save();
     if (appreovedIdea.user_Id.fullName_en) {
       await sendMail(
         appreovedIdea.user_Id.Email,
@@ -104,8 +104,8 @@ exports.DeclineIdea = async (req, res) => {
 
     new notificationSchema({
       user_Id: declineData.user_Id,
-      title: "Your Idea Has Been REJECTED"
-    }).save()
+      title: "Your Idea Has Been REJECTED",
+    }).save();
     res.status(200).json(success(res.statusCode, "Success", { declineData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -213,7 +213,6 @@ exports.deleteBussinessIdea = async (req, res) => {
   }
 };
 
-
 //how to firebase notification implement in node js?
 
 // const admin = require('firebase-admin');
@@ -238,7 +237,6 @@ exports.deleteBussinessIdea = async (req, res) => {
 //      console.log('Error sending message:', error);
 //   }
 //  }
-
 
 //  sendNotification('registration-token-here', {
 //   title: 'Test Notification',

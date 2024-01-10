@@ -10,7 +10,7 @@ exports.getMessages = async (chatId) => {
     //   .populate("chatId")
     //   .sort({ createdAt: 1 })
     //   .lean();
-    const msg = await chatModel.find().populate("chatId");
+    const msg = await chatModel.find().populate("chatId").populate("senderId");
     return msg;
   } catch (err) {
     console.log(err);
@@ -26,6 +26,7 @@ exports.sendMessage = async (data) => {
         chatId: data.chatId,
       })
       .populate("chatId")
+      .populate("senderId")
       .sort({ createdAt: 1 })
       .lean();
     return messages;
@@ -34,7 +35,6 @@ exports.sendMessage = async (data) => {
     return;
   }
 };
-
 
 exports.userList = async (req, res) => {
   try {
@@ -52,7 +52,7 @@ exports.userList = async (req, res) => {
         },
       },
     ]);
-    res.status(200).json(success("User List", res.statusCode ,{ userList }));
+    res.status(200).json(success("User List", res.statusCode, { userList }));
   } catch (err) {
     res.status(400).json(error("Error In userList", res.statusCode));
   }
