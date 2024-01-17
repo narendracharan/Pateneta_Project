@@ -2,7 +2,6 @@ const { default: mongoose } = require("mongoose");
 const orderSchema = require("../../models/userModels/orderSchema");
 const { error, success } = require("../../responseCode");
 
-
 // Sales List Api
 exports.salesList = async (req, res) => {
   try {
@@ -26,7 +25,6 @@ exports.userSalesDetails = async (req, res) => {
     res.status(400).json(error("Error in SalesDetails", re.statusCode));
   }
 };
-
 
 // Sales Search Details Api
 exports.salesSearch = async (req, res) => {
@@ -73,11 +71,6 @@ exports.salesSearch = async (req, res) => {
 exports.mySalesSearch = async (req, res) => {
   try {
     const search = req.body.search;
-    // if (!search) {
-    //   return res
-    //     .status(201)
-    //     .json(error("Please Provide Search Key", res.statusCode));
-    // }
     const sales = await orderSchema.aggregate([
       {
         $match: {
@@ -90,7 +83,7 @@ exports.mySalesSearch = async (req, res) => {
           localField: "user_Id",
           foreignField: "_id",
           as: "users",
-          pipeline:[ { $project: { fullName_en: 1, companyName_ar: 1, } },]
+          pipeline: [{ $project: { fullName_en: 1, companyName_ar: 1 } }],
         },
       },
       {
@@ -99,17 +92,26 @@ exports.mySalesSearch = async (req, res) => {
           localField: "products.product_Id",
           foreignField: "_id",
           as: "products",
-          pipeline:[ { $project: { title_en: 1, user_Id:1,documentPic:1,pic:1 ,logoPic:1} },
+          pipeline: [
+            {
+              $project: {
+                title_en: 1,
+                user_Id: 1,
+                documentPic: 1,
+                pic: 1,
+                logoPic: 1,
+              },
+            },
             {
               $lookup: {
                 from: "users",
                 localField: "user_Id",
                 foreignField: "_id",
                 as: "user_Id",
-                pipeline:[ { $project: { fullName_en: 1, companyName_ar: 1, } },]
+                pipeline: [{ $project: { fullName_en: 1, companyName_ar: 1 } }],
               },
             },
-          ]
+          ],
         },
       },
       { $unwind: "$users" },

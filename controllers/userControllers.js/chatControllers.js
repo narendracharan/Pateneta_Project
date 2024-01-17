@@ -1,6 +1,7 @@
 const chatModel = require("../../models/userModels/chatMessage");
 const { error, success } = require("../../responseCode");
 const User = require("../../models/userModels/UserRegister");
+const chatUser = require("../../models/userModels/user");
 
 exports.getMessages = async (chatId) => {
   try {
@@ -55,5 +56,18 @@ exports.userList = async (req, res) => {
     res.status(200).json(success("User List", res.statusCode, { userList }));
   } catch (err) {
     res.status(400).json(error("Error In userList", res.statusCode));
+  }
+};
+
+exports.addUser = async (req, res) => {
+  try {
+    const { user_Id, creator_Id } = req.body;
+    const user = await chatUser.create({
+      user_Id: user_Id,
+      creator_Id: creator_Id,
+    });
+    res.status(200).json(success("Success", res.statusCode, { user }));
+  } catch (err) {
+    res.status(400).json(error("Error", res.statusCode));
   }
 };
