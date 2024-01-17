@@ -30,10 +30,10 @@ exports.approvedIdea = async (req, res) => {
     const appreovedIdea = await ideaRequestSchema
       .findByIdAndUpdate(id, { verify: status }, { new: true })
       .populate("user_Id");
-    new notificationSchema({
+    await notificationSchema.create({
       user_Id: appreovedIdea.user_Id,
       title: "Your Idea has been partially approved by admin",
-    }).save();
+    });
     if (appreovedIdea.user_Id.fullName_en) {
       await sendMail(
         appreovedIdea.user_Id.Email,
@@ -102,10 +102,10 @@ exports.DeclineIdea = async (req, res) => {
       new: true,
     });
 
-    new notificationSchema({
+    await  notificationSchema.create({
       user_Id: declineData.user_Id,
       title: "Your Idea Has Been REJECTED",
-    }).save();
+    })
     res.status(200).json(success(res.statusCode, "Success", { declineData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

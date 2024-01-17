@@ -62,11 +62,32 @@ exports.userList = async (req, res) => {
 exports.addUser = async (req, res) => {
   try {
     const { user_Id, creator_Id } = req.body;
+    if (!user_Id) {
+      return res
+        .status(201)
+        .json(error("Please Provide user_Id", res.statusCode));
+    }
+    if (!creator_Id) {
+      return res
+        .status(201)
+        .json(error("Please Provide creator_Id", res.statusCode));
+    }
     const user = await chatUser.create({
       user_Id: user_Id,
       creator_Id: creator_Id,
     });
     res.status(200).json(success("Success", res.statusCode, { user }));
+  } catch (err) {
+    res.status(400).json(error("Error", res.statusCode));
+  }
+};
+
+exports.chatUserList = async (req, res) => {
+  try {
+    const userList = await chatUser
+      .find({ creator_Id: req.params.id })
+      .populate(["user_Id", "creator_Id"]);
+    res.status(200).json(success("Success", res.statusCode, { userList }));
   } catch (err) {
     res.status(400).json(error("Error", res.statusCode));
   }

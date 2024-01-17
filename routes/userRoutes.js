@@ -70,7 +70,7 @@ const {
   orderPayment,
 } = require("../controllers/userControllers.js/payment");
 const {
-  userList,
+  userList, addUser, chatUserList,
 } = require("../controllers/userControllers.js/chatControllers");
 const router = express.Router();
 
@@ -164,5 +164,7 @@ router.post("/create-payment", hyperPayStep1);
 router.post("/create-payment-step2", hyperPayStep2);
 router.post("/user-report", tokenAuthorisationUser, createReports);
 router.post("/order-payment", orderPayment);
+router.post("/add-chat-user",addUser)
+router.get("/chat-user-list/:id",chatUserList)
 
 module.exports = router;
