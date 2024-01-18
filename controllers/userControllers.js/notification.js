@@ -5,7 +5,7 @@ const { error, success } = require("../../responseCode");
 //------> notification List APi
 exports.notificationList = async (req, res) => {
   try {
-    const list = await notificationSchema.find({ user_Id: req.param.id });
+    const list = await notificationSchema.find({ user_Id: req.params.id });
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Error In List", res.statusCode));
