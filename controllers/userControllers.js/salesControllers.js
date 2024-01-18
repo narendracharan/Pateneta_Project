@@ -83,7 +83,7 @@ exports.mySalesSearch = async (req, res) => {
           localField: "user_Id",
           foreignField: "_id",
           as: "users",
-          pipeline: [{ $project: { fullName_en: 1, companyName_ar: 1 } }],
+          pipeline: [{ $project: { fullName_en: 1, companyName_ar: 1,createdAt:1 } }],
         },
       },
       {
@@ -108,7 +108,7 @@ exports.mySalesSearch = async (req, res) => {
                 localField: "user_Id",
                 foreignField: "_id",
                 as: "user_Id",
-                pipeline: [{ $project: { fullName_en: 1, companyName_ar: 1 } }],
+                pipeline: [{ $project: { fullName_en: 1, companyName_ar: 1,createdAt:1  } }],
               },
             },
           ],

@@ -102,10 +102,10 @@ exports.DeclineIdea = async (req, res) => {
       new: true,
     });
 
-    await  notificationSchema.create({
+    await notificationSchema.create({
       user_Id: declineData.user_Id,
       title: "Your Idea Has Been REJECTED",
-    })
+    });
     res.status(200).json(success(res.statusCode, "Success", { declineData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));

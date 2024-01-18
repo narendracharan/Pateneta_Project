@@ -2,8 +2,7 @@ const contentModels = require("../../models/adminModels/contentModels");
 const notificationSchema = require("../../models/userModels/notificationSchema");
 const { error, success } = require("../../responseCode");
 
-
-//------> notification List APi 
+//------> notification List APi
 exports.notificationList = async (req, res) => {
   try {
     const list = await notificationSchema.find({ user_Id: req.param.id });
