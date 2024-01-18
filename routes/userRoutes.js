@@ -45,6 +45,7 @@ const {
   pushNotification,
   PrivacyUser,
   notificationList,
+  updateStatus,
 } = require("../controllers/userControllers.js/notification");
 const {
   //createPayment,
@@ -159,6 +160,7 @@ router.post("/sub-category-list/:id", subCategoryListing);
 //router.post("/push-notification", pushNotification);
 router.post("/privacy-list", tokenAuthorisationUser, PrivacyUser);
 router.get("/notification-list/:id", notificationList);
+router.post("/update-isRead/:id",updateStatus)
 router.post("/ratings-added", tokenAuthorisationUser, addRatings);
 router.post("/create-payment", hyperPayStep1);
 router.post("/create-payment-step2", hyperPayStep2);

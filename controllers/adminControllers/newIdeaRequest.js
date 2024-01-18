@@ -30,11 +30,11 @@ exports.approvedIdea = async (req, res) => {
     const appreovedIdea = await ideaRequestSchema
       .findByIdAndUpdate(id, { verify: status }, { new: true })
       .populate("user_Id");
-    const dd = await notificationSchema.create({
+    await notificationSchema.create({
       user_Id: appreovedIdea.user_Id,
       title: "Your Idea has been partially approved by admin",
     });
-    console.log(dd);
+    
     if (appreovedIdea.user_Id.fullName_en) {
       await sendMail(
         appreovedIdea.user_Id.Email,
