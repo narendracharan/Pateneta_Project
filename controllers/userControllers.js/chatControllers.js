@@ -87,8 +87,34 @@ exports.chatUserList = async (req, res) => {
     const userList = await chatUser
       .find({ creator_Id: req.params.id })
       .populate(["user_Id", "creator_Id"]);
-      
+
     res.status(200).json(success("Success", res.statusCode, { userList }));
+  } catch (err) {
+    res.status(400).json(error("Error", res.statusCode));
+  }
+};
+
+exports.userOnline = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (user) {
+      user.isOnline = true;
+    }
+    await user.save();
+    res.status(200).json(success("User Online", res.statusCode));
+  } catch (err) {
+    res.status(400).json(error("Error", res.statusCode));
+  }
+};
+
+exports.userOffilne = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (user) {
+      user.isOnline = false;
+    }
+    await user.save();
+    res.status(200).json(success("User Offline", res.statusCode));
   } catch (err) {
     res.status(400).json(error("Error", res.statusCode));
   }

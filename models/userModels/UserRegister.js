@@ -98,15 +98,18 @@ const schema = new mongoose.Schema({
   commission: {
     type: Number,
   },
-  userType:{
+  userType: {
     type: String,
   },
-  deviceId:{
-    type:String
-  },
-  companyType:{
+  deviceId: {
     type: String,
-    
+  },
+  companyType: {
+    type: String,
+  },
+  isOnline: {
+    type: Boolean,
+    default: false,
   },
   withdrawalRequest: {
     type: String,
