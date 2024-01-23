@@ -28,7 +28,7 @@ exports.createOrder = async (req, res) => {
       user_Id: product.user_Id,
       title: "Your Idea Has Been Buy",
     }).save();
-    const status = "PURCHASE";
+    const status = "PURCHASED";
     product.buyStatus = status;
     product.buyer_Id = user_Id;
     await product.save();

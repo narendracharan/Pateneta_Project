@@ -17,9 +17,9 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  documentName:{
+  documentName: {
     type: String,
-    require: true
+    require: true,
   },
   category_Id: {
     type: mongoose.Schema.Types.ObjectId,
@@ -152,7 +152,7 @@ const schema = new mongoose.Schema({
   },
   buyStatus: {
     type: String,
-    enum: ["PENDING", "PURCHASE"],
+    enum: ["PENDING", "PURCHASED"],
     default: "PENDING",
   },
   buyer_Id: {

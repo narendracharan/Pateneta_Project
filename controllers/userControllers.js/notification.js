@@ -15,11 +15,16 @@ exports.notificationList = async (req, res) => {
 exports.updateStatus = async (req, res) => {
   try {
     const status = req.body.status;
-    const update = await notificationSchema.findOne({ user_Id: req.params.id });
-    if (status) {
-      update.isRead = status;
-    }
-    await update.save();
+    const update = await notificationSchema.updateMany(
+      {
+        user_Id: req.params.id,
+      },
+      {
+        $set: {
+          status: status,
+        },
+      }
+    );
     res.status(200).json(success(res.statusCode, "Success", { update }));
   } catch (err) {
     res.status(400).json(error("Error", res.statusCode));

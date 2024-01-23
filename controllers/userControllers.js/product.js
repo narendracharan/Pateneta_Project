@@ -107,8 +107,6 @@ exports.createIdea = async (req, res) => {
   }
 };
 
-
-
 //---->Create Auction Idea
 exports.createAuctionIdea = async (req, res) => {
   try {
@@ -518,7 +516,6 @@ exports.myBussinessIdea = async (req, res) => {
       .populate(["user_Id", "category_Id", "subCategory_Id"]);
     res.status(200).json(success(res.statusCode, "Success", { myIdeas }));
   } catch (err) {
-    console.log(err);
     res
       .status(400)
       .json(error("Error In Bussiness Idea Listing", res.statusCode));
@@ -794,17 +791,35 @@ exports.RejectBids = async (req, res) => {
   }
 };
 
-
 //----> Search My Idea Api
 exports.searchMyIdea = async (req, res) => {
   try {
     const search = req.body.search;
-    if (!search) {
-      return res
-        .status(201)
-        .json(error("Please provide search key", res.statusCode));
-    }
     const searchIdeas = await productSchema.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "users",
+        },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category_Id",
+          foreignField: "_id",
+          as: "categories",
+        },
+      },
+      {
+        $lookup: {
+          from: "subcategories",
+          localField: "subCategory_Id",
+          foreignField: "_id",
+          as: "categories",
+        },
+      },
       {
         $match: {
           user_Id: new mongoose.Types.ObjectId(req.params.id),
@@ -814,13 +829,13 @@ exports.searchMyIdea = async (req, res) => {
         $match: {
           $or: [
             {
-            title_en  : { $regex: search, $options: "i" },
+              title_en: { $regex: search, $options: "i" },
             },
           ],
         },
       },
-    ])
-   res.status(200).json(success(res.statusCode, "Success", { searchIdeas }))
+    ]);
+    res.status(200).json(success(res.statusCode, "Success", { searchIdeas }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Error In Searching", res.statusCode));
@@ -885,7 +900,6 @@ exports.RecivedDocument = async (req, res) => {
     res.status(400).json(error("Error In Recieved Document", res.statusCode));
   }
 };
-
 
 //--------> Verify Kyc Api
 exports.verifyKyc = async (req, res) => {
