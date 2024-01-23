@@ -71,7 +71,9 @@ const {
   orderPayment,
 } = require("../controllers/userControllers.js/payment");
 const {
-  userList, addUser, chatUserList,
+  userList,
+  addUser,
+  chatUserList,
 } = require("../controllers/userControllers.js/chatControllers");
 const router = express.Router();
 
@@ -117,10 +119,7 @@ router.post("/low-to-high", tokenAuthorisationUser, lowtoHighPrice);
 router.post("/high-to-low", tokenAuthorisationUser, highToLowPrice);
 router.post("/bussines-idea-details/:id", bussinessIdeaDetails);
 router.post("/my-bussiness-idea/:id", tokenAuthorisationUser, myBussinessIdea);
-router.post(
-  "/recommanded-ideas/:id",
-  recommandedProduct
-);
+router.post("/recommanded-ideas/:id", recommandedProduct);
 router.post(
   "/update-idea/:id",
   tokenAuthorisationUser,
@@ -160,13 +159,13 @@ router.post("/sub-category-list/:id", subCategoryListing);
 //router.post("/push-notification", pushNotification);
 router.post("/privacy-list", tokenAuthorisationUser, PrivacyUser);
 router.get("/notification-list/:id", notificationList);
-router.post("/update-isRead/:id",updateStatus)
+router.post("/update-isRead/:id", updateStatus);
 router.post("/ratings-added", tokenAuthorisationUser, addRatings);
 router.post("/create-payment", hyperPayStep1);
 router.post("/create-payment-step2", hyperPayStep2);
 router.post("/user-report", tokenAuthorisationUser, createReports);
 router.post("/order-payment", orderPayment);
-router.post("/add-chat-user",addUser)
-router.get("/chat-user-list/:id",chatUserList)
+router.post("/add-chat-user", addUser);
+router.get("/chat-user-list/:id", chatUserList);
 
 module.exports = router;

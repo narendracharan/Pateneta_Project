@@ -817,7 +817,7 @@ exports.searchMyIdea = async (req, res) => {
           from: "subcategories",
           localField: "subCategory_Id",
           foreignField: "_id",
-          as: "categories",
+          as: "Subcategories",
         },
       },
       {
