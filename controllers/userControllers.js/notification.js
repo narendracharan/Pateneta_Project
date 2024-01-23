@@ -21,9 +21,10 @@ exports.updateStatus = async (req, res) => {
       },
       {
         $set: {
-          status: status,
+          isRead: status,
         },
-      }
+      },
+     
     );
     res.status(200).json(success(res.statusCode, "Success", { update }));
   } catch (err) {
