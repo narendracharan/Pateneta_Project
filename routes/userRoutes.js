@@ -76,6 +76,8 @@ const {
   chatUserList,
   userOnline,
   userOffilne,
+  SeenMessage,
+  userSeenMsg,
 } = require("../controllers/userControllers.js/chatControllers");
 const router = express.Router();
 
@@ -171,5 +173,7 @@ router.post("/add-chat-user", addUser);
 router.get("/chat-user-list/:id", chatUserList);
 router.get("/user-online/:id", tokenAuthorisationUser, userOnline)
 router.get("/user-offline/:id", tokenAuthorisationUser, userOffilne)
+router.get("/seen-message/:id",tokenAuthorisationUser,SeenMessage)
+router.get("/user-seen-msg/:id",tokenAuthorisationUser,userSeenMsg)
 
 module.exports = router;

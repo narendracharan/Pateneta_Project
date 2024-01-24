@@ -120,11 +120,29 @@ exports.userOffilne = async (req, res) => {
   }
 };
 
-exports.isReadUpdate = async (req, res) => {
+exports.userSeenMsg = async (req, res) => {
   try {
     const chat = await chatModel.updateMany(
       {
-        user_Id: req.params.id,
+        chatId: req.params.id,
+      },
+      {
+        $set: {
+          isRead: true,
+        },
+      }
+    );
+    res.status(200).json(success(res.statusCode, "Success", { chat }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.SeenMessage = async (req, res) => {
+  try {
+    const chat = await chatModel.updateMany(
+      {
+        senderId: req.params.id,
       },
       {
         $set: {
