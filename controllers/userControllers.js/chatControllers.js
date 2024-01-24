@@ -119,3 +119,21 @@ exports.userOffilne = async (req, res) => {
     res.status(400).json(error("Error", res.statusCode));
   }
 };
+
+exports.isReadUpdate = async (req, res) => {
+  try {
+    const chat = await chatModel.updateMany(
+      {
+        user_Id: req.params.id,
+      },
+      {
+        $set: {
+          isRead: true,
+        },
+      }
+    );
+    res.status(200).json(success(res.statusCode, "Success", { chat }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
