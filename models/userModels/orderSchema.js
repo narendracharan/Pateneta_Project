@@ -49,7 +49,7 @@ const schema = new mongoose.Schema({
   },
   status:{
     type: String,
-    default: "purchase",
+    default: "purchased",
   },
   total: {
     type: Number,
