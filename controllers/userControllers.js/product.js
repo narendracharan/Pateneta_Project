@@ -476,10 +476,19 @@ exports.addBids = async (req, res) => {
     });
     const user = await userSchema.findById(user_Id);
     const newProduct = await product.save();
-    await notification.create({
-      title: `${user.fullName_en} Bids you $$$$ 💰🔨 for ${product.title_en}.`,
-      user_Id: product.user_Id,
-    });
+    if (user.fullName_en) {
+      await notification.create({
+        title: `${user.fullName_en} Bids you ${Price} 💰🔨 for ${product.title_en}.`,
+        user_Id: product.user_Id,
+      });
+    }
+    if (user.companyName_en) {
+      await notification.create({
+        title: `${user.companyName_en} Bids you ${Price} 💰🔨 for ${product.title_en}.`,
+        user_Id: product.user_Id,
+      });
+    }
+
     res.status(200).json(success(res.statusCode, "Success", { newProduct }));
   } catch (err) {
     res.status(200).json(error("Error In Add Bids", res.statusCode));
