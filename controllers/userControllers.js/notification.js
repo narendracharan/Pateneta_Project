@@ -23,8 +23,7 @@ exports.updateStatus = async (req, res) => {
         $set: {
           isRead: status,
         },
-      },
-     
+      }
     );
     res.status(200).json(success(res.statusCode, "Success", { update }));
   } catch (err) {
@@ -82,5 +81,16 @@ exports.PrivacyUser = async (req, res) => {
     }
   } catch (err) {
     res.status(400).json(success("Failed", res.statusCode));
+  }
+};
+
+exports.notificationDelete = async (req, res) => {
+  try {
+    const notification = await notificationSchema.findByIdAndDelete(
+      req.params.id
+    );
+    res.status(200).json(success(res.statusCode, "Notication Deleted", {}));
+  } catch (err) {
+    res.status(400).json(error("Error", res.statusCode));
   }
 };

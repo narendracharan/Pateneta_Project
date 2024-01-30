@@ -26,7 +26,7 @@ exports.createOrder = async (req, res) => {
     const product = await productModel.findOne({ _id: product_Id });
     new notificationSchema({
       user_Id: product.user_Id,
-      title: "Your Idea Has Been Buy",
+      title: "Your Idea Has Been PURCHASED",
     }).save();
     const status = "PURCHASED";
     product.buyStatus = status;

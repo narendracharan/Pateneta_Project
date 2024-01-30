@@ -183,7 +183,6 @@ exports.orderPayment = async (request, respose) => {
       response: "",
       callback: "",
     };
-  //  https://webhook.site/32008376-3fe0-4d8e-89a5-ee5480e87277
     let paymentMethods = ["all"];
 
     let transaction_details = [transaction.type, transaction.class];

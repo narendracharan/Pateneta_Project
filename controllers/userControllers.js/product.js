@@ -7,6 +7,7 @@ const productModel = require("../../models/userModels/productModel");
 const adminSchema = require("../../models/adminModels/userModels");
 const sendMail = require("../../services/EmailSerices");
 const { default: mongoose } = require("mongoose");
+const notification = require("../../models/userModels/notificationSchema");
 
 //---------> create bussiness idea api
 exports.createIdea = async (req, res) => {
@@ -473,7 +474,12 @@ exports.addBids = async (req, res) => {
       user_Id: user_Id,
       createdAt: new Date(),
     });
+    const user = await userSchema.findById(user_Id);
     const newProduct = await product.save();
+    await notification.create({
+      title: `${user.fullName_en} Bids you $$$$ 💰🔨 for ${product.title_en}.`,
+      user_Id: product.user_Id,
+    });
     res.status(200).json(success(res.statusCode, "Success", { newProduct }));
   } catch (err) {
     res.status(200).json(error("Error In Add Bids", res.statusCode));
