@@ -8,6 +8,7 @@ const productModel = require("../../models/userModels/productModel");
 const adminSchema = require("../../models/adminModels/userModels");
 const sendMail = require("../../services/EmailSerices");
 const { notification } = require("./notification");
+const userNotification = require("../../models/adminModels/userNotification");
 // const firebase = require("firebase-admin");
 // const service = require("../../config/firebase.json");
 
@@ -99,7 +100,7 @@ exports.userRegister = async (req, res) => {
     //     //   redirect_to: "Notification"
     //     // }
     // };
- 
+
     // firebase
     //   .messaging()
     //   .send(message)
@@ -109,6 +110,9 @@ exports.userRegister = async (req, res) => {
     //   .catch((error) => {
     //     console.log("Error sending notification:", error);
     //   });
+    await userNotification.create({
+      title: "New User has been registered on the Platform",
+    });
 
     await sendMail(
       admin.userEmail,
@@ -190,6 +194,9 @@ exports.sellerRegister = async (req, res) => {
       userType: "Seller",
     });
     const user = await newUser.save();
+    await userNotification.create({
+      title: " New User has been registered on the Platform",
+    });
     await sendMail(
       admin.userEmail,
       `New User`,
@@ -241,10 +248,16 @@ exports.userLogin = async (req, res) => {
     if (verifyUser.userVerify != "APPROVED") {
       res.status(201).json(error("Your Are Not Approved User", res.statusCode));
     }
+    if (verifyUser.status != true) {
+      res
+        .status(201)
+        .json(
+          error("Admin Has Blocked Your Access to Patenta.", res.statusCode)
+        );
+    }
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
 
     const isMatch = await bcrypt.compare(password, verifyUser.password);
-    console.log(isMatch);
     if (!isMatch) {
       return res
         .status(201)
@@ -323,6 +336,9 @@ exports.companySignup = async (req, res) => {
       companyType: "Seller",
     });
     const company = await newUser.save();
+    await userNotification.create({
+      title: "New User has been registered on the Platform",
+    });
     await sendMail(
       admin.userEmail,
       `New User`,

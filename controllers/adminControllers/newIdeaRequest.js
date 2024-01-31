@@ -34,7 +34,7 @@ exports.approvedIdea = async (req, res) => {
       user_Id: appreovedIdea.user_Id,
       title: "Your Idea has been partially approved by admin",
     });
-    
+
     if (appreovedIdea.user_Id.fullName_en) {
       await sendMail(
         appreovedIdea.user_Id.Email,

@@ -77,6 +77,12 @@ const adminAuthorisationUser = require("../middleware/adminAuthentication");
 const {
   homeDashboards,
 } = require("../controllers/adminControllers/dashboards");
+const {
+  userNotificationlist,
+  ideaNotificationlist,
+  userUpdateStatus,
+  ideaUpdateStatus,
+} = require("../controllers/adminControllers/notification");
 
 //-admin register
 router.post("/create-admin", adminRegister);
@@ -133,8 +139,6 @@ router.post(
   deleteSubCategory
 );
 
-
-
 ///-------> Category Routes
 router.post("/category-search", adminAuthorisationUser, categorySearch);
 router.post("/subCategory-search", adminAuthorisationUser, subCategorySearch);
@@ -173,7 +177,6 @@ router.post("/buyer-details/:id", adminAuthorisationUser, buyerDetails);
 router.post("/home-dashboard", adminAuthorisationUser, homeDashboards);
 router.post("/set-commission", adminAuthorisationUser, setCommission);
 
-
 //reports
 router.post("/reports-list", adminAuthorisationUser, reportsList);
 router.post("/search-reports", adminAuthorisationUser, reportsSearch);
@@ -190,6 +193,11 @@ router.post("/approved-user/:id", adminAuthorisationUser, approvedDoc);
 router.post("/decline-user/:id", adminAuthorisationUser, declineDoc);
 router.post("/approved-kyc/:id", adminAuthorisationUser, verifyDocument);
 
+router.post("/update-token/:id", updateToken);
 
-router.post("/update-token/:id",updateToken)
+///notification
+router.get("/user-notify-list", userNotificationlist);
+router.get("/idea-notify-list", ideaNotificationlist);
+router.get("/user-notify-update", userUpdateStatus);
+router.get("/idea-notify-update", ideaUpdateStatus);
 module.exports = router;

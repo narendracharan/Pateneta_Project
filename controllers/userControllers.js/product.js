@@ -8,6 +8,7 @@ const adminSchema = require("../../models/adminModels/userModels");
 const sendMail = require("../../services/EmailSerices");
 const { default: mongoose } = require("mongoose");
 const notification = require("../../models/userModels/notificationSchema");
+const ideaNotification = require("../../models/adminModels/ideaNotification");
 
 //---------> create bussiness idea api
 exports.createIdea = async (req, res) => {
@@ -80,7 +81,9 @@ exports.createIdea = async (req, res) => {
       }
     }
     const saveIdea = await newIdeas.save();
-    console.log(saveIdea);
+    await ideaNotification.create({
+      title: "New idea has been added on the Platform",
+    });
     await sendMail(
       admin.userEmail,
       `New Idea`,
@@ -179,7 +182,9 @@ exports.createAuctionIdea = async (req, res) => {
       }
     }
     const saveIdea = await newIdeas.save();
-    console.log(saveIdea);
+    await ideaNotification.create({
+      title: "New idea has been added on the Platform",
+    });
     await sendMail(
       admin.userEmail,
       `New Idea`,
@@ -478,13 +483,13 @@ exports.addBids = async (req, res) => {
     const newProduct = await product.save();
     if (user.fullName_en) {
       await notification.create({
-        title: `${user.fullName_en} Bids you ${Price} 💰🔨 for ${product.title_en}.`,
+        title: `${user.fullName_en} Bids You $${Price} 💰🔨 for ${product.title_en}.`,
         user_Id: product.user_Id,
       });
     }
     if (user.companyName_en) {
       await notification.create({
-        title: `${user.companyName_en} Bids you ${Price} 💰🔨 for ${product.title_en}.`,
+        title: `${user.companyName_en} Bids You $${Price} 💰🔨 for ${product.title_en}.`,
         user_Id: product.user_Id,
       });
     }
