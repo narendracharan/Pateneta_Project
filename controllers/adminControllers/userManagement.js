@@ -13,11 +13,9 @@ exports.userList = async (req, res) => {
         to ? { createdAt: { $lte: new Date(`${to}T23:59:59`) } } : {},
       ],
     });
-    if (userList) {
-      res.status(200).json(success(res.statusCode, "Success", { userList }));
-    } else {
-      res.status(201).json(error("NO Data Found", res.statusCode));
-    }
+
+    res.status(200).json(success(res.statusCode, "Success", { userList }));
+
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -46,12 +44,12 @@ exports.approvedDoc = async (req, res) => {
     const approvedUser = await userModels.findById(id);
     approvedUser.userVerify = approved;
     await approvedUser.save();
-    if (approvedUser.fullName_en) {
-      await sendMail(
-        approvedUser.Email,
-        `Account Verify`,
-        approvedUser.fullName_en,
-        `<br.
+
+    await sendMail(
+      approvedUser.Email,
+      `Account Verify`,
+      approvedUser.fullName_en || approvedUser.companyName_en,
+      `<br.
       <br>
       Your account has been partially approved by admin.<br>
       <br>
@@ -66,31 +64,7 @@ exports.approvedDoc = async (req, res) => {
       Customer Service Team<br>
       91164721
       `
-      );
-    }
-    //
-    if (approvedUser.companyName_en) {
-      await sendMail(
-        approvedUser.Email,
-        `Account Verify`,
-        approvedUser.companyName_en,
-        `<br.
-        <br>
-        Your account has been partially approved by admin.<br>
-        <br>
-        <b> We are delighted to welcome you to Patenta, a platform where each and every idea is valued.</b>
-        <br>
-        Your access to our platform is now hassle-free.<br>
-        <br>
-        Please Login Your Account https://patenta-sa.com/login
-        <br>
-        <br>
-        Patenta<br>
-        Customer Service Team<br>
-        91164721
-        `
-      );
-    }
+    );
 
     res.status(200).json(success(res.statusCode, "Success", { approvedUser }));
   } catch (err) {
@@ -202,12 +176,12 @@ exports.verifyDocument = async (req, res) => {
     approvedUser.verifyDocument = approved;
     approvedUser.companyType = "Seller";
     await approvedUser.save();
-    if (approvedUser.fullName_en) {
-      await sendMail(
-        approvedUser.Email,
-        `Verify Kyc`,
-        approvedUser.fullName_en,
-        `<br.
+
+    await sendMail(
+      approvedUser.Email,
+      `Verify Kyc`,
+      approvedUser.fullName_en || approvedUser.companyName_en,
+      `<br.
       <br>
       Your KYC has been partially approved by admin.<br>
       <br>
@@ -222,30 +196,7 @@ exports.verifyDocument = async (req, res) => {
       Customer Service Team<br>
       91164721
       `
-      );
-    }
-    if (approvedUser.companyName_en) {
-      await sendMail(
-        approvedUser.Email,
-        `Verify Kyc`,
-        approvedUser.companyName_en,
-        `<br.
-        <br>
-        Your KYC has been partially approved by admin.<br>
-        <br>
-        <b> We are delighted to welcome you to Patenta, a platform where each and every idea is valued.</b>
-        <br>
-        Your access to our platform is now hassle-free.<br>
-        <br>
-        Please Login Your Account https://patenta-sa.com/login
-        <br>
-        <br>
-        Patenta<br>
-        Customer Service Team<br>
-        91164721
-        `
-      );
-    }
+    );
     res.status(200).json(success(res.statusCode, "Veirfy Document"));
   } catch (err) {
     console.log(err);

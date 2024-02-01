@@ -34,7 +34,7 @@ const sendMail = async (
   //   console.debug("Body " + body);
 
   var mailOptions = {
-    from: "s04450647@gmail.com",
+    from: { name: "PATENTA", address: "s04450647@gmail.com" },
     to: to,
     subject: subject,
     text: body,

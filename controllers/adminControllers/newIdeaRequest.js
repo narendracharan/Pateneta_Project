@@ -35,12 +35,11 @@ exports.approvedIdea = async (req, res) => {
       title: "Your Idea has been partially approved by admin",
     });
 
-    if (appreovedIdea.user_Id.fullName_en) {
-      await sendMail(
-        appreovedIdea.user_Id.Email,
-        `Verify Idea`,
-        appreovedIdea.user_Id.fullName_en,
-        `<br.
+    await sendMail(
+      appreovedIdea.user_Id.Email,
+      `Verify Idea`,
+      appreovedIdea.user_Id.fullName_en || appreovedIdea.user_Id.companyName_en,
+      `<br.
       <br>
       Your Idea has been partially approved by admin.<br>
       <br>
@@ -55,31 +54,9 @@ exports.approvedIdea = async (req, res) => {
       Customer Service Team<br>
       91164721
       `
-      );
-    }
+    );
+
     //
-    if (appreovedIdea.user_Id.companyName_en) {
-      await sendMail(
-        appreovedIdea.user_Id.Email,
-        `Account Verify`,
-        appreovedIdea.user_Id.companyName_en,
-        `<br.
-        <br>
-        Your account has been partially approved by admin.<br>
-        <br>
-        <b> We are delighted to welcome you to Patenta, a platform where each and every idea is valued.</b>
-        <br>
-        Your access to our platform is now hassle-free.<br>
-        <br>
-        Please Login Your Account https://patenta-sa.com/login
-        <br>
-        <br>
-        Patenta<br>
-        Customer Service Team<br>
-        91164721
-        `
-      );
-    }
 
     res
       .status(200)

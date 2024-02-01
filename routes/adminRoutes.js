@@ -188,7 +188,7 @@ router.post("/delete-reports/:id", adminAuthorisationUser, deleteReports);
 router.post("/user-list", adminAuthorisationUser, userList);
 router.post("/user-details/:id", adminAuthorisationUser, userDetails);
 router.post("/delete-user/:id", adminAuthorisationUser, userDelete);
-router.post("/change-status/:id",adminAuthorisationUser, changeStatus);
+router.post("/change-status/:id", adminAuthorisationUser, changeStatus);
 router.post("/approved-user/:id", adminAuthorisationUser, approvedDoc);
 router.post("/decline-user/:id", adminAuthorisationUser, declineDoc);
 router.post("/approved-kyc/:id", adminAuthorisationUser, verifyDocument);

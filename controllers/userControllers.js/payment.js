@@ -133,6 +133,7 @@ exports.hyperPayStep2 = async (request, response) => {
 };
 
 
+////---------> Paytabs Payment Api
 exports.orderPayment = async (request, respose) => {
   try {
     const {
@@ -210,7 +211,7 @@ exports.orderPayment = async (request, respose) => {
     paymentPageCreated = function ($results) {
       respose
         .status(200)
-        .json(success(respose.statusCode, "Suucess", { $results }));
+        .json(success(respose.statusCode, "Success", { $results }));
     };
 
     let frameMode = true;
@@ -226,7 +227,6 @@ exports.orderPayment = async (request, respose) => {
       frameMode
     );
   } catch (err) {
-    console.log(err);
     respose.status(400).json(error("Error", respose.statusCode));
   }
 };

@@ -559,12 +559,6 @@ exports.CategoryListing = async (req, res) => {
   try {
     const categoryList = await categoryModels.find({});
     res.status(200).json(success(res.statusCode, "Success", { categoryList }));
-    // if (categoryList.length > 0) {
-    //   res.status(200).json(success(res.statusCode, "Success", { categoryList }));
-    // } else {
-    //   res.status(201).json(error("List are not found", res.statusCode));
-    // }
-    // res.status(200).json(success(res.statusCode, "Success", { categoryList }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -577,11 +571,6 @@ exports.subCategoryListing = async (req, res) => {
       .find({ category_Id: id })
       .populate("category_Id");
     res.status(200).json(success(res.statusCode, "Success", { categoryList }));
-    // if (categoryList.length > 0) {
-    //   res.status(200).json(success(res.statusCode, "Success", { categoryList }));
-    // } else {
-    //   res.status(201).json(error("List are not found", res.statusCode));
-    // }
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -684,35 +673,17 @@ exports.acceptBids = async (req, res) => {
     if (bids.length) {
       bids[0].bidsVerify = approved;
       // bids[0].bids = bids;
+      await notification.create({
+        title: "Your BIds Amount has been Accepted on the Platform",
+        user_Id: bids[0].user_Id,
+      });
       if (bids[0].user_Id.fullName_en) {
         await sendMail(
           bids[0].user_Id.Email,
           `Accepted Bids`,
-          bids[0].user_Id.fullName_en,
+          bids[0].user_Id.fullName_en || bids[0].user_Id.companyName_en,
           `<br.
 
-         <br>
-         Your BIds Amount ${parseInt(
-           bids[0].Price
-         )} has been Accepted on the Platform<br>
-         <br>
-     
-         <br>
-         Please Login Your Account https://patenta-sa.com/login
-         <br>
-         <br>
-         Patenta<br>
-         Customer Service Team<br>
-         91164721
-         `
-        );
-      }
-      if (bids[0].user_Id.companyName_en) {
-        await sendMail(
-          bids[0].user_Id.Email,
-          `Accepted Bids`,
-          bids[0].user_Id.companyName_en,
-          `<br.
          <br>
          Your BIds Amount ${parseInt(
            bids[0].Price
@@ -760,7 +731,7 @@ exports.RejectBids = async (req, res) => {
         await sendMail(
           bids[0].user_Id.Email,
           `Reject Bids`,
-          bids[0].user_Id.fullName_en,
+          bids[0].user_Id.fullName_en || bids[0].user_Id.companyName_en,
           `<br.
          <br>
          Your BIds Amount ${parseInt(
@@ -768,29 +739,6 @@ exports.RejectBids = async (req, res) => {
          )} has been Decline on the Platform<br>
          <br>
          Reject Reasons:${bids[0].bidsReject}
-         <br>
-         <br>
-         Please Login Your Account https://patenta-sa.com/login
-         <br>
-         <br>
-         Patenta<br>
-         Customer Service Team<br>
-         91164721
-         `
-        );
-      }
-      if (bids[0].user_Id.companyName_en) {
-        await sendMail(
-          bids[0].user_Id.Email,
-          `Reject Bids`,
-          bids[0].user_Id.companyName_en,
-          `<br.
-         <br>
-         Your BIds Amount ${parseInt(
-           bids[0].Price
-         )} has been Decline on the Platform<br>
-         <br>
-         Reject Reasons: ${bids[0].bidsReject}
          <br>
          <br>
          Please Login Your Account https://patenta-sa.com/login

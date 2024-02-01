@@ -24,27 +24,23 @@ exports.sellerList = async (req, res) => {
           $and: [
             from
               ? {
-                createdAt: {
-                  $gte: new Date(moment(new Date(from)).startOf("day")),
-                },
-              }
+                  createdAt: {
+                    $gte: new Date(moment(new Date(from)).startOf("day")),
+                  },
+                }
               : {},
             to
               ? {
-                createdAt: {
-                  $lte: new Date(moment(new Date(to)).endOf("day")),
-                },
-              }
+                  createdAt: {
+                    $lte: new Date(moment(new Date(to)).endOf("day")),
+                  },
+                }
               : {},
           ],
         },
       },
     ]);
-    if (list.length > 0) {
-      return res.status(200).json(success(res.statusCode, "Success", { list }));
-    } else {
-      res.status(201).json(error("List are Not Found", res.statusCode));
-    }
+    res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -129,13 +125,7 @@ exports.sellerSearch = async (req, res) => {
         },
       },
     ]);
-    if (searchIdeas.length > 0) {
-      return res
-        .status(200)
-        .json(success(res.statusCode, "Success", { searchIdeas }));
-    } else {
-      res.status(201).json(error("User are not Found", res.statusCode));
-    }
+    res.status(200).json(success(res.statusCode, "Success", { searchIdeas }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
@@ -177,13 +167,7 @@ exports.buyerSearch = async (req, res) => {
         },
       },
     ]);
-    if (searchIdeas.length > 0) {
-      return res
-        .status(200)
-        .json(success(res.statusCode, "Success", { searchIdeas }));
-    } else {
-      res.status(201).json(error("User are not Found", res.statusCode));
-    }
+    res.status(200).json(success(res.statusCode, "Success", { searchIdeas }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
@@ -208,17 +192,17 @@ exports.buyerUserList = async (req, res) => {
           $and: [
             from
               ? {
-                createdAt: {
-                  $gte: new Date(moment(new Date(from)).startOf("day")),
-                },
-              }
+                  createdAt: {
+                    $gte: new Date(moment(new Date(from)).startOf("day")),
+                  },
+                }
               : {},
             to
               ? {
-                createdAt: {
-                  $lte: new Date(moment(new Date(to)).endOf("day")),
-                },
-              }
+                  createdAt: {
+                    $lte: new Date(moment(new Date(to)).endOf("day")),
+                  },
+                }
               : {},
           ],
         },
@@ -287,13 +271,7 @@ exports.salesUserList = async (req, res) => {
         ],
       })
       .populate(["products.product_Id", "user_Id"]);
-    if (salesList.length > 0) {
-      return res
-        .status(200)
-        .json(success(res.status, "Success", { salesList }));
-    } else {
-      res.status(201).json(error("No Data Found", res.statusCode));
-    }
+    res.status(200).json(success(res.status, "Success", { salesList }));
   } catch (err) {
     res.status(400).json(error("Error in Sales Listing", res.statusCode));
   }
@@ -361,13 +339,7 @@ exports.searchSales = async (req, res) => {
       },
     ]);
 
-    if (saleSearch.length > 0) {
-      return res
-        .status(200)
-        .json(success(res.statusCode, "Success", { saleSearch }));
-    } else {
-      res.status(201).json(error("No Data Found", res.statusCode));
-    }
+    res.status(200).json(success(res.statusCode, "Success", { saleSearch }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Error in Sales Searching", res.statusCode));
