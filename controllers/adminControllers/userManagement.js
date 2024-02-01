@@ -3,8 +3,6 @@ const { error, success } = require("../../responseCode");
 const sendMail = require("../../services/EmailSerices");
 const { transporter } = require("../../services/mailServices");
 
-
-
 //User List Api
 exports.userList = async (req, res) => {
   try {
@@ -143,6 +141,7 @@ exports.changeStatus = async (req, res) => {
   try {
     const id = req.params.id;
     const status = req.body.status;
+    console.log(req.body);
     if (!status) {
       res.status(201).json(error("please provide status", res.statusCode));
     }
@@ -151,13 +150,46 @@ exports.changeStatus = async (req, res) => {
       { status: status },
       { new: true }
     );
-    if (changeStatus) {
-      res
-        .status(200)
-        .json(success(res.statusCode, "Success", { changeStatus }));
-    } else {
-      res.status(201).json(error("No Data Found", res.statusCode));
+
+    if (changeStatus.status == false) {
+      await sendMail(
+        changeStatus.Email,
+        `Block User`,
+        changeStatus.fullName_en || changeStatus.companyName_en,
+        `<br.
+        <br>
+        Admin Has Blocked Your Access to Patenta..<br>
+        <br>
+        <br>
+        Patenta<br>
+        Customer Service Team<br>
+        91164721
+        `
+      );
     }
+    if (changeStatus.status == true) {
+      await sendMail(
+        changeStatus.Email,
+        `UnBlock User`,
+        changeStatus.companyName_en || changeStatus.fullName_en,
+        `<br.
+        <br>
+        Admin Has UnBlocked Your Access to Patenta..<br>
+        <br>
+        <b> We are delighted to welcome you to Patenta, a platform where each and every idea is valued.</b>
+        <br>
+        Your access to our platform is now hassle-free.<br>
+        <br>
+        Please Login Your Account https://patenta-sa.com/login
+        <br>
+        <br>
+        Patenta<br>
+        Customer Service Team<br>
+        91164721
+        `
+      );
+    }
+    res.status(200).json(success(res.statusCode, "Success", { changeStatus }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -170,7 +202,7 @@ exports.verifyDocument = async (req, res) => {
     const approved = "APPROVED";
     const approvedUser = await userModels.findById(id);
     approvedUser.verifyDocument = approved;
-    approvedUser.companyType="Seller"
+    approvedUser.companyType = "Seller";
     await approvedUser.save();
     if (approvedUser.fullName_en) {
       await sendMail(

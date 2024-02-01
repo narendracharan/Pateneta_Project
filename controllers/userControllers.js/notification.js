@@ -94,3 +94,14 @@ exports.notificationDelete = async (req, res) => {
     res.status(400).json(error("Error", res.statusCode));
   }
 };
+
+exports.allNotificationDelete = async (req, res) => {
+  try {
+    const notification = await notificationSchema.deleteMany({
+      user_Id: req.params.id,
+    });
+    res.status(200).json(success(res.statusCode, "All Notication Deleted", {}));
+  } catch (err) {
+    res.status(400).json(error("Error", res.statusCode));
+  }
+};
