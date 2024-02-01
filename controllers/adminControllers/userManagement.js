@@ -141,7 +141,6 @@ exports.changeStatus = async (req, res) => {
   try {
     const id = req.params.id;
     const status = req.body.status;
-    console.log(req.body);
     if (!status) {
       res.status(201).json(error("please provide status", res.statusCode));
     }
@@ -150,7 +149,6 @@ exports.changeStatus = async (req, res) => {
       { status: status },
       { new: true }
     );
-
     if (changeStatus.status == false) {
       await sendMail(
         changeStatus.Email,

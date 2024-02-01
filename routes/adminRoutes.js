@@ -198,6 +198,6 @@ router.post("/update-token/:id", updateToken);
 ///notification
 router.get("/user-notify-list", adminAuthorisationUser, userNotificationlist);
 router.get("/idea-notify-list", adminAuthorisationUser, ideaNotificationlist);
-router.get("/user-notify-update", adminAuthorisationUser, userUpdateStatus);
-router.get("/idea-notify-update", adminAuthorisationUser, ideaUpdateStatus);
+router.post("/user-notify-update", adminAuthorisationUser, userUpdateStatus);
+router.post("/idea-notify-update", adminAuthorisationUser, ideaUpdateStatus);
 module.exports = router;

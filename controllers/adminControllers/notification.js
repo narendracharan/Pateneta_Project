@@ -22,9 +22,10 @@ exports.ideaNotificationlist = async (req, res) => {
 
 exports.userUpdateStatus = async (req, res) => {
   try {
+    const status=req.body.status
     const update = await userNotify.updateMany({
       $set: {
-        isRead: true,
+        isRead: status,
       },
     });
     res.status(200).json(success(res.statusCode, "Success", { update }));
@@ -35,9 +36,10 @@ exports.userUpdateStatus = async (req, res) => {
 
 exports.ideaUpdateStatus = async (req, res) => {
   try {
+    const status=req.body.status
     const update = await ideaNotify.updateMany({
       $set: {
-        isRead: true,
+        isRead: status,
       },
     });
     res.status(200).json(success(res.statusCode, "Success", { update }));
