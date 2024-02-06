@@ -116,6 +116,22 @@ const schema = new mongoose.Schema({
     default: "PENDING",
     enum: ["PENDING", "APPROVED"],
   },
+  bankName: {
+    type: String,
+    require: true,
+  },
+  OwnerName: {
+    type: String,
+    require: true,
+  },
+  iban: {
+    type: Number,
+    require: true,
+  },
+  accountNumber: {
+    type: Number,
+    require: true,
+  },
 });
 schema.methods.checkPassword = async function (plainPassword, hashedPassword) {
   return await bcrypt.compare(plainPassword, hashedPassword);

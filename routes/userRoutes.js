@@ -14,6 +14,7 @@ const {
   userResetPassword,
   userDetails,
   sellerRegister,
+  addAccount,
 } = require("../controllers/userControllers.js/register");
 const upload = require("../middleware/multer");
 const tokenAuthorisationUser = require("../middleware/userAuthentication");
@@ -106,6 +107,7 @@ router.post(
 );
 router.post("/change-password/:id", tokenAuthorisationUser, userResetPassword);
 router.get("/user-list", tokenAuthorisationUser, userList);
+router.post("/add-user-account/:id",addAccount)
 
 ///--->language routes
 

@@ -416,7 +416,7 @@ exports.userKyc = async (req, res) => {
       createKyc.docFile = `${process.env.BASE_URL}/${req.files[0].filename}`;
     }
     await createKyc.save();
-    res.status(200).json(success(res.statusCode, "Success", { createKyc })); 
+    res.status(200).json(success(res.statusCode, "Success", { createKyc }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
@@ -637,6 +637,50 @@ exports.userDetails = async (req, res) => {
     res.status(200).json(success(res.statusCode, "Success", { userDetails }));
   } catch (err) {
     res.status(400).json(error("Error in User Details", res.statusCode));
+  }
+};
+
+//  Add User Bank Account
+
+exports.addAccount = async (req, res) => {
+  try {
+    const { bankName, accountNumber, iban, OwnerName } = req.body;
+    if (!bankName) {
+      return res
+        .status(201)
+        .json(error("Please Provide Bank Name", res.statusCode));
+    }
+    if (!accountNumber) {
+      return res
+        .status(201)
+        .json(error("Please Provide account Number", res.statusCode));
+    }
+    if (!iban) {
+      return res
+        .status(201)
+        .json(error("Please Provide Iban Number", res.statusCode));
+    }
+    if (!OwnerName) {
+      return res
+        .status(201)
+        .json(error("Please Provide Owner Name", res.statusCode));
+    }
+    const user = await userSchema.findById(req.params.id);
+    if (bankName) {
+      user.bankName = bankName;
+    }
+    if (accountNumber) {
+      user.accountNumber;
+    }
+    if (OwnerName) {
+      user.OwnerName = OwnerName;
+    }
+    if (iban) {
+      user.iban = iban;
+    }
+    await user.save();
+  } catch (err) {
+    res.status(400).json(error("Error", res.statusCode));
   }
 };
 
