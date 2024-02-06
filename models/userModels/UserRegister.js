@@ -125,7 +125,7 @@ const schema = new mongoose.Schema({
     require: true,
   },
   iban: {
-    type: Number,
+    type: String,
     require: true,
   },
   accountNumber: {
