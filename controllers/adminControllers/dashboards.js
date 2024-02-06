@@ -29,13 +29,10 @@ exports.homeDashboards = async (req, res) => {
         },
       },
     ]);
-    const totalBuyerCount = await orderSchema.aggregate([
+    const totalBuyerCount = await userModels.aggregate([
       {
-        $lookup: {
-          from: "users",
-          localField: "user_Id",
-          foreignField: "_id",
-          as: "users",
+        $match: {
+          userType: "Buyer",
         },
       },
       {

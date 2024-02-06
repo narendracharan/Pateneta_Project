@@ -71,6 +71,7 @@ const {
   hyperPayStep1,
   hyperPayStep2,
   orderPayment,
+  validatePayments,
 } = require("../controllers/userControllers.js/payment");
 const {
   userList,
@@ -81,6 +82,7 @@ const {
   SeenMessage,
   userSeenMsg,
 } = require("../controllers/userControllers.js/chatControllers");
+const { validatePayment } = require("paytabs_pt2");
 const router = express.Router();
 
 ///---->user register Routes
@@ -164,20 +166,29 @@ router.post("/sub-category-list/:id", subCategoryListing);
 ///--> Privacy Routes
 //router.post("/push-notification", pushNotification);
 router.post("/privacy-list", tokenAuthorisationUser, PrivacyUser);
-router.get("/notification-list/:id", tokenAuthorisationUser,notificationList);
-router.post("/update-isRead/:id", tokenAuthorisationUser,updateStatus);
-router.delete("/delete-notification/:id",tokenAuthorisationUser,notificationDelete)
-router.delete("/all-notification-delete/:id",tokenAuthorisationUser,allNotificationDelete)
+router.get("/notification-list/:id", tokenAuthorisationUser, notificationList);
+router.post("/update-isRead/:id", tokenAuthorisationUser, updateStatus);
+router.delete(
+  "/delete-notification/:id",
+  tokenAuthorisationUser,
+  notificationDelete
+);
+router.delete(
+  "/all-notification-delete/:id",
+  tokenAuthorisationUser,
+  allNotificationDelete
+);
 router.post("/ratings-added", tokenAuthorisationUser, addRatings);
 router.post("/create-payment", hyperPayStep1);
 router.post("/create-payment-step2", hyperPayStep2);
 router.post("/user-report", tokenAuthorisationUser, createReports);
-router.post("/order-payment", orderPayment);
-router.post("/add-chat-user", addUser);
-router.get("/chat-user-list/:id", chatUserList);
-router.get("/user-online/:id", tokenAuthorisationUser, userOnline)
-router.get("/user-offline/:id", tokenAuthorisationUser, userOffilne)
-router.get("/seen-message/:id",tokenAuthorisationUser,SeenMessage)
-router.get("/user-seen-msg/:id",tokenAuthorisationUser,userSeenMsg)
+router.post("/order-payment", tokenAuthorisationUser, orderPayment);
+router.post("/add-chat-user", tokenAuthorisationUser, addUser);
+router.get("/chat-user-list/:id", tokenAuthorisationUser, chatUserList);
+router.get("/user-online/:id", tokenAuthorisationUser, userOnline);
+router.get("/user-offline/:id", tokenAuthorisationUser, userOffilne);
+router.get("/seen-message/:id", tokenAuthorisationUser, SeenMessage);
+router.get("/user-seen-msg/:id", tokenAuthorisationUser, userSeenMsg);
+//router.post("/validate",validatePayment)
 
 module.exports = router;

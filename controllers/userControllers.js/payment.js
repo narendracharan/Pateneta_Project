@@ -2,7 +2,7 @@ const https = require("https");
 const queryString = require("querystring");
 const { success } = require("../../responseCode");
 const { error } = require("console");
-const paytabs=require("paytabs_pt2")
+const paytabs = require("paytabs_pt2");
 let profileID = "107560",
   serverKey = "S6JNHJKLL2-JHMT6L29NJ-JJMWHHZWJ6",
   region = "SAU";
@@ -63,8 +63,8 @@ exports.hyperPayStep1 = async (request, response) => {
       amount: request.body.amount,
       currency: request.body.currency,
       paymentType: request.body.paymentType,
-    //   user_Id: request.body.user_Id,
-    //   product_Id:request.body.product_Id
+      //   user_Id: request.body.user_Id,
+      //   product_Id:request.body.product_Id
     });
     console.log(data);
     var options = {
@@ -131,7 +131,6 @@ exports.hyperPayStep2 = async (request, response) => {
     response.status(400).json(error("Failed", res.statusCode));
   }
 };
-
 
 ////---------> Paytabs Payment Api
 exports.orderPayment = async (request, respose) => {
@@ -230,3 +229,13 @@ exports.orderPayment = async (request, respose) => {
     respose.status(400).json(error("Error", respose.statusCode));
   }
 };
+
+// exports.validatePayments = (req, res) => {
+//   data = {
+//     profile_id: "54843",
+//     tran_ref: req.body.tran_ref,
+//   };
+//   url = _setEndPoint("SAU") + "payment/query";
+//    _sendPost(url,data,callback);
+//   //res.status(200).json(success(respose.statusCode, "Success", { url, data }));
+// };

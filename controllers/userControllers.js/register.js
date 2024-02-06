@@ -403,33 +403,20 @@ exports.userKyc = async (req, res) => {
   try {
     const id = req.params.id;
     const { docFile, IdNumber } = req.body;
-    if (!docFile && !IdNumber) {
+    if (!IdNumber) {
       return res
         .status(201)
-        .json(error("All Filed are required", res.statusCode));
+        .json(error("Please Provide IdNumber", res.statusCode));
+    }
+    const createKyc = await userSchema.findById(id);
+    if (IdNumber) {
+      createKyc.IdNumber = IdNumber;
     }
     if (req.files.length) {
-      if (
-        !(
-          req.files[0].mimetype == "image/jpeg" ||
-          req.files[0].mimetype == "image/jpg" ||
-          req.files[0].mimetype == "image/png"
-        )
-      ) {
-        return res
-          .status(201)
-          .json(error("Invalid Image format", res.statusCode));
-      } else {
-        const data = {
-          IdNumber: req.body.IdNumber,
-          docFile: `${process.env.BASE_URL}/${req.files[0].filename}`,
-        };
-        const createKyc = await userSchema.findByIdAndUpdate(id, data, {
-          new: true,
-        });
-        res.status(200).json(success(res.statusCode, "Success", { createKyc }));
-      }
+      createKyc.docFile = `${process.env.BASE_URL}/${req.files[0].filename}`;
     }
+    await createKyc.save();
+    res.status(200).json(success(res.statusCode, "Success", { createKyc })); 
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
@@ -441,33 +428,21 @@ exports.companyKyc = async (req, res) => {
   try {
     const id = req.params.id;
     const { docFile, companyNumber } = req.body;
-    if (!docFile && !companyNumber) {
+    if (!companyNumber) {
       return res
         .status(201)
-        .json(error("All Filed are required", res.statusCode));
+        .json(error("Please Provide companyNumber", res.statusCode));
+    }
+
+    const createKyc = await userSchema.findById(id);
+    if (companyNumber) {
+      createKyc.companyNumber = companyNumber;
     }
     if (req.files.length) {
-      if (
-        !(
-          req.files[0].mimetype == "image/jpeg" ||
-          req.files[0].mimetype == "image/jpg" ||
-          req.files[0].mimetype == "image/png"
-        )
-      ) {
-        return res
-          .status(201)
-          .json(error("Invalid Image format", res.statusCode));
-      } else {
-        const data = {
-          IdNumber: req.body.companyNumber,
-          docFile: `${process.env.BASE_URL}/${req.files[0].filename}`,
-        };
-        const createKyc = await userSchema.findByIdAndUpdate(id, data, {
-          new: true,
-        });
-        res.status(200).json(success(res.statusCode, "Success", { createKyc }));
-      }
+      createKyc.docFile = `${process.env.BASE_URL}/${req.files[0].filename}`;
     }
+    await createKyc.save();
+    res.status(200).json(success(res.statusCode, "Success", { createKyc }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }

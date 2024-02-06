@@ -44,6 +44,8 @@ exports.userList = async (req, res) => {
           _id: 1,
           fullName_en: 1,
           profile: 1,
+          isOnline: 1,
+          createdAt: 1,
         },
       },
     ]);
