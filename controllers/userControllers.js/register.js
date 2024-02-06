@@ -679,6 +679,7 @@ exports.addAccount = async (req, res) => {
       user.iban = iban;
     }
     await user.save();
+    res.status(200).json(success(res.statusCode, "Success", { user }));
   } catch (err) {
     res.status(400).json(error("Error", res.statusCode));
   }
