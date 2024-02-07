@@ -515,7 +515,7 @@ exports.baseBidList = async (req, res) => {
         title: list[i].title_en,
         title_ar: list[i].title_ar,
         bidStatus: list[i].bidsVerify,
-        user: list[i].user_Id.fullName_en,
+        user: list[i].user_Id,
         product_Id: list[i]._id,
         date: list[i].createdAt,
       };
@@ -523,6 +523,7 @@ exports.baseBidList = async (req, res) => {
     }
     res.status(200).json(success(res.statusCode, "Success", { Bids }));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Error In Listing", res.statusCode));
   }
 };

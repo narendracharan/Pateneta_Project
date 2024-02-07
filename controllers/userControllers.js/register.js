@@ -670,7 +670,7 @@ exports.addAccount = async (req, res) => {
       user.bankName = bankName;
     }
     if (accountNumber) {
-      user.accountNumber=accountNumber;
+      user.accountNumber = accountNumber;
     }
     if (OwnerName) {
       user.OwnerName = OwnerName;
