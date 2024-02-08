@@ -493,7 +493,6 @@ exports.addBids = async (req, res) => {
 exports.baseBidList = async (req, res) => {
   try {
     const id = req.params.id;
-
     const Bids = await productSchema.aggregate([
       { $unwind: "$baseBid" },
       {
@@ -502,11 +501,20 @@ exports.baseBidList = async (req, res) => {
         },
       },
       {
+        $lookup: {
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "users",
+        },
+      },
+      {
         $project: {
           _id:1,
           title_en: 1,
           baseBid: 1,
-          buyStatus:1
+          buyStatus:1,
+          user_Id:1
         },
       },
     ]);
