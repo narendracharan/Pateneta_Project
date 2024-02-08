@@ -503,6 +503,7 @@ exports.baseBidList = async (req, res) => {
       },
       {
         $project: {
+          _id:1,
           title_en: 1,
           baseBid: 1,
         },
