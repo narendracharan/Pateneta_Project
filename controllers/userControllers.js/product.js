@@ -38,11 +38,11 @@ exports.createIdea = async (req, res) => {
         .status(201)
         .json(error("Title Name is already register", res.statusCode));
     }
-    if (userVerify.verifyDocument != "APPROVED") {
-      return res
-        .status(201)
-        .json(error("Please Complete Your Kyc", res.statusCode));
-    }
+    // if (userVerify.verifyDocument != "APPROVED") {
+    //   return res
+    //     .status(201)
+    //     .json(error("Please Complete Your Kyc", res.statusCode));
+    // }
 
     let newIdeas = new productSchema({
       title_en: title_en,
