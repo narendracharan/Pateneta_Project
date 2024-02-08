@@ -31,19 +31,14 @@ exports.createIdea = async (req, res) => {
       present,
     } = req.body;
     const admin = await adminSchema.findOne();
-    const userVerify = await userSchema.findOne({ _id: user_Id });
+    ////const userVerify = await userSchema.findOne({ _id: user_Id });
     const idea = await productSchema.findOne({ title_en: title_en });
     if (idea) {
       return res
         .status(201)
         .json(error("Title Name is already register", res.statusCode));
     }
-    // if (userVerify.verifyDocument != "APPROVED") {
-    //   return res
-    //     .status(201)
-    //     .json(error("Please Complete Your Kyc", res.statusCode));
-    // }
-
+   
     let newIdeas = new productSchema({
       title_en: title_en,
       title_ar: title_ar,
@@ -139,12 +134,6 @@ exports.createAuctionIdea = async (req, res) => {
         .status(201)
         .json(error("Title Name is already register", res.statusCode));
     }
-    if (userVerify.verifyDocument != "APPROVED") {
-      return res
-        .status(201)
-        .json(error("Please Complete Your Kyc", res.statusCode));
-    }
-
     let newIdeas = new productSchema({
       title_en: title_en,
       title_ar: title_ar,
@@ -874,11 +863,11 @@ exports.RecivedDocument = async (req, res) => {
 exports.verifyKyc = async (req, res) => {
   try {
     const userVerify = await userSchema.findById(req.params.id);
-    if (userVerify.verifyDocument != "APPROVED") {
-      return res
-        .status(201)
-        .json(error("Please Complete Your Kyc", res.statusCode));
-    }
+    // if (userVerify.verifyDocument != "APPROVED") {
+    //   return res
+    //     .status(201)
+    //     .json(error("Please Complete Your Kyc", res.statusCode));
+    // }
     res.status(200).json(success(res.statusCode, "Approved User", {}));
   } catch (err) {
     res.status(400).json(error("Error In Kyc", res.statusCode));
