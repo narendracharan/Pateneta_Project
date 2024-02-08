@@ -506,6 +506,7 @@ exports.baseBidList = async (req, res) => {
           _id:1,
           title_en: 1,
           baseBid: 1,
+          buyStatus:1
         },
       },
     ]);
