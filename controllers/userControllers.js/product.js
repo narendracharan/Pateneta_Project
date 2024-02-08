@@ -466,7 +466,7 @@ exports.addBids = async (req, res) => {
     product.baseBid.push({
       Price: Price,
       user_Id: user_Id,
-      createdAt: new Date(),
+      createdAt: Date.now(),
     });
     const user = await userSchema.findById(user_Id);
     const newProduct = await product.save();
