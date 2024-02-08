@@ -38,7 +38,7 @@ exports.createIdea = async (req, res) => {
         .status(201)
         .json(error("Title Name is already register", res.statusCode));
     }
-   
+
     let newIdeas = new productSchema({
       title_en: title_en,
       title_ar: title_ar,
@@ -493,23 +493,21 @@ exports.addBids = async (req, res) => {
 exports.baseBidList = async (req, res) => {
   try {
     const id = req.params.id;
-    const list = await productSchema.find().populate("user_Id");
-    let Bids = [];
-    for (let i = 0; i < list.length; i++) {
-      var baseBide = list[i].baseBid.filter(
-        (baseBide) => String(baseBide.user_Id) === String(id)
-      );
-      let obj = {
-        baseBide: baseBide,
-        title: list[i].title_en,
-        title_ar: list[i].title_ar,
-        bidStatus: list[i].bidsVerify,
-        user: list[i].user_Id,
-        product_Id: list[i]._id,
-        date: list[i].createdAt,
-      };
-      Bids.push(obj);
-    }
+
+    const Bids = await productSchema.aggregate([
+      { $unwind: "$baseBid" },
+      {
+        $match: {
+          "baseBid.user_Id": new mongoose.Types.ObjectId(id),
+        },
+      },
+      {
+        $project: {
+          title_en: 1,
+          baseBid: 1,
+        },
+      },
+    ]);
     res.status(200).json(success(res.statusCode, "Success", { Bids }));
   } catch (err) {
     console.log(err);
