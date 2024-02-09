@@ -181,7 +181,7 @@ router.delete(
   tokenAuthorisationUser,
   allNotificationDelete
 );
-router.post("/ratings-added", tokenAuthorisationUser, addRatings);
+router.post("/ratings-added", addRatings);
 router.post("/update-ratings/:id",tokenAuthorisationUser,updateRatings)
 router.post("/create-payment", hyperPayStep1);
 router.post("/create-payment-step2", hyperPayStep2);
@@ -191,7 +191,7 @@ router.post("/add-chat-user", tokenAuthorisationUser, addUser);
 router.get("/chat-user-list/:id", tokenAuthorisationUser, chatUserList);
 router.get("/user-online/:id", tokenAuthorisationUser, userOnline);
 router.get("/user-offline/:id", tokenAuthorisationUser, userOffilne);
-router.get("/seen-message/:id", tokenAuthorisationUser, SeenMessage);
+router.post("/seen-message/:id", tokenAuthorisationUser, SeenMessage);
 router.get("/user-seen-msg/:id", tokenAuthorisationUser, userSeenMsg);
 //router.post("/validate",validatePayment)
 

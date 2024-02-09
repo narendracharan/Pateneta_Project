@@ -205,14 +205,25 @@ exports.addRatings = async (req, res) => {
         .json(error("Please Provide ratingby", res.statusCode));
     }
     const ideas = await productModel.findById(idea_Id);
-    ideas.ratings.push({
-      star: star,
-      ratingby: ratingby,
-    });
-    await ideas.save();
-    res
-      .status(200)
-      .json(success(res.statusCode, "Rating Added Successfully", { ideas }));
+    let alreadyRated = ideas.ratings.find((user_Id) => user_Id.ratingby);
+    if (alreadyRated) {
+      const updateRating = await productModel.updateOne(
+        { _id: idea_Id, "ratings.ratingby": ratingby },
+        { $set: { "ratings.$.star": star } }
+      );
+      res
+        .status(200)
+        .json(success(res.statusCode, "Success", { updateRating }));
+    } else {
+      ideas.ratings.push({
+        star: star,
+        ratingby: ratingby,
+      });
+      await ideas.save();
+      res
+        .status(200)
+        .json(success(res.statusCode, "Rating Added Successfully", { ideas }));
+    }
   } catch (err) {
     res.status(400).json(error("Error In Add Ratings", res.statusCode));
   }
