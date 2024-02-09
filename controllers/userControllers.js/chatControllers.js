@@ -118,7 +118,7 @@ exports.userOffilne = async (req, res) => {
 
 exports.userSeenMsg = async (req, res) => {
   try {
-    const { chatId,senderId } = req.body.chatId;
+    const { chatId,senderId } = req.body;
     const chat = await chatModel.updateMany(
       {
         chatId: chatId,
