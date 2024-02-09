@@ -138,7 +138,7 @@ exports.SeenMessage = async (req, res) => {
   try {
     const chat = await chatModel.updateMany(
       {
-        senderId: req.params.id,
+        _id: req.params.id,
       },
       {
         $set: {
