@@ -494,18 +494,19 @@ exports.baseBidList = async (req, res) => {
   try {
     const id = req.params.id;
     const Bids = await productSchema.aggregate([
-      { $unwind: "$baseBid" },
-      {
-        $match: {
-          "baseBid.user_Id": new mongoose.Types.ObjectId(id),
-        },
-      },
       {
         $lookup: {
           from: "users",
           localField: "user_Id",
           foreignField: "_id",
-          as: "users",
+          as: "user_Id",
+          pipeline: [{ $project: { fullName_en: 1,companyName_en:1, profile_Pic: 1 } }]
+        },
+      },
+      { $unwind: "$baseBid" },
+      {
+        $match: {
+          "baseBid.user_Id": new mongoose.Types.ObjectId(id),
         },
       },
       {

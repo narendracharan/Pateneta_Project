@@ -155,7 +155,7 @@ router.post("/search-sales", tokenAuthorisationUser, salesSearch);
 
 //=----> add Bids ROutes
 router.post("/bids-add/:id", tokenAuthorisationUser, addBids);
-router.post("/list-Bids/:id", tokenAuthorisationUser, baseBidList);
+router.post("/list-Bids/:id",tokenAuthorisationUser, baseBidList);
 router.post("/bids-view/:id", tokenAuthorisationUser, bidsView);
 router.post("/accept-bids/:id", tokenAuthorisationUser, acceptBids);
 router.post("/Decline-bids/:id", tokenAuthorisationUser, RejectBids);
