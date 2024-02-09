@@ -218,4 +218,29 @@ exports.addRatings = async (req, res) => {
   }
 };
 
+exports.updateRatings = async (req, res) => {
+  try {
+    const { star, ratingby, idea_Id } = req.body;
+    if (!star) {
+      return res.status(201).json(error("Please Provide Star", res.statusCode));
+    }
+    if (!ratingby) {
+      return res
+        .status(201)
+        .json(error("Please Provide ratingby", res.statusCode));
+    }
 
+    const updateRating = await productModel.updateOne(
+      { _id: idea_Id, "ratings.ratingby": ratingby },
+      { $set: { "ratings.$.star": star } }
+    );
+    res
+      .status(200)
+      .json(success(res.statusCode, "Rating update Successfully", {}));
+
+    console.log(ideas.ratings);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("Error In Add Ratings", res.statusCode));
+  }
+};

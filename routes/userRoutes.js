@@ -57,6 +57,7 @@ const {
   downloadUserOrder,
   myOrder,
   addRatings,
+  updateRatings,
 } = require("../controllers/userControllers.js/orderControllers");
 const {
   salesList,
@@ -181,6 +182,7 @@ router.delete(
   allNotificationDelete
 );
 router.post("/ratings-added", tokenAuthorisationUser, addRatings);
+router.post("/update-ratings/:id",tokenAuthorisationUser,updateRatings)
 router.post("/create-payment", hyperPayStep1);
 router.post("/create-payment-step2", hyperPayStep2);
 router.post("/user-report", tokenAuthorisationUser, createReports);

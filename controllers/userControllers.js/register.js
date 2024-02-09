@@ -409,6 +409,12 @@ exports.userKyc = async (req, res) => {
         .json(error("Please Provide IdNumber", res.statusCode));
     }
     const createKyc = await userSchema.findById(id);
+    const isMatch = await userSchema.findOne({ IdNumber: IdNumber });
+    if (isMatch) {
+      return res
+        .status(200)
+        .json(error("IdNumber Aleardy Register", res.statusCode));
+    }
     if (IdNumber) {
       createKyc.IdNumber = IdNumber;
     }
@@ -435,6 +441,12 @@ exports.companyKyc = async (req, res) => {
     }
 
     const createKyc = await userSchema.findById(id);
+    const isMatch = await userSchema.findOne({ companyNumber: companyNumber });
+    if (isMatch) {
+      return res
+        .status(200)
+        .json(error("Company Number Aleardy Register", res.statusCode));
+    }
     if (companyNumber) {
       createKyc.companyNumber = companyNumber;
     }
