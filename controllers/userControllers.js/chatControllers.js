@@ -118,10 +118,10 @@ exports.userOffilne = async (req, res) => {
 
 exports.userSeenMsg = async (req, res) => {
   try {
-    const { chatId, senderId } = req.body;
+    const { messageId } = req.body.chatId;
     const chat = await chatModel.updateMany(
       {
-        chatId: chatId,
+        _id: messageId,
       },
       {
         $set: {
@@ -129,19 +129,10 @@ exports.userSeenMsg = async (req, res) => {
         },
       }
     );
-    const userchat = await chatModel.updateMany(
-      {
-        senderId: senderId,
-      },
-      {
-        $set: {
-          isRead: true,
-        },
-      }
-    );
+   
     res
       .status(200)
-      .json(success(res.statusCode, "Success", { chat, userchat }));
+      .json(success(res.statusCode, "Success", { chat }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
