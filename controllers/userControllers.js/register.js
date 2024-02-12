@@ -468,12 +468,13 @@ exports.userEditProfile = async (req, res) => {
       fullName_ar,
       companyName_ar,
       companyName_en,
-      password,
+      description,
       Email,
       mobileNumber,
       anotherEmail,
       DOB,
       address,
+      
     } = req.body;
     // const passwordHash = await bcrypt.hash(password, 10);
     const userprofile = await userSchema.findById(req.params.id);
@@ -489,9 +490,9 @@ exports.userEditProfile = async (req, res) => {
     if (companyName_ar) {
       userprofile.companyName_ar = companyName_ar;
     }
-    // if (password) {
-    //   userprofile.password = passwordHash;
-    // }
+    if (description) {
+      userprofile.description = description;
+    }
     if (Email) {
       userprofile.Email = Email;
     }

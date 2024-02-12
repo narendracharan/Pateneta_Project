@@ -58,6 +58,7 @@ const {
   myOrder,
   addRatings,
   updateRatings,
+  withdrawalRequest,
 } = require("../controllers/userControllers.js/orderControllers");
 const {
   salesList,
@@ -148,6 +149,7 @@ router.post("/order-details/:id", tokenAuthorisationUser, orderDetails);
 router.post("/order-download/:id", tokenAuthorisationUser, downloadUserOrder);
 router.post("/my-order/:id", tokenAuthorisationUser, myOrder);
 router.post("/search-my-order/:id", tokenAuthorisationUser, mySalesSearch);
+router.post("/withdrawal-request",withdrawalRequest)
 
 //---->>selas routes
 router.post("/user-sales-list/:id", tokenAuthorisationUser, salesList);

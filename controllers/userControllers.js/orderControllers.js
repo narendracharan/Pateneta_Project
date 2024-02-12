@@ -8,6 +8,7 @@ const fs = require("fs");
 const jsonrawtoxlsx = require("jsonrawtoxlsx");
 const moment = require("moment");
 const notificationSchema = require("../../models/userModels/notificationSchema");
+const withdrawalSchema = require("../../models/adminModels/withdrawal");
 
 ///-----------> Create Order APi
 exports.createOrder = async (req, res) => {
@@ -253,5 +254,30 @@ exports.updateRatings = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Error In Add Ratings", res.statusCode));
+  }
+};
+
+exports.withdrawalRequest = async (req, res) => {
+  try {
+    const { product_Id, user_Id } = req.body;
+    if (!product_Id) {
+      return res
+        .status(200)
+        .json(error("Please Provide Product_Id", res.statusCode));
+    }
+    if (!user_Id) {
+      return res
+        .status(200)
+        .json(error("Please Provide user_Id", res.statusCode));
+    }
+    await withdrawalSchema.create({
+      product_Id: product_Id,
+      user_Id: user_Id,
+    });
+    res
+      .status(201)
+      .json(success(res.statusCode, "Withdrawal Request Send", {}));
+  } catch (err) {
+    res.status(400).json(error("Error", res.statusCode));
   }
 };

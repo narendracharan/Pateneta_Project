@@ -863,7 +863,7 @@ exports.RecivedDocument = async (req, res) => {
       product.documentPic.typedocument = type;
     }
     await product.save();
-    const order = await orderSchema.find();
+    var order = await orderSchema.find();
     if (order.length) {
       var recived = order[0].products.filter(
         (x) => String(x.product_Id) === String(req.params.id)
