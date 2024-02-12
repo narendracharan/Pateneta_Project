@@ -47,19 +47,17 @@ const schema = new mongoose.Schema({
     type: Number,
     require: true,
   },
-  status:{
+  status: {
     type: String,
     default: "purchased",
+    enum: ["purchased", "Recieved"],
   },
   total: {
     type: Number,
   },
-    tran_ref:{
-      type:String
-    },
-  //   securityCode:{
-
-  //   }
+  tran_ref: {
+    type: String,
+  },
 });
 
 schema.set("timestamps", true);

@@ -9,6 +9,7 @@ const sendMail = require("../../services/EmailSerices");
 const { default: mongoose } = require("mongoose");
 const notification = require("../../models/userModels/notificationSchema");
 const ideaNotification = require("../../models/adminModels/ideaNotification");
+const orderSchema = require("../../models/userModels/orderSchema");
 
 //---------> create bussiness idea api
 exports.createIdea = async (req, res) => {
@@ -500,7 +501,9 @@ exports.baseBidList = async (req, res) => {
           localField: "user_Id",
           foreignField: "_id",
           as: "user_Id",
-          pipeline: [{ $project: { fullName_en: 1,companyName_en:1, profile_Pic: 1 } }]
+          pipeline: [
+            { $project: { fullName_en: 1, companyName_en: 1, profile_Pic: 1 } },
+          ],
         },
       },
       { $unwind: "$baseBid" },
@@ -511,11 +514,11 @@ exports.baseBidList = async (req, res) => {
       },
       {
         $project: {
-          _id:1,
+          _id: 1,
           title_en: 1,
           baseBid: 1,
-          buyStatus:1,
-          user_Id:1
+          buyStatus: 1,
+          user_Id: 1,
         },
       },
     ]);
@@ -860,6 +863,14 @@ exports.RecivedDocument = async (req, res) => {
       product.documentPic.typedocument = type;
     }
     await product.save();
+    const order = await orderSchema.find();
+    if (order.length) {
+      var recived = order[0].products.filter(
+        (x) => String(x.product_Id) === String(req.params.id)
+      );
+      order[0].status = "Recieved";
+      await order[0].save();
+    }
     res
       .status(200)
       .json(success(res.statusCode, "Success Received", { product }));
