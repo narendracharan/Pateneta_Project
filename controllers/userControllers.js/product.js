@@ -853,6 +853,7 @@ exports.RecivedDocument = async (req, res) => {
   try {
     const type = req.body.type;
     const product = await productSchema.findById(req.params.id);
+
     if (type) {
       product.logoPic.typelogo = type;
     }
@@ -863,14 +864,15 @@ exports.RecivedDocument = async (req, res) => {
       product.documentPic.typedocument = type;
     }
     await product.save();
-    var order = await orderSchema.find();
-    if (order.length) {
-      var recived = order[0].products.filter(
-        (x) => String(x.product_Id) === String(req.params.id)
-      );
-      order[0].status = "Recieved";
-      await order[0].save();
-    }
+   // var order = await orderSchema.find();
+    // for (let i = 0; i < order.length; i++) {
+    //   var recived = order[i].products.filter(
+    //     (product_Id) => String(product_Id.product_Id) === String(req.params.id)
+    //   );
+      
+    //   order[i].status = "Recieved";
+    //   await order[i].save();
+    // }
     res
       .status(200)
       .json(success(res.statusCode, "Success Received", { product }));

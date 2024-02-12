@@ -250,7 +250,7 @@ exports.updateRatings = async (req, res) => {
       .status(200)
       .json(success(res.statusCode, "Rating update Successfully", {}));
 
-    console.log(ideas.ratings);
+    
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Error In Add Ratings", res.statusCode));
