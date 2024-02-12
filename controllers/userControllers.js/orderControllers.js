@@ -69,6 +69,9 @@ exports.createOrder = async (req, res) => {
       await newOrder.save();
       res.status(200).json(success(res.statusCode, "Success", { newOrder }));
     }
+    const products = await productModel.findOne({ _id: product_Id })
+    product.purchased = "purchased"
+    await products.save()
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Error in Create Order", res.statusCode));
@@ -250,7 +253,7 @@ exports.updateRatings = async (req, res) => {
       .status(200)
       .json(success(res.statusCode, "Rating update Successfully", {}));
 
-    
+
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Error In Add Ratings", res.statusCode));

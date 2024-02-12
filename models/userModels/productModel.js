@@ -160,6 +160,11 @@ const schema = new mongoose.Schema({
     ref: "user",
     require: true,
   },
+  purchased: {
+    type: String,
+    default: "purchased",
+    enum: ["purchased", "Recieved"],
+  },
 });
 schema.set("timestamps", true);
 module.exports = mongoose.model("product", schema);

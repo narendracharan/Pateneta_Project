@@ -863,16 +863,9 @@ exports.RecivedDocument = async (req, res) => {
     if (type) {
       product.documentPic.typedocument = type;
     }
+    product.purchased="Recieved"
     await product.save();
-   // var order = await orderSchema.find();
-    // for (let i = 0; i < order.length; i++) {
-    //   var recived = order[i].products.filter(
-    //     (product_Id) => String(product_Id.product_Id) === String(req.params.id)
-    //   );
-      
-    //   order[i].status = "Recieved";
-    //   await order[i].save();
-    // }
+   
     res
       .status(200)
       .json(success(res.statusCode, "Success Received", { product }));
