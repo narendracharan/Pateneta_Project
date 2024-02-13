@@ -195,6 +195,6 @@ router.get("/user-online/:id", tokenAuthorisationUser, userOnline);
 router.get("/user-offline/:id", tokenAuthorisationUser, userOffilne);
 router.post("/seen-message/:id", tokenAuthorisationUser, SeenMessage);
 router.post("/user-seen-msg", tokenAuthorisationUser, userSeenMsg);
-//router.post("/validate",validatePayment)
+router.post("/validate",validatePayments)
 
 module.exports = router;

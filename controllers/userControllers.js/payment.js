@@ -180,8 +180,8 @@ exports.orderPayment = async (request, respose) => {
       street: Street,
     };
     const url = {
-      response: "",
-      callback: "",
+      response: "http://localhost:2053/user/validate",
+      callback: "http://localhost:2053/user/validate",
     };
     let paymentMethods = ["all"];
 
@@ -230,12 +230,7 @@ exports.orderPayment = async (request, respose) => {
   }
 };
 
-// exports.validatePayments = (req, res) => {
-//   data = {
-//     profile_id: "54843",
-//     tran_ref: req.body.tran_ref,
-//   };
-//   url = _setEndPoint("SAU") + "payment/query";
-//    _sendPost(url,data,callback);
-//   //res.status(200).json(success(respose.statusCode, "Success", { url, data }));
-// };
+exports.validatePayments = (req, res) => {
+  res.status(200)
+  .json(success(res.statusCode, "Payment Success", {}));
+};
