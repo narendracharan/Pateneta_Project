@@ -180,11 +180,10 @@ exports.orderPayment = async (request, respose) => {
       street: Street,
     };
     const url = {
-      response: "https://patenta-sa.com:2053/user/validate",
+      response: "https://patenta-sa.com/payment-success",
       callback: "https://patenta-sa.com:2053/user/validate",
     };
     let paymentMethods = ["all"];
-
     let transaction_details = [transaction.type, transaction.class];
 
     let cart_details = [cart.id, cart.currency, cart.amount, cart.description];
@@ -231,6 +230,6 @@ exports.orderPayment = async (request, respose) => {
 };
 
 exports.validatePayments = (req, res) => {
-  res.status(200)
-  .json(success(res.statusCode, "Payment Success", {}));
+  var url="https://patenta-sa.com/payment-success"
+  res.sendFile(url)
 };
