@@ -231,5 +231,5 @@ exports.orderPayment = async (request, respose) => {
 
 exports.validatePayments = (req, res) => {
   var url="https://patenta-sa.com/payment-success"
-  res.sendFile(url)
+  res.redirect(url)
 };
