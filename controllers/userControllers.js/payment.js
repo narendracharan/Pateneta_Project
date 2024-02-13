@@ -180,8 +180,8 @@ exports.orderPayment = async (request, respose) => {
       street: Street,
     };
     const url = {
-      response: "http://localhost:2053/user/validate",
-      callback: "http://localhost:2053/user/validate",
+      response: "https://patenta-sa.com:2053/user/validate",
+      callback: "https://patenta-sa.com:2053/user/validate",
     };
     let paymentMethods = ["all"];
 
