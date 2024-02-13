@@ -5,6 +5,7 @@ const { error, success } = require("../../responseCode");
 const fs = require("fs");
 const jsonrawtoxlsx = require("jsonrawtoxlsx");
 const moment = require("moment");
+const withdrawalSchema=require("../../models/adminModels/withdrawal")
 
 //Seller List Api
 exports.sellerList = async (req, res) => {
@@ -413,3 +414,22 @@ exports.withdrawalApproved = async (req, res) => {
     res.status(400).json(error("Error In Approved Request", res.statusCode));
   }
 };
+
+////--------> withdrawal Request List
+
+exports.withdrawalRequestList=async(req,res)=>{
+  try {
+    const { from, to } = req.body;
+    const salesList = await withdrawalSchema
+      .find({
+        $and: [
+          from ? { createdAt: { $gte: new Date(from) } } : {},
+          to ? { createdAt: { $lte: new Date(`${to}T23:59:59`) } } : {},
+        ],
+      })
+      .populate(["product_Id", "user_Id"]);
+    res.status(200).json(success(res.status, "Success", { salesList }));
+  } catch (err) {
+    res.status(400).json(error("Error in Sales Listing", res.statusCode));
+  }
+}

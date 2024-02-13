@@ -63,6 +63,7 @@ const {
   setCommission,
   buyerSearch,
   withdrawalApproved,
+  withdrawalRequestList,
 } = require("../controllers/adminControllers/sellerContoller");
 const {
   userList,
@@ -176,6 +177,7 @@ router.post("/buyer-change-status/:id", adminAuthorisationUser, buyerStatus);
 router.post("/buyer-details/:id", adminAuthorisationUser, buyerDetails);
 router.post("/home-dashboard", adminAuthorisationUser, homeDashboards);
 router.post("/set-commission", adminAuthorisationUser, setCommission);
+router.post("/withdrawal-list",adminAuthorisationUser,withdrawalRequestList)
 
 //reports
 router.post("/reports-list", adminAuthorisationUser, reportsList);
