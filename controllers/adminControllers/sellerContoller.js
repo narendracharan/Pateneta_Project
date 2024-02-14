@@ -443,7 +443,7 @@ exports.acceptWithdrawalRequest = async (req, res) => {
     let Commission = withdrawal.Price * (1 - admin.commission / 100);
     let netAmount = withdrawal.Price - Commission;
     let adminCommission = admin.walletTotalBalance + +netAmount;
-    admin.walletTotalBalance=adminCommission
+    admin.walletTotalBalance = adminCommission;
     await admin.save();
     console.log(admin);
     withdrawal.status = "Approved";
@@ -451,5 +451,16 @@ exports.acceptWithdrawalRequest = async (req, res) => {
     res.status(200).json(success("Approved Request", {}, res.statusCode));
   } catch (err) {
     res.status(400).json(error("Error", res.statusCode));
+  }
+};
+
+exports.withdrawalDetails = async (req, res) => {
+  try {
+    const Details = await withdrawalSchema
+      .findById(req.params.id)
+      .populate(["product_Id", "user_Id"]);
+    res.status(200).json(success(res.status, "Success", { Details }));
+  } catch (err) {
+    res.status(400).json(error("Error in Sales Listing", res.statusCode));
   }
 };
