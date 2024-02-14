@@ -443,7 +443,9 @@ exports.acceptWithdrawalRequest = async (req, res) => {
     let Commission = withdrawal.Price * (1 - admin.commission / 100);
     let netAmount = withdrawal.Price - Commission;
     let adminCommission = admin.walletTotalBalance + +netAmount;
+    admin.walletTotalBalance=adminCommission
     await admin.save();
+    console.log(admin);
     withdrawal.status = "Approved";
     await withdrawal.save();
     res.status(200).json(success("Approved Request", {}, res.statusCode));
