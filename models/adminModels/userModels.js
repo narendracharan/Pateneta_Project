@@ -14,8 +14,8 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  token:{
-    type:String
+  token: {
+    type: String,
   },
   mobileNumber: {
     type: Number,
@@ -32,26 +32,29 @@ const schema = new mongoose.Schema({
   expireOtp: {
     type: Date,
   },
-  bankName:{
+  bankName: {
     type: String,
     require: true,
   },
-  country:{
+  country: {
     type: String,
     require: true,
   },
-  address:{
+  address: {
     type: String,
     require: true,
   },
-  IBAN:{
+  IBAN: {
     type: String,
     require: true,
   },
-  commission:{
+  commission: {
     type: Number,
     require: true,
-  }
+  },
+  walletTotalBalance: {
+    type: Number,
+  },
 });
 schema.methods.AdminAuthToken = function () {
   const token = jwt.sign({ _id: this._id }, "ultra-security", {

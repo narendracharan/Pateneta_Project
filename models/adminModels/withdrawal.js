@@ -15,6 +15,9 @@ const schema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  Price:{
+    type:Number
+  }
 });
 schema.set("timestamps", true);
 module.exports = mongoose.model("withdrawal", schema);

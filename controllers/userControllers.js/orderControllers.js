@@ -262,7 +262,7 @@ exports.updateRatings = async (req, res) => {
 
 exports.withdrawalRequest = async (req, res) => {
   try {
-    const { product_Id, user_Id } = req.body;
+    const { product_Id, user_Id,Price} = req.body;
     if (!product_Id) {
       return res
         .status(200)
@@ -276,6 +276,7 @@ exports.withdrawalRequest = async (req, res) => {
     await withdrawalSchema.create({
       product_Id: product_Id,
       user_Id: user_Id,
+      Price:Price
     });
     res
       .status(201)

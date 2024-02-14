@@ -21,10 +21,14 @@ const {
   getMessages,
   sendMessage,
 } = require("./controllers/userControllers.js/chatControllers");
+
+
 process.env["BASE_URL"] = "https://patenta-sa.com:2053";
 app.use(express.static("./public"));
 // app.set("views", __dirname + "views");
 // app.set("view engine", "ejs");
+
+
 //----> User Routes
 app.use("/user", router);
 
@@ -65,6 +69,8 @@ io.on("connection", async (socket) => {
     console.log("🔥: A user disconnected");
   });
 });
+
+
 server.listen(process.env.PORT, () => {
   console.log(`Server is running port no:${process.env.PORT}`);
 });
