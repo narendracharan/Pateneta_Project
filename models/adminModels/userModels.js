@@ -54,6 +54,7 @@ const schema = new mongoose.Schema({
   },
   walletTotalBalance: {
     type: Number,
+    default:0
   },
 });
 schema.methods.AdminAuthToken = function () {

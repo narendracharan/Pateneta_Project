@@ -64,6 +64,7 @@ const {
   buyerSearch,
   withdrawalApproved,
   withdrawalRequestList,
+  acceptWithdrawalRequest,
 } = require("../controllers/adminControllers/sellerContoller");
 const {
   userList,
@@ -178,6 +179,7 @@ router.post("/buyer-details/:id", adminAuthorisationUser, buyerDetails);
 router.post("/home-dashboard", adminAuthorisationUser, homeDashboards);
 router.post("/set-commission", adminAuthorisationUser, setCommission);
 router.post("/withdrawal-list",adminAuthorisationUser,withdrawalRequestList)
+router.post('/accept-withdrawal',adminAuthorisationUser,acceptWithdrawalRequest)
 
 //reports
 router.post("/reports-list", adminAuthorisationUser, reportsList);

@@ -5,7 +5,8 @@ const { error, success } = require("../../responseCode");
 const fs = require("fs");
 const jsonrawtoxlsx = require("jsonrawtoxlsx");
 const moment = require("moment");
-const withdrawalSchema=require("../../models/adminModels/withdrawal")
+const withdrawalSchema = require("../../models/adminModels/withdrawal");
+const adminSchema = require("../../models/adminModels/userModels");
 
 //Seller List Api
 exports.sellerList = async (req, res) => {
@@ -417,7 +418,7 @@ exports.withdrawalApproved = async (req, res) => {
 
 ////--------> withdrawal Request List
 
-exports.withdrawalRequestList=async(req,res)=>{
+exports.withdrawalRequestList = async (req, res) => {
   try {
     const { from, to } = req.body;
     const salesList = await withdrawalSchema
@@ -432,4 +433,21 @@ exports.withdrawalRequestList=async(req,res)=>{
   } catch (err) {
     res.status(400).json(error("Error in Sales Listing", res.statusCode));
   }
-}
+};
+
+exports.acceptWithdrawalRequest = async (req, res) => {
+  try {
+    const { adminId, withdrawal_Id } = req.body;
+    const admin = await adminSchema.findById(adminId);
+    const withdrawal = await withdrawalSchema.findById(withdrawal_Id);
+    let Commission = withdrawal.Price * (1 - admin.commission / 100);
+    let netAmount = withdrawal.Price - Commission;
+    let adminCommission = admin.walletTotalBalance + +netAmount;
+    await admin.save();
+    withdrawal.status = "Approved";
+    await withdrawal.save();
+    res.status(200).json(success("Approved Request", {}, res.statusCode));
+  } catch (err) {
+    res.status(400).json(error("Error", res.statusCode));
+  }
+};
