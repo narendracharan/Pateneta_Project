@@ -165,6 +165,10 @@ const schema = new mongoose.Schema({
     default: "purchased",
     enum: ["purchased", "Recieved"],
   },
+  withdrawalRequest:{
+    type: Boolean,
+    default:false
+  }
 });
 schema.set("timestamps", true);
 module.exports = mongoose.model("product", schema);

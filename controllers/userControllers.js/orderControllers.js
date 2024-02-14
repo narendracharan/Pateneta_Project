@@ -273,6 +273,9 @@ exports.withdrawalRequest = async (req, res) => {
         .status(200)
         .json(error("Please Provide user_Id", res.statusCode));
     }
+    const product=await productModel.findById(product_Id)
+    product.withdrawalRequest=true
+    await product.save()
     await withdrawalSchema.create({
       product_Id: product_Id,
       user_Id: user_Id,
