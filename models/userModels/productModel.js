@@ -168,6 +168,10 @@ const schema = new mongoose.Schema({
   withdrawalRequest:{
     type: Boolean,
     default:false
+  },
+  adminRequest:{
+    type: Boolean,
+    default:false
   }
 });
 schema.set("timestamps", true);

@@ -440,14 +440,16 @@ exports.acceptWithdrawalRequest = async (req, res) => {
     const { adminId, withdrawal_Id } = req.body;
     const admin = await adminSchema.findById(adminId);
     const withdrawal = await withdrawalSchema.findById(withdrawal_Id);
+    const product = await productModel.findById(withdrawal.product_Id);
     let Commission = withdrawal.Price * (1 - admin.commission / 100);
     let netAmount = withdrawal.Price - Commission;
     let adminCommission = admin.walletTotalBalance + +netAmount;
     admin.walletTotalBalance = adminCommission;
     await admin.save();
-    console.log(admin);
     withdrawal.status = "Approved";
     await withdrawal.save();
+    product.adminRequest = true;
+    product.save();
     res.status(200).json(success("Approved Request", {}, res.statusCode));
   } catch (err) {
     res.status(400).json(error("Error", res.statusCode));
