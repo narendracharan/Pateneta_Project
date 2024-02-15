@@ -151,7 +151,7 @@ router.post("/order-download/:id", tokenAuthorisationUser, downloadUserOrder);
 router.post("/my-order/:id", tokenAuthorisationUser, myOrder);
 router.post("/search-my-order/:id", tokenAuthorisationUser, mySalesSearch);
 router.post("/withdrawal-request",tokenAuthorisationUser,withdrawalRequest)
-router.get("/user-total-earning/:id",tokenAuthorisationUser,userTotalEarning)
+router.post("/user-total-earning/:id",tokenAuthorisationUser,userTotalEarning)
 
 
 //---->>selas routes
