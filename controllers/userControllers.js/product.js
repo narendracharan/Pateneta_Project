@@ -223,26 +223,7 @@ exports.bussinessIdeaDetails = async (req, res) => {
   }
 };
 
-// Bussiness Idea Details Api
-exports.bussinessIdeaDetails = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const detailsIdea = await productSchema
-      .findById(id)
-      .populate([
-        "baseBid.user_Id",
-        "user_Id",
-        "buyer_Id",
-        "category_Id",
-        "subCategory_Id",
-      ]);
-    res.status(200).json(success(res.statusCode, "Success", { detailsIdea }));
-  } catch (err) {
-    res
-      .status(400)
-      .json(error("Error in Bussiness Idea Details", res.statusCode));
-  }
-};
+
 
 //----> update bussiness idea
 
@@ -711,7 +692,7 @@ exports.acceptBids = async (req, res) => {
   }
 };
 
-// Accept Bids Api
+// Rejected Bids Api
 exports.RejectBids = async (req, res) => {
   try {
     const approved = "Decline";

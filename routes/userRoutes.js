@@ -110,7 +110,7 @@ router.post(
 );
 router.post("/change-password/:id", tokenAuthorisationUser, userResetPassword);
 router.get("/user-list", tokenAuthorisationUser, userList);
-router.post("/add-user-account/:id",addAccount)
+router.post("/add-user-account/:id", addAccount);
 
 ///--->language routes
 
@@ -150,9 +150,12 @@ router.post("/order-details/:id", tokenAuthorisationUser, orderDetails);
 router.post("/order-download/:id", tokenAuthorisationUser, downloadUserOrder);
 router.post("/my-order/:id", tokenAuthorisationUser, myOrder);
 router.post("/search-my-order/:id", tokenAuthorisationUser, mySalesSearch);
-router.post("/withdrawal-request",tokenAuthorisationUser,withdrawalRequest)
-router.post("/user-total-earning/:id",tokenAuthorisationUser,userTotalEarning)
-
+router.post("/withdrawal-request", tokenAuthorisationUser, withdrawalRequest);
+router.post(
+  "/user-total-earning/:id",
+  tokenAuthorisationUser,
+  userTotalEarning
+);
 
 //---->>selas routes
 router.post("/user-sales-list/:id", tokenAuthorisationUser, salesList);
@@ -161,7 +164,7 @@ router.post("/search-sales", tokenAuthorisationUser, salesSearch);
 
 //=----> add Bids ROutes
 router.post("/bids-add/:id", tokenAuthorisationUser, addBids);
-router.post("/list-Bids/:id",tokenAuthorisationUser, baseBidList);
+router.post("/list-Bids/:id", tokenAuthorisationUser, baseBidList);
 router.post("/bids-view/:id", tokenAuthorisationUser, bidsView);
 router.post("/accept-bids/:id", tokenAuthorisationUser, acceptBids);
 router.post("/Decline-bids/:id", tokenAuthorisationUser, RejectBids);
@@ -187,9 +190,8 @@ router.delete(
   allNotificationDelete
 );
 router.post("/ratings-added", addRatings);
-router.post("/update-ratings/:id",tokenAuthorisationUser,updateRatings)
-router.post("/create-payment", hyperPayStep1);
-router.post("/create-payment-step2", hyperPayStep2);
+//router.post("/create-payment", hyperPayStep1);
+//router.post("/create-payment-step2", hyperPayStep2);
 router.post("/user-report", tokenAuthorisationUser, createReports);
 router.post("/order-payment", tokenAuthorisationUser, orderPayment);
 router.post("/add-chat-user", tokenAuthorisationUser, addUser);
@@ -198,6 +200,6 @@ router.get("/user-online/:id", tokenAuthorisationUser, userOnline);
 router.get("/user-offline/:id", tokenAuthorisationUser, userOffilne);
 router.post("/seen-message/:id", tokenAuthorisationUser, SeenMessage);
 router.post("/user-seen-msg", tokenAuthorisationUser, userSeenMsg);
-router.post("/validate",validatePayments)
+router.post("/validate", validatePayments);
 
 module.exports = router;

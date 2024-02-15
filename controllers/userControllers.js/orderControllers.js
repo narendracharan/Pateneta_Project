@@ -79,7 +79,7 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-///-------> Create Order Api
+///-------> Create Order Details APi
 exports.orderDetails = async (req, res) => {
   try {
     const orderDetails = await orderSchema
@@ -234,31 +234,8 @@ exports.addRatings = async (req, res) => {
   }
 };
 
-exports.updateRatings = async (req, res) => {
-  try {
-    const { star, ratingby, idea_Id } = req.body;
-    if (!star) {
-      return res.status(201).json(error("Please Provide Star", res.statusCode));
-    }
-    if (!ratingby) {
-      return res
-        .status(201)
-        .json(error("Please Provide ratingby", res.statusCode));
-    }
 
-    const updateRating = await productModel.updateOne(
-      { _id: idea_Id, "ratings.ratingby": ratingby },
-      { $set: { "ratings.$.star": star } }
-    );
-    res
-      .status(200)
-      .json(success(res.statusCode, "Rating update Successfully", {}));
-  } catch (err) {
-    console.log(err);
-    res.status(400).json(error("Error In Add Ratings", res.statusCode));
-  }
-};
-
+///------> Add Withdrawal Request APi
 exports.withdrawalRequest = async (req, res) => {
   try {
     const { product_Id, user_Id, Price } = req.body;
@@ -288,6 +265,8 @@ exports.withdrawalRequest = async (req, res) => {
   }
 };
 
+
+//-----> user Total Earning Api
 exports.userTotalEarning = async (req, res) => {
   try {
     const totalEarning = await withdrawalSchema.aggregate([
@@ -335,6 +314,15 @@ exports.userTotalEarning = async (req, res) => {
         },
       },
     ]);
+    
+    // let totalAmountAfterFee = 0;
+
+    // if (totalEarning.length > 0) {
+    //   const totalAmount = totalEarning[0].totalAmount;
+    //   const adminFee = totalAmount * 0.1; // 10% administrative fee
+    //   totalAmountAfterFee = totalAmount - adminFee;
+    // }
+
 
     res.status(200).json(
       success(res.statusCode, "Success", {

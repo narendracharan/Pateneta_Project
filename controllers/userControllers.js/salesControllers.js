@@ -102,7 +102,8 @@ exports.mySalesSearch = async (req, res) => {
                 logoPic: 1,
                 documentName:1,
                 ratings:1,
-                purchased:1
+                purchased:1,
+                adminRequest:1
               },
             },
             {
