@@ -4,6 +4,7 @@ const userModels = require("../../models/userModels/UserRegister");
 const { error, success } = require("../../responseCode");
 const moment = require("moment");
 const admin = require("../../models/adminModels/userModels");
+const withdrawalSchema=require("../../models/adminModels/withdrawal")
 
 //----> Home DashBords api
 exports.homeDashboards = async (req, res) => {
@@ -56,7 +57,6 @@ exports.homeDashboards = async (req, res) => {
         },
       },
     ]);
-
     const pendingRequest = await productSchema.aggregate([
       {
         $match: {
@@ -70,6 +70,7 @@ exports.homeDashboards = async (req, res) => {
         },
       },
     ]);
+    const totalWithdrawalRequest=await withdrawalSchema.find().count()
     const Commission = await admin.findOne();
     const totalCommission = Commission.commission;
     res.status(200).json(
@@ -79,6 +80,7 @@ exports.homeDashboards = async (req, res) => {
         saleOfMonth,
         pendingRequest,
         totalCommission,
+        totalWithdrawalRequest,
       })
     );
   } catch (err) {
