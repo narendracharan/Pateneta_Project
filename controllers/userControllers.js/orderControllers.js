@@ -9,6 +9,7 @@ const jsonrawtoxlsx = require("jsonrawtoxlsx");
 const moment = require("moment");
 const notificationSchema = require("../../models/userModels/notificationSchema");
 const withdrawalSchema = require("../../models/adminModels/withdrawal");
+const { default: mongoose } = require("mongoose");
 
 ///-----------> Create Order APi
 exports.createOrder = async (req, res) => {
@@ -69,9 +70,9 @@ exports.createOrder = async (req, res) => {
       await newOrder.save();
       res.status(200).json(success(res.statusCode, "Success", { newOrder }));
     }
-    const products = await productModel.findOne({ _id: product_Id })
-    product.purchased = "purchased"
-    await products.save()
+    const products = await productModel.findOne({ _id: product_Id });
+    product.purchased = "purchased";
+    await products.save();
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Error in Create Order", res.statusCode));
@@ -252,8 +253,6 @@ exports.updateRatings = async (req, res) => {
     res
       .status(200)
       .json(success(res.statusCode, "Rating update Successfully", {}));
-
-
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Error In Add Ratings", res.statusCode));
@@ -262,7 +261,7 @@ exports.updateRatings = async (req, res) => {
 
 exports.withdrawalRequest = async (req, res) => {
   try {
-    const { product_Id, user_Id,Price} = req.body;
+    const { product_Id, user_Id, Price } = req.body;
     if (!product_Id) {
       return res
         .status(200)
@@ -273,17 +272,77 @@ exports.withdrawalRequest = async (req, res) => {
         .status(200)
         .json(error("Please Provide user_Id", res.statusCode));
     }
-    const product=await productModel.findById(product_Id)
-    product.withdrawalRequest=true
-    await product.save()
+    const product = await productModel.findById(product_Id);
+    product.withdrawalRequest = true;
+    await product.save();
     await withdrawalSchema.create({
       product_Id: product_Id,
       user_Id: user_Id,
-      Price:Price
+      Price: Price,
     });
     res
       .status(201)
       .json(success(res.statusCode, "Withdrawal Request Send", {}));
+  } catch (err) {
+    res.status(400).json(error("Error", res.statusCode));
+  }
+};
+
+exports.userTotalEarning = async (req, res) => {
+  try {
+    const totalEarning = await withdrawalSchema.aggregate([
+      {
+        $match: {
+          user_Id: new mongoose.Types.ObjectId(req.params.id),
+          status: "Approved",
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: "$Price" },
+        },
+      },
+    ]);
+    const totalMonthEarning = await withdrawalSchema.aggregate([
+      {
+        $match: {
+          user_Id: new mongoose.Types.ObjectId(req.params.id),
+          status: "Approved",
+          createdAt: { $gte: new Date(moment(new Date()).startOf("month")) },
+          createdAt: { $lte: new Date(moment(new Date()).endOf("month")) },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: "$Price" },
+        },
+      },
+    ]);
+
+    const totalPendingEarning = await withdrawalSchema.aggregate([
+      {
+        $match: {
+          user_Id: new mongoose.Types.ObjectId(req.params.id),
+          status: "Pending",
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: "$Price" },
+        },
+      },
+    ]);
+
+    res.status(200).json(
+      success(res.statusCode, "Success", {
+        totalEarning,
+        totalMonthEarning,
+        totalPendingEarning,
+      })
+    );
   } catch (err) {
     res.status(400).json(error("Error", res.statusCode));
   }
