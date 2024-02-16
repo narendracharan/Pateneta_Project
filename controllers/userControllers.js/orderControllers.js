@@ -11,6 +11,8 @@ const notificationSchema = require("../../models/userModels/notificationSchema")
 const withdrawalSchema = require("../../models/adminModels/withdrawal");
 const { default: mongoose } = require("mongoose");
 
+
+
 ///-----------> Create Order APi
 exports.createOrder = async (req, res) => {
   try {
@@ -335,9 +337,6 @@ exports.userTotalEarning = async (req, res) => {
       const adminFee = totalAmount * 0.1; // 10% administrative fee
       totalPendingEarning = totalAmount - adminFee;
     }
-    
-
-
     res.status(200).json(
       success(res.statusCode, "Success", {
         totalEarning,
@@ -423,3 +422,16 @@ exports.myWithdrawalRequestList= async (req, res) => {
     res.status(400).json(error("Error in Search", res.status));
   }
 };
+
+
+exports.withdrawalRequestDetails=async(req,res)=>{
+  try {
+//const admin=await 
+    const Details = await withdrawalSchema
+      .findById(req.params.id)
+      .populate(["product_Id", "user_Id"]);
+    res.status(200).json(success(res.status, "Success", { Details }));
+  } catch (err) {
+    res.status(400).json(error("Error in Sales Listing", res.statusCode));
+  }
+}

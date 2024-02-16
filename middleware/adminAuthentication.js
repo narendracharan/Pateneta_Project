@@ -10,7 +10,7 @@ async function adminAuthorisationUser(req, res, next) {
   try {
     const decoded = jwt.verify(token, "ultra-security");
     req.user = decoded;
-    const admin= await Admin.findById(req.admin._id);
+   // const admin= await Admin.findById(req.admin._id);
     next();
   } catch (ex) {
     return res
