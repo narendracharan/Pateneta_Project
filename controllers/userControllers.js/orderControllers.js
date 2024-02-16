@@ -335,3 +335,76 @@ exports.userTotalEarning = async (req, res) => {
     res.status(400).json(error("Error", res.statusCode));
   }
 };
+
+
+
+
+
+///Sales Search Details Api
+exports.myWithdrawalRequestList= async (req, res) => {
+  try {
+    const search = req.body.search;
+    const sales = await withdrawalSchema.aggregate([
+      {
+        $match: {
+          user_Id: new mongoose.Types.ObjectId(req.params.id),
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "users",
+          pipeline: [{ $project: { fullName_en: 1, companyName_ar: 1,createdAt:1 } }],
+        },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "products.product_Id",
+          foreignField: "_id",
+          as: "products",
+          pipeline: [
+            {
+              $project: {
+                title_en: 1,
+                user_Id: 1,
+                documentPic: 1,
+                pic: 1,
+                logoPic: 1,
+                documentName:1,
+                ratings:1,
+                purchased:1,
+                adminRequest:1
+              },
+            },
+            {
+              $lookup: {
+                from: "users",
+                localField: "user_Id",
+                foreignField: "_id",
+                as: "user_Id",
+                pipeline: [{ $project: { fullName_en: 1, companyName_ar: 1,createdAt:1  } }],
+              },
+            },
+          ],
+        },
+      },
+      { $unwind: "$users" },
+      { $unwind: "$products" },
+      {
+        $match: {
+          $or: [
+            {
+              "products.title_en": { $regex: search, $options: "i" },
+            },
+          ],
+        },
+      },
+    ]);
+    res.status(200).json(success(res.statusCode, "Success", { sales }));
+  } catch (err) {
+    res.status(400).json(error("Error in Search", res.status));
+  }
+};
