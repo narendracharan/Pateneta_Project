@@ -61,6 +61,7 @@ const {
   withdrawalRequest,
   userTotalEarning,
   myWithdrawalRequestList,
+  withdrawalRequestDetails,
 } = require("../controllers/userControllers.js/orderControllers");
 const {
   salesList,
@@ -165,7 +166,7 @@ router.post(
   tokenAuthorisationUser,
   myWithdrawalRequestList
 );
-
+router.post("/withdrawal-details/:id",tokenAuthorisationUser,withdrawalRequestDetails)
 //---->>selas routes
 router.post("/user-sales-list/:id", tokenAuthorisationUser, salesList);
 router.post("/sales-details/:id", tokenAuthorisationUser, userSalesDetails);

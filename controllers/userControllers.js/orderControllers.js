@@ -10,8 +10,7 @@ const moment = require("moment");
 const notificationSchema = require("../../models/userModels/notificationSchema");
 const withdrawalSchema = require("../../models/adminModels/withdrawal");
 const { default: mongoose } = require("mongoose");
-
-
+const Admin = require("../../models/adminModels/userModels");
 
 ///-----------> Create Order APi
 exports.createOrder = async (req, res) => {
@@ -236,7 +235,6 @@ exports.addRatings = async (req, res) => {
   }
 };
 
-
 ///------> Add Withdrawal Request APi
 exports.withdrawalRequest = async (req, res) => {
   try {
@@ -267,11 +265,10 @@ exports.withdrawalRequest = async (req, res) => {
   }
 };
 
-
 //-----> user Total Earning Api
 exports.userTotalEarning = async (req, res) => {
   try {
-    const withdrawalAmount= await withdrawalSchema.aggregate([
+    const withdrawalAmount = await withdrawalSchema.aggregate([
       {
         $match: {
           user_Id: new mongoose.Types.ObjectId(req.params.id),
@@ -292,7 +289,7 @@ exports.userTotalEarning = async (req, res) => {
       const adminFee = totalAmount * 0.1; // 10% administrative fee
       totalEarning = totalAmount - adminFee;
     }
-  
+
     const earningWeek = await withdrawalSchema.aggregate([
       {
         $match: {
@@ -349,16 +346,12 @@ exports.userTotalEarning = async (req, res) => {
   }
 };
 
-
-
-
-
 ///Sales Search Details Api
-exports.myWithdrawalRequestList= async (req, res) => {
+exports.myWithdrawalRequestList = async (req, res) => {
   try {
     const search = req.body.search;
-   
-    const withdrawal= await withdrawalSchema.aggregate([
+
+    const withdrawal = await withdrawalSchema.aggregate([
       {
         $match: {
           user_Id: new mongoose.Types.ObjectId(req.params.id),
@@ -370,7 +363,9 @@ exports.myWithdrawalRequestList= async (req, res) => {
           localField: "user_Id",
           foreignField: "_id",
           as: "user_Id",
-          pipeline: [{ $project: { fullName_en: 1, companyName_ar: 1,createdAt:1 } }],
+          pipeline: [
+            { $project: { fullName_en: 1, companyName_ar: 1, createdAt: 1 } },
+          ],
         },
       },
       {
@@ -387,10 +382,10 @@ exports.myWithdrawalRequestList= async (req, res) => {
                 documentPic: 1,
                 pic: 1,
                 logoPic: 1,
-                documentName:1,
-                ratings:1,
-                purchased:1,
-                adminRequest:1
+                documentName: 1,
+                ratings: 1,
+                purchased: 1,
+                adminRequest: 1,
               },
             },
             // {
@@ -405,7 +400,7 @@ exports.myWithdrawalRequestList= async (req, res) => {
           ],
         },
       },
-     // { $unwind: "$" },
+      // { $unwind: "$" },
       { $unwind: "$product_Id" },
       {
         $match: {
@@ -417,21 +412,24 @@ exports.myWithdrawalRequestList= async (req, res) => {
         },
       },
     ]);
-    res.status(200).json(success(res.statusCode, "Success", { withdrawal}));
+    res.status(200).json(success(res.statusCode, "Success", { withdrawal }));
   } catch (err) {
     res.status(400).json(error("Error in Search", res.status));
   }
 };
 
-
-exports.withdrawalRequestDetails=async(req,res)=>{
+exports.withdrawalRequestDetails = async (req, res) => {
   try {
-//const admin=await 
+    const admin = await Admin.findOne();
     const Details = await withdrawalSchema
       .findById(req.params.id)
       .populate(["product_Id", "user_Id"]);
-    res.status(200).json(success(res.status, "Success", { Details }));
+    let Commission = Details.Price * (1 - admin.commission / 100);
+  //let netAmount = Details.Price - Commission;
+    res
+      .status(200)
+      .json(success(res.status, "Success", { Details, Commission }));
   } catch (err) {
-    res.status(400).json(error("Error in Sales Listing", res.statusCode));
+    res.status(400).json(error("Error", res.statusCode));
   }
-}
+};
