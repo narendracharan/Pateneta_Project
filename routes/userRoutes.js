@@ -88,7 +88,9 @@ const {
   userSeenMsg,
 } = require("../controllers/userControllers.js/chatControllers");
 const { validatePayment } = require("paytabs_pt2");
-const { withdrawalRequestList } = require("../controllers/adminControllers/sellerContoller");
+const {
+  withdrawalRequestList,
+} = require("../controllers/adminControllers/sellerContoller");
 const router = express.Router();
 
 ///---->user register Routes
@@ -158,7 +160,11 @@ router.post(
   tokenAuthorisationUser,
   userTotalEarning
 );
-router.post("/withdrawal-request-list/:id",tokenAuthorisationUser,myWithdrawalRequestList)
+router.post(
+  "/withdrawal-request-list/:id",
+  tokenAuthorisationUser,
+  myWithdrawalRequestList
+);
 
 //---->>selas routes
 router.post("/user-sales-list/:id", tokenAuthorisationUser, salesList);

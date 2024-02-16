@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { error } = require("../responseCode");
-
-function adminAuthorisationUser(req, res, next) {
+const Admin=require("../models/adminModels/userModels")
+async function adminAuthorisationUser(req, res, next) {
   const token = req.header("x-auth-token-admin");
   if (!token)
     return res
@@ -10,6 +10,7 @@ function adminAuthorisationUser(req, res, next) {
   try {
     const decoded = jwt.verify(token, "ultra-security");
     req.user = decoded;
+    const admin= await Admin.findById(req.admin._id);
     next();
   } catch (ex) {
     return res

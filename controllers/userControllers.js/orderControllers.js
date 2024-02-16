@@ -269,7 +269,7 @@ exports.withdrawalRequest = async (req, res) => {
 //-----> user Total Earning Api
 exports.userTotalEarning = async (req, res) => {
   try {
-    const totalEarning = await withdrawalSchema.aggregate([
+    const withdrawalAmount= await withdrawalSchema.aggregate([
       {
         $match: {
           user_Id: new mongoose.Types.ObjectId(req.params.id),
@@ -283,7 +283,15 @@ exports.userTotalEarning = async (req, res) => {
         },
       },
     ]);
-    const totalMonthEarning = await withdrawalSchema.aggregate([
+    let totalEarning = 0;
+
+    if (withdrawalAmount.length > 0) {
+      const totalAmount = withdrawalAmount[0].totalAmount;
+      const adminFee = totalAmount * 0.1; // 10% administrative fee
+      totalEarning = totalAmount - adminFee;
+    }
+  
+    const earningWeek = await withdrawalSchema.aggregate([
       {
         $match: {
           user_Id: new mongoose.Types.ObjectId(req.params.id),
@@ -299,8 +307,14 @@ exports.userTotalEarning = async (req, res) => {
         },
       },
     ]);
+    let totalMonthEarning = 0;
 
-    const totalPendingEarning = await withdrawalSchema.aggregate([
+    if (earningWeek.length > 0) {
+      const totalAmount = earningWeek[0].totalAmount;
+      const adminFee = totalAmount * 0.1; // 10% administrative fee
+      totalMonthEarning = totalAmount - adminFee;
+    }
+    const PendingEarning = await withdrawalSchema.aggregate([
       {
         $match: {
           user_Id: new mongoose.Types.ObjectId(req.params.id),
@@ -314,14 +328,14 @@ exports.userTotalEarning = async (req, res) => {
         },
       },
     ]);
-    
-    // let totalAmountAfterFee = 0;
+    let totalPendingEarning = 0;
 
-    // if (totalEarning.length > 0) {
-    //   const totalAmount = totalEarning[0].totalAmount;
-    //   const adminFee = totalAmount * 0.1; // 10% administrative fee
-    //   totalAmountAfterFee = totalAmount - adminFee;
-    // }
+    if (PendingEarning.length > 0) {
+      const totalAmount = PendingEarning[0].totalAmount;
+      const adminFee = totalAmount * 0.1; // 10% administrative fee
+      totalPendingEarning = totalAmount - adminFee;
+    }
+    
 
 
     res.status(200).json(

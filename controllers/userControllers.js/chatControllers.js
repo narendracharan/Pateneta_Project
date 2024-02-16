@@ -33,6 +33,7 @@ exports.sendMessage = async (data) => {
 
 exports.userList = async (req, res) => {
   try {
+    console.log(req.user._id);
     const userList = await User.aggregate([
       {
         $match: {
