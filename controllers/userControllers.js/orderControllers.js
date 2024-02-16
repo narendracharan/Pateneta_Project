@@ -288,8 +288,8 @@ exports.userTotalEarning = async (req, res) => {
         $match: {
           user_Id: new mongoose.Types.ObjectId(req.params.id),
           status: "Approved",
-          createdAt: { $gte: new Date(moment(new Date()).startOf("month")) },
-          createdAt: { $lte: new Date(moment(new Date()).endOf("month")) },
+          createdAt: { $gte: new Date(moment(new Date()).startOf("week")) },
+          createdAt: { $lte: new Date(moment(new Date()).endOf("week")) },
         },
       },
       {
@@ -344,7 +344,8 @@ exports.userTotalEarning = async (req, res) => {
 exports.myWithdrawalRequestList= async (req, res) => {
   try {
     const search = req.body.search;
-    const sales = await withdrawalSchema.aggregate([
+   
+    const withdrawal= await withdrawalSchema.aggregate([
       {
         $match: {
           user_Id: new mongoose.Types.ObjectId(req.params.id),
@@ -355,16 +356,16 @@ exports.myWithdrawalRequestList= async (req, res) => {
           from: "users",
           localField: "user_Id",
           foreignField: "_id",
-          as: "users",
+          as: "user_Id",
           pipeline: [{ $project: { fullName_en: 1, companyName_ar: 1,createdAt:1 } }],
         },
       },
       {
         $lookup: {
           from: "products",
-          localField: "products.product_Id",
+          localField: "product_Id",
           foreignField: "_id",
-          as: "products",
+          as: "product_Id",
           pipeline: [
             {
               $project: {
@@ -379,31 +380,31 @@ exports.myWithdrawalRequestList= async (req, res) => {
                 adminRequest:1
               },
             },
-            {
-              $lookup: {
-                from: "users",
-                localField: "user_Id",
-                foreignField: "_id",
-                as: "user_Id",
-                pipeline: [{ $project: { fullName_en: 1, companyName_ar: 1,createdAt:1  } }],
-              },
-            },
+            // {
+            //   $lookup: {
+            //     from: "users",
+            //     localField: "user_Id",
+            //     foreignField: "_id",
+            //     as: "user_Id",
+            //     pipeline: [{ $project: { fullName_en: 1, companyName_ar: 1,createdAt:1  } }],
+            //   },
+            // },
           ],
         },
       },
-      { $unwind: "$users" },
-      { $unwind: "$products" },
+     // { $unwind: "$" },
+      { $unwind: "$product_Id" },
       {
         $match: {
           $or: [
             {
-              "products.title_en": { $regex: search, $options: "i" },
+              "product_Id.title_en": { $regex: search, $options: "i" },
             },
           ],
         },
       },
     ]);
-    res.status(200).json(success(res.statusCode, "Success", { sales }));
+    res.status(200).json(success(res.statusCode, "Success", { withdrawal}));
   } catch (err) {
     res.status(400).json(error("Error in Search", res.status));
   }
