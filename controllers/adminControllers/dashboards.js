@@ -3,16 +3,18 @@ const productSchema = require("../../models/userModels/productModel");
 const userModels = require("../../models/userModels/UserRegister");
 const { error, success } = require("../../responseCode");
 const moment = require("moment");
-const admin = require("../../models/adminModels/userModels");
-const withdrawalSchema=require("../../models/adminModels/withdrawal")
+const adminModels = require("../../models/adminModels/userModels");
+const withdrawalSchema = require("../../models/adminModels/withdrawal");
 
 //----> Home DashBords api
 exports.homeDashboards = async (req, res) => {
   try {
-    const totalSallerCount = await productSchema.aggregate([
+    const admin = await adminModels.findOne();
+    const totalSallerCount = await userModels.aggregate([
       {
         $match: {
-          verify: "APPROVED",
+          userVerify: "APPROVED",
+          userType: "Seller",
         },
       },
       {
@@ -33,6 +35,7 @@ exports.homeDashboards = async (req, res) => {
     const totalBuyerCount = await userModels.aggregate([
       {
         $match: {
+          userVerify: "APPROVED",
           userType: "Buyer",
         },
       },
@@ -70,9 +73,28 @@ exports.homeDashboards = async (req, res) => {
         },
       },
     ]);
-    const totalWithdrawalRequest=await withdrawalSchema.find().count()
-    const Commission = await admin.findOne();
-    const totalCommission = Commission.commission;
+    const totalWithdrawalRequest = await withdrawalSchema.find().count();
+    // const Commission = await admin.findOne();
+    // const totalCommission = Commission.commission;
+
+    const withdrawalAmount = await withdrawalSchema.aggregate([
+      {
+        $match: {
+          status: "Approved",
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: "$Price" },
+        },
+      },
+    ]);
+
+    if (withdrawalAmount.length > 0) {
+      const totalAmount = withdrawalAmount[0].totalAmount;
+      var totalCommission = totalAmount * (admin.commission / 100);
+    }
     res.status(200).json(
       success(res.statusCode, "Success", {
         totalBuyerCount,

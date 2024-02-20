@@ -32,7 +32,7 @@ exports.approvedIdea = async (req, res) => {
       .populate("user_Id");
     await notificationSchema.create({
       user_Id: appreovedIdea.user_Id,
-      title: "Your Idea has been partially approved by admin",
+      title: "Your Idea has been approved by admin",
     });
 
     await sendMail(
@@ -41,7 +41,7 @@ exports.approvedIdea = async (req, res) => {
       appreovedIdea.user_Id.fullName_en || appreovedIdea.user_Id.companyName_en,
       `<br.
       <br>
-      Your Idea has been partially approved by admin.<br>
+      Your Idea has been approved by admin.<br>
       <br>
       <b> We are delighted to welcome you to Patenta, a platform where each and every idea is valued.</b>
       <br>

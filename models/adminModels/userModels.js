@@ -52,10 +52,10 @@ const schema = new mongoose.Schema({
     type: Number,
     require: true,
   },
-  walletTotalBalance: {
-    type: Number,
-    default:0
-  },
+  // walletTotalBalance: {
+  //   type: Number,
+  //   default:0
+  // },
 });
 schema.methods.AdminAuthToken = function () {
   const token = jwt.sign({ _id: this._id }, "ultra-security", {

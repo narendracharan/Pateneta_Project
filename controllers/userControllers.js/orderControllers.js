@@ -268,6 +268,7 @@ exports.withdrawalRequest = async (req, res) => {
 //-----> user Total Earning Api
 exports.userTotalEarning = async (req, res) => {
   try {
+    const admin = await Admin.findOne();
     const withdrawalAmount = await withdrawalSchema.aggregate([
       {
         $match: {
@@ -286,7 +287,7 @@ exports.userTotalEarning = async (req, res) => {
 
     if (withdrawalAmount.length > 0) {
       const totalAmount = withdrawalAmount[0].totalAmount;
-      const adminFee = totalAmount * 0.1; // 10% administrative fee
+      const adminFee = totalAmount * (admin.commission / 100);
       totalEarning = totalAmount - adminFee;
     }
 
@@ -310,7 +311,7 @@ exports.userTotalEarning = async (req, res) => {
 
     if (earningWeek.length > 0) {
       const totalAmount = earningWeek[0].totalAmount;
-      const adminFee = totalAmount * 0.1; // 10% administrative fee
+      const adminFee = totalAmount * (admin.commission / 100);
       totalMonthEarning = totalAmount - adminFee;
     }
     const PendingEarning = await withdrawalSchema.aggregate([
@@ -328,10 +329,9 @@ exports.userTotalEarning = async (req, res) => {
       },
     ]);
     let totalPendingEarning = 0;
-
     if (PendingEarning.length > 0) {
       const totalAmount = PendingEarning[0].totalAmount;
-      const adminFee = totalAmount * 0.1; // 10% administrative fee
+      const adminFee = totalAmount * (admin.commission / 100);
       totalPendingEarning = totalAmount - adminFee;
     }
     res.status(200).json(
@@ -425,7 +425,7 @@ exports.withdrawalRequestDetails = async (req, res) => {
       .findById(req.params.id)
       .populate(["product_Id", "user_Id"]);
     let Commission = Details.Price * (1 - admin.commission / 100);
-  //let netAmount = Details.Price - Commission;
+    //let netAmount = Details.Price - Commission;
     res
       .status(200)
       .json(success(res.status, "Success", { Details, Commission }));

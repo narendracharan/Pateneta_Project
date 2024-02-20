@@ -51,7 +51,7 @@ exports.approvedDoc = async (req, res) => {
       approvedUser.fullName_en || approvedUser.companyName_en,
       `<br.
       <br>
-      Your account has been partially approved by admin.<br>
+      Your account has been approved by admin.<br>
       <br>
       <b> We are delighted to welcome you to Patenta, a platform where each and every idea is valued.</b>
       <br>
@@ -183,7 +183,7 @@ exports.verifyDocument = async (req, res) => {
       approvedUser.fullName_en || approvedUser.companyName_en,
       `<br.
       <br>
-      Your KYC has been partially approved by admin.<br>
+      Your KYC has been approved by admin.<br>
       <br>
       <b> We are delighted to welcome you to Patenta, a platform where each and every idea is valued.</b>
       <br>

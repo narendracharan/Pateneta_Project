@@ -27,8 +27,8 @@ const schema = new mongoose.Schema({
   },
   paymentIntent: {
     type: String,
-    default: "COD",
-    enum: ["UPI", "Phone Pay", "COD"],
+    default: "CARD",
+   // enum: ["UPI", "Phone Pay", "COD"],
   },
   user_Id: {
     type: mongoose.Schema.Types.ObjectId,
