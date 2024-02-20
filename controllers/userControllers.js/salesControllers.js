@@ -83,7 +83,9 @@ exports.mySalesSearch = async (req, res) => {
           localField: "user_Id",
           foreignField: "_id",
           as: "users",
-          pipeline: [{ $project: { fullName_en: 1, companyName_ar: 1,createdAt:1 } }],
+          pipeline: [
+            { $project: { fullName_en: 1, companyName_ar: 1, createdAt: 1 } },
+          ],
         },
       },
       {
@@ -100,10 +102,10 @@ exports.mySalesSearch = async (req, res) => {
                 documentPic: 1,
                 pic: 1,
                 logoPic: 1,
-                documentName:1,
-                ratings:1,
-                purchased:1,
-                adminRequest:1
+                documentName: 1,
+                ratings: 1,
+                purchased: 1,
+                adminRequest: 1,
               },
             },
             {
@@ -112,7 +114,15 @@ exports.mySalesSearch = async (req, res) => {
                 localField: "user_Id",
                 foreignField: "_id",
                 as: "user_Id",
-                pipeline: [{ $project: { fullName_en: 1, companyName_ar: 1,createdAt:1  } }],
+                pipeline: [
+                  {
+                    $project: {
+                      fullName_en: 1,
+                      companyName_ar: 1,
+                      createdAt: 1,
+                    },
+                  },
+                ],
               },
             },
           ],
@@ -126,6 +136,92 @@ exports.mySalesSearch = async (req, res) => {
             {
               orderId: { $regex: search, $options: "i" },
             },
+            {
+              "products.title_en": { $regex: search, $options: "i" },
+            },
+            {
+              "users.fullName_en": { $regex: search, $options: "i" },
+            },
+            {
+              "users.companyName_ar": { $regex: search, $options: "i" },
+            },
+          ],
+        },
+      },
+    ]);
+    res.status(200).json(success(res.statusCode, "Success", { sales }));
+  } catch (err) {
+    res.status(400).json(error("Error in Search", res.status));
+  }
+};
+
+///myIdea Search Details Api
+exports.myIdeas = async (req, res) => {
+  try {
+    const search = req.body.search;
+    const sales = await orderSchema.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "users",
+          pipeline: [
+            { $project: { fullName_en: 1, companyName_ar: 1, createdAt: 1 } },
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "products.product_Id",
+          foreignField: "_id",
+          as: "products",
+        //   pipeline: [
+        //     // {
+        //     //   $project: {
+        //     //     title_en: 1,
+        //     //     user_Id: 1,
+        //     //     documentPic: 1,
+        //     //     pic: 1,
+        //     //     logoPic: 1,
+        //     //     documentName: 1,
+        //     //     ratings: 1,
+        //     //     purchased: 1,
+        //     //     adminRequest: 1,
+        //     //     user_Id: 1,
+        //     //   },
+        //     // },
+        //     {
+        //       $lookup: {
+        //         from: "users",
+        //         localField: "user_Id",
+        //         foreignField: "_id",
+        //         as: "user_Id",
+        //         pipeline: [
+        //           {
+        //             $project: {
+        //               fullName_en: 1,
+        //               companyName_ar: 1,
+        //               createdAt: 1,
+        //             },
+        //           },
+        //         ],
+        //       },
+        //     },
+        //   ],
+        },
+      },
+      { $unwind: "$users" },
+      { $unwind: "$products" },
+      {
+        $match: {
+          "products.user_Id": new mongoose.Types.ObjectId(req.params.id),
+        },
+      },
+      {
+        $match: {
+          $or: [
             {
               "products.title_en": { $regex: search, $options: "i" },
             },

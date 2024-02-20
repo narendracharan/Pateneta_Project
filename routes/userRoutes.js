@@ -68,6 +68,7 @@ const {
   userSalesDetails,
   salesSearch,
   mySalesSearch,
+  myIdeas,
 } = require("../controllers/userControllers.js/salesControllers");
 const {
   createReports,
@@ -147,7 +148,7 @@ router.post(
 router.post("/sub-category-ideas/:id", subCategoryIdeas);
 router.post("/search-my-idea/:id", tokenAuthorisationUser, searchMyIdea);
 router.post("/received-idea/:id", tokenAuthorisationUser, RecivedDocument);
-
+router.post("/my-ideas/:id",tokenAuthorisationUser,myIdeas)
 //----> user Order
 
 router.post("/user-order", tokenAuthorisationUser, createOrder);
