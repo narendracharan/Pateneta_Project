@@ -25,13 +25,13 @@ exports.adminRegister = async (req, res) => {
         .status(201)
         .json(error("Please enter password", res.statusCode));
     }
-    const checkName = await adminSchema.findOne({ userName: userName });
+    const checkName = await adminSchema.findOne({ userName: userName }).lean()
     if (checkName) {
       return res
         .status(201)
         .json(error("userName are already register", res.statusCode));
     }
-    const checkMail = await adminSchema.findOne({ userEmail: userEmail });
+    const checkMail = await adminSchema.findOne({ userEmail: userEmail }).lean()
     if (checkMail) {
       return res
         .status(201)
@@ -65,7 +65,7 @@ exports.loginAdmin = async (req, res) => {
     }
     const verifyUser = await adminSchema.findOne({
       userName: userName,
-    });
+    }).lean()
     verifyUser.token=fcmToken
     await verifyUser.save()
     if (!verifyUser) {
@@ -99,7 +99,7 @@ exports.loginAdmin = async (req, res) => {
 exports.updateToken = async (req, res) => {
   try {
     const token = req.body.token;
-    const admin = await adminSchema.findById(req.params.id);
+    const admin = await adminSchema.findById(req.params.id).lean()
     admin.token = token;
     await admin.save();
     res.status(200).json(success(res.statusCode, "Success", { admin }));
@@ -158,7 +158,7 @@ exports.resetPassword = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const { userName, userEmail, mobileNumber, profile } = req.body;
-    const admin = await adminSchema.findById(req.params.id);
+    const admin = await adminSchema.findById(req.params.id).lean()
     if (userName) {
       admin.userName = userName;
     }
@@ -239,7 +239,7 @@ exports.OtpVerify = async (req, res) => {
 //------> Admin Details Api
 exports.adminDetails = async (req, res) => {
   try {
-    const admim = await adminSchema.findById(req.params.id);
+    const admim = await adminSchema.findById(req.params.id).lean()
     if (!admim) {
       return res.status(201).json(error("No Admin Found", res.statusCode));
     }
@@ -255,7 +255,7 @@ exports.adminDetails = async (req, res) => {
 exports.addCommission = async (req, res) => {
   try {
     const commission = req.body.commission;
-    const admin = await adminSchema.findById(req.params.id);
+    const admin = await adminSchema.findById(req.params.id).lean()
     if (!commission) {
       return res
         .status(201)
@@ -275,7 +275,7 @@ exports.addCommission = async (req, res) => {
 exports.addBankDeatils = async (req, res) => {
   try {
     const { bankName, country, address, IBAN } = req.body;
-    const admin = await adminSchema.findById(req.params.id);
+    const admin = await adminSchema.findById(req.params.id).lean()
     if (!bankName) {
       res.status(201).json("Please Provide BankName", res.statusCode);
     }

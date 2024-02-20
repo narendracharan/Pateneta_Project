@@ -646,7 +646,7 @@ exports.userResetPassword = async (req, res) => {
 exports.userDetails = async (req, res) => {
   try {
     const id = req.params.id;
-    const userDetails = await userSchema.findById(id);
+    const userDetails = await userSchema.findById(id).lean()
     res.status(200).json(success(res.statusCode, "Success", { userDetails }));
   } catch (err) {
     res.status(400).json(error("Error in User Details", res.statusCode));
@@ -678,7 +678,7 @@ exports.addAccount = async (req, res) => {
         .status(201)
         .json(error("Please Provide Owner Name", res.statusCode));
     }
-    const user = await userSchema.findById(req.params.id);
+    const user = await userSchema.findById(req.params.id).lean()
     if (bankName) {
       user.bankName = bankName;
     }

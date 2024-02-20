@@ -4,7 +4,7 @@ const { error, success } = require("../../responseCode");
 
 exports.userNotificationlist = async (req, res) => {
   try {
-    const notification = await userNotify.find({});
+    const notification = await userNotify.find({}).lean()
     res.status(200).json(success(res.statusCode, "Success", { notification }));
   } catch (err) {
     res.status(400).json(error("Error", res.statusCode));
@@ -13,7 +13,7 @@ exports.userNotificationlist = async (req, res) => {
 
 exports.ideaNotificationlist = async (req, res) => {
   try {
-    const notification = await ideaNotify.find({});
+    const notification = await ideaNotify.find({}).lean()
     res.status(200).json(success(res.statusCode, "Success", { notification }));
   } catch (err) {
     res.status(400).json(error("Error", res.statusCode));

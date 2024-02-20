@@ -2,7 +2,6 @@ const categoryModels = require("../../models/adminModels/categoryModels");
 const subCategoryModel = require("../../models/adminModels/subCategoryModel"); //----> create category api
 const { error, success } = require("../../responseCode");
 
-
 ///----- Create Category Api
 exports.createCategory = async (req, res) => {
   try {
@@ -58,7 +57,7 @@ exports.createSubCategory = async (req, res) => {
 //-------> category list Api
 exports.categoryList = async (req, res) => {
   try {
-    const listData = await categoryModels.find({});
+    const listData = await categoryModels.find({}).lean();
     if (listData.length > 0) {
       res.status(200).json(success(res.statusCode, "Success", { listData }));
     } else {
@@ -72,7 +71,7 @@ exports.categoryList = async (req, res) => {
 //-------> SubCategory list Api
 exports.subCategoryList = async (req, res) => {
   try {
-    const listData = await subCategoryModel.find({});
+    const listData = await subCategoryModel.find({}).lean();
     if (listData.length > 0) {
       res.status(200).json(success(res.statusCode, "Success", { listData }));
     } else {
@@ -160,16 +159,12 @@ exports.categorySearch = async (req, res) => {
         .status(201)
         .json(error("Please provide search key", res.statusCode));
     }
-    const searchIdeas = await categoryModels.find({
-      $and: [{ categoryName: { $regex: new RegExp(search.trim(), "i") } }],
-    });
-    if (searchIdeas.length > 0) {
-      return res
-        .status(200)
-        .json(success(res.statusCode, "Success", { searchIdeas }));
-    } else {
-      res.status(201).json(error("category are not Found", res.statusCode));
-    }
+    const searchIdeas = await categoryModels
+      .find({
+        $and: [{ categoryName: { $regex: new RegExp(search.trim(), "i") } }],
+      })
+      .lean();
+    res.status(200).json(success(res.statusCode, "Success", { searchIdeas }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -184,16 +179,13 @@ exports.subCategorySearch = async (req, res) => {
         .status(201)
         .json(error("Please provide search key", res.statusCode));
     }
-    const searchIdeas = await subCategoryModel.find({
-      $and: [{ categoryName: { $regex: new RegExp(search.trim(), "i") } }],
-    });
-    if (searchIdeas.length > 0) {
-      return res
-        .status(200)
-        .json(success(res.statusCode, "Success", { searchIdeas }));
-    } else {
-      res.status(201).json(error("subCategory are not Found", res.statusCode));
-    }
+    const searchIdeas = await subCategoryModel
+      .find({
+        $and: [{ categoryName: { $regex: new RegExp(search.trim(), "i") } }],
+      })
+      .lean();
+
+    res.status(200).json(success(res.statusCode, "Success", { searchIdeas }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -208,7 +200,7 @@ exports.categoryStatus = async (req, res) => {
         .status(201)
         .json(error("Please Provide Status Key", res.statusCode));
     }
-    const categoryStatus = await categoryModels.findById(req.params.id);
+    const categoryStatus = await categoryModels.findById(req.params.id).lean()
     if (status) {
       categoryStatus.status = status;
     }
@@ -230,7 +222,7 @@ exports.subCategoryStatus = async (req, res) => {
         .status(201)
         .json(error("Please Provide Status Key", res.statusCode));
     }
-    const subCategoryStatus = await categoryModels.findById(req.params.id);
+    const subCategoryStatus = await categoryModels.findById(req.params.id).lean()
     if (status) {
       subCategoryStatus.status = status;
     }

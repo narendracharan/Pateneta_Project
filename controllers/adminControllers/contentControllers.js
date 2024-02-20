@@ -42,7 +42,7 @@ exports.createContent = async (req, res) => {
 //Content List Api
 exports.ContentList = async (req, res) => {
   try {
-    const listData = await contentSchema.find({});
+    const listData = await contentSchema.find({}).lean()
     res.status(200).json(success(res.statusCode, "Success", { listData }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -75,7 +75,7 @@ exports.reportsList = async (req, res) => {
         from ? { createdAt: { $gte: new Date(from) } } : {},
         to ? { createdAt: { $lte: new Date(`${to}T23:59:59`) } } : {},
       ],
-    });
+    }).lean()
     if (reportsList) {
       return res
         .status(201)
@@ -113,7 +113,7 @@ exports.reportsSearch = async (req, res) => {
 exports.reportsView = async (req, res) => {
   try {
     const id = req.params.id;
-    const reportsDetails = await userSupport.findById(id);
+    const reportsDetails = await userSupport.findById(id).lean()
     if (reportsDetails) {
       res
         .status(200)

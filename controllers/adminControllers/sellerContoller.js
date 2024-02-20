@@ -7,6 +7,7 @@ const jsonrawtoxlsx = require("jsonrawtoxlsx");
 const moment = require("moment");
 const withdrawalSchema = require("../../models/adminModels/withdrawal");
 const adminSchema = require("../../models/adminModels/userModels");
+const { default: mongoose } = require("mongoose");
 
 //Seller List Api
 exports.sellerList = async (req, res) => {
@@ -74,7 +75,7 @@ exports.editSeller = async (req, res) => {
 exports.sellerDetails = async (req, res) => {
   try {
     const id = req.params.id;
-    const details = await UserRegister.findById(id);
+    const details = await UserRegister.findById(id).lean();
     res.status(200).json(success(res.statusCode, "Success", { details }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -220,7 +221,7 @@ exports.buyerUserList = async (req, res) => {
 //Buyer Details Api
 exports.buyerDetails = async (req, res) => {
   try {
-    const buyerDetails = await UserRegister.findById(req.params.id);
+    const buyerDetails = await UserRegister.findById(req.params.id).lean();
 
     res.status(200).json(success(res.statusCode, "Success", { buyerDetails }));
   } catch (err) {
@@ -250,7 +251,7 @@ exports.buyerStatus = async (req, res) => {
         .status(201)
         .json(error("Please Provide Status Key", res.statusCode));
     }
-    const user = await UserRegister.findById(req.params.id);
+    const user = await UserRegister.findById(req.params.id).lean();
     if (status) {
       user.status = status;
     }
@@ -284,7 +285,8 @@ exports.salesUserDetails = async (req, res) => {
   try {
     const details = await orderSchema
       .findById(req.params.id)
-      .populate(["products.product_Id", "user_Id"]);
+      .populate(["products.product_Id", "user_Id"])
+      .lean();
     res.status(200).json(success(res.statusCode, "Success", { details }));
   } catch (err) {
     res.status(400).json(error("Error in Sales Details", res.statusCode));
@@ -405,7 +407,7 @@ exports.setCommission = async (req, res) => {
 exports.withdrawalApproved = async (req, res) => {
   try {
     var status = "APPROVED";
-    const user = await UserRegister.findById(req.params.id);
+    const user = await UserRegister.findById(req.params.id).lean();
     if (status) {
       user.withdrawalRequest = status;
     }
@@ -428,7 +430,8 @@ exports.withdrawalRequestList = async (req, res) => {
           to ? { createdAt: { $lte: new Date(`${to}T23:59:59`) } } : {},
         ],
       })
-      .populate(["product_Id", "user_Id"]);
+      .populate(["product_Id", "user_Id"])
+      .lean();
     res.status(200).json(success(res.status, "Success", { salesList }));
   } catch (err) {
     res.status(400).json(error("Error in Sales Listing", res.statusCode));
@@ -438,8 +441,8 @@ exports.withdrawalRequestList = async (req, res) => {
 exports.acceptWithdrawalRequest = async (req, res) => {
   try {
     const { adminId, withdrawal_Id } = req.body;
-    const withdrawal = await withdrawalSchema.findById(withdrawal_Id);
-    const product = await productModel.findById(withdrawal.product_Id);
+    const withdrawal = await withdrawalSchema.findById(withdrawal_Id).lean();
+    const product = await productModel.findById(withdrawal.product_Id).lean();
     withdrawal.status = "Approved";
     await withdrawal.save();
     product.adminRequest = true;
@@ -452,10 +455,65 @@ exports.acceptWithdrawalRequest = async (req, res) => {
 
 exports.withdrawalDetails = async (req, res) => {
   try {
-    const Details = await withdrawalSchema
-      .findById(req.params.id)
-      .populate(["product_Id", "user_Id"]);
-    res.status(200).json(success(res.status, "Success", { Details }));
+    const adminCommission = await adminSchema.findOne();
+    const Details = await withdrawalSchema.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "user_Id",
+          pipeline: [
+            { $project: { fullName_en: 1, companyName_ar: 1, createdAt: 1 } },
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "product_Id",
+          foreignField: "_id",
+          as: "product_Id",
+          pipeline: [
+            {
+              $project: {
+                title_en: 1,
+                user_Id: 1,
+                documentPic: 1,
+                pic: 1,
+                logoPic: 1,
+                documentName: 1,
+                ratings: 1,
+                purchased: 1,
+                adminRequest: 1,
+              },
+            },
+            {
+              $lookup: {
+                from: "users",
+                localField: "user_Id",
+                foreignField: "_id",
+                as: "user_Id",
+                pipeline: [
+                  {
+                    $project: {
+                      fullName_en: 1,
+                      companyName_ar: 1,
+                      createdAt: 1,
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    ]);
+    const commission = adminCommission.commission;
+    res
+      .status(200)
+      .json(success(res.status, "Success", { Details, commission }));
   } catch (err) {
     res.status(400).json(error("Error in Sales Listing", res.statusCode));
   }
