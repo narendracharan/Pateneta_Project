@@ -25,7 +25,7 @@ exports.userList = async (req, res) => {
 exports.userDetails = async (req, res) => {
   try {
     const id = req.params.id;
-    const userDetails = await userModels.findById(id).lean()
+    const userDetails = await userModels.findById(id)
     if (userDetails) {
       res.status(200).json(success(res.statusCode, "Success", { userDetails }));
     } else {
@@ -41,7 +41,7 @@ exports.approvedDoc = async (req, res) => {
   try {
     const id = req.params.id;
     const approved = "APPROVED";
-    const approvedUser = await userModels.findById(id).lean()
+    const approvedUser = await userModels.findById(id)
     approvedUser.userVerify = approved;
     await approvedUser.save();
 
@@ -79,7 +79,7 @@ exports.declineDoc = async (req, res) => {
     const id = req.params.id;
     const status = "REJECTED";
     const decline = req.body.decline;
-    const declinedUser = await userModels.findById(id).lean()
+    const declinedUser = await userModels.findById(id)
     declinedUser.userVerify = status;
     declinedUser.declineDoc = decline;
     await declinedUser.save();
@@ -172,7 +172,7 @@ exports.verifyDocument = async (req, res) => {
   try {
     const id = req.params.id;
     const approved = "APPROVED";
-    const approvedUser = await userModels.findById(id).lean()
+    const approvedUser = await userModels.findById(id)
     approvedUser.verifyDocument = approved;
     approvedUser.companyType = "Seller";
     await approvedUser.save();

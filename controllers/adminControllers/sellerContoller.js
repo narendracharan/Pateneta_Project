@@ -76,7 +76,7 @@ exports.editSeller = async (req, res) => {
 exports.sellerDetails = async (req, res) => {
   try {
     const id = req.params.id;
-    const details = await UserRegister.findById(id).lean();
+    const details = await UserRegister.findById(id)
     res.status(200).json(success(res.statusCode, "Success", { details }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -222,7 +222,7 @@ exports.buyerUserList = async (req, res) => {
 //Buyer Details Api
 exports.buyerDetails = async (req, res) => {
   try {
-    const buyerDetails = await UserRegister.findById(req.params.id).lean();
+    const buyerDetails = await UserRegister.findById(req.params.id)
 
     res.status(200).json(success(res.statusCode, "Success", { buyerDetails }));
   } catch (err) {
@@ -252,7 +252,7 @@ exports.buyerStatus = async (req, res) => {
         .status(201)
         .json(error("Please Provide Status Key", res.statusCode));
     }
-    const user = await UserRegister.findById(req.params.id).lean();
+    const user = await UserRegister.findById(req.params.id)
     if (status) {
       user.status = status;
     }
@@ -287,7 +287,6 @@ exports.salesUserDetails = async (req, res) => {
     const details = await orderSchema
       .findById(req.params.id)
       .populate(["products.product_Id", "user_Id"])
-      .lean();
     res.status(200).json(success(res.statusCode, "Success", { details }));
   } catch (err) {
     res.status(400).json(error("Error in Sales Details", res.statusCode));
@@ -408,7 +407,7 @@ exports.setCommission = async (req, res) => {
 exports.withdrawalApproved = async (req, res) => {
   try {
     var status = "APPROVED";
-    const user = await UserRegister.findById(req.params.id).lean();
+    const user = await UserRegister.findById(req.params.id)
     if (status) {
       user.withdrawalRequest = status;
     }
@@ -442,8 +441,8 @@ exports.withdrawalRequestList = async (req, res) => {
 exports.acceptWithdrawalRequest = async (req, res) => {
   try {
     const { adminId, withdrawal_Id } = req.body;
-    const withdrawal = await withdrawalSchema.findById(withdrawal_Id).lean();
-    const product = await productModel.findById(withdrawal.product_Id).lean();
+    const withdrawal = await withdrawalSchema.findById(withdrawal_Id)
+    const product = await productModel.findById(withdrawal.product_Id)
     withdrawal.status = "Approved";
     await withdrawal.save();
     product.adminRequest = true;

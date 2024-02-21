@@ -113,7 +113,7 @@ exports.reportsSearch = async (req, res) => {
 exports.reportsView = async (req, res) => {
   try {
     const id = req.params.id;
-    const reportsDetails = await userSupport.findById(id).lean()
+    const reportsDetails = await userSupport.findById(id)
     if (reportsDetails) {
       res
         .status(200)

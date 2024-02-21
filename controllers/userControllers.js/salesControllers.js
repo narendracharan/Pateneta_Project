@@ -19,7 +19,7 @@ exports.userSalesDetails = async (req, res) => {
   try {
     const salesDeatils = await orderSchema
       .findById(req.params.id)
-      .populate(["products.product_Id", "user_Id"]).lean()
+      .populate(["products.product_Id", "user_Id"])
     res.status(200).json(success(res.statusCode, "Success", { salesDeatils }));
   } catch (err) {
     res.status(400).json(error("Error in SalesDetails", re.statusCode));

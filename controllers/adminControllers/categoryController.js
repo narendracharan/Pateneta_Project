@@ -200,7 +200,7 @@ exports.categoryStatus = async (req, res) => {
         .status(201)
         .json(error("Please Provide Status Key", res.statusCode));
     }
-    const categoryStatus = await categoryModels.findById(req.params.id).lean()
+    const categoryStatus = await categoryModels.findById(req.params.id)
     if (status) {
       categoryStatus.status = status;
     }
@@ -222,7 +222,7 @@ exports.subCategoryStatus = async (req, res) => {
         .status(201)
         .json(error("Please Provide Status Key", res.statusCode));
     }
-    const subCategoryStatus = await categoryModels.findById(req.params.id).lean()
+    const subCategoryStatus = await categoryModels.findById(req.params.id)
     if (status) {
       subCategoryStatus.status = status;
     }

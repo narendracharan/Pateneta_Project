@@ -96,7 +96,7 @@ exports.viewIdeaRequest = async (req, res) => {
     const id = req.params.id;
     const detailIdea = await ideaRequestSchema
       .findById(id)
-      .populate(["user_Id", "category_Id", "subCategory_Id"]).lean()
+      .populate(["user_Id", "category_Id", "subCategory_Id"])
     res.status(200).json(success(res.statusCode, "Success", { detailIdea }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -162,7 +162,7 @@ exports.updateStatus = async (req, res) => {
     if (!status) {
       res.status(200).json(error("Please provide status", res.statusCode));
     }
-    const updateStatus = await ideaRequestSchema.findById(id).lean()
+    const updateStatus = await ideaRequestSchema.findById(id)
     updateStatus.status = status;
     if (updateStatus) {
       res

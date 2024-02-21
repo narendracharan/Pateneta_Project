@@ -26,7 +26,7 @@ exports.createOrder = async (req, res) => {
       bids_Id,
       tran_ref,
     } = req.body;
-    const product = await productModel.findOne({ _id: product_Id }).lean()
+    const product = await productModel.findOne({ _id: product_Id })
     new notificationSchema({
       user_Id: product.user_Id,
       title: "Your Idea Has Been PURCHASED",
@@ -85,7 +85,7 @@ exports.orderDetails = async (req, res) => {
   try {
     const orderDetails = await orderSchema
       .findById(req.params.id)
-      .populate("user_Id").lean()
+      .populate("user_Id")
     res.status(200).json(success(res.statusCode, "Success", { orderDetails }));
   } catch (err) {
     res.status(400).json(error("Error in Order Details", res.statusCode));
@@ -249,7 +249,7 @@ exports.withdrawalRequest = async (req, res) => {
         .status(200)
         .json(error("Please Provide user_Id", res.statusCode));
     }
-    const product = await productModel.findById(product_Id).lean()
+    const product = await productModel.findById(product_Id)
     product.withdrawalRequest = true;
     await product.save();
     await withdrawalSchema.create({
@@ -420,7 +420,7 @@ exports.myWithdrawalRequestList = async (req, res) => {
 
 exports.withdrawalRequestDetails = async (req, res) => {
   try {
-    const admin = await Admin.findOne().lean()
+    const admin = await Admin.findOne()
     const Details = await withdrawalSchema
       .findById(req.params.id)
       .populate(["product_Id", "user_Id"]);
