@@ -6,13 +6,13 @@ const { error, success } = require("../../responseCode");
 exports.createCategory = async (req, res) => {
   try {
     const { categoryName, user_Id } = req.body;
-
-    
     if (!categoryName) {
       return res
         .status(201)
         .json(error("plz provide categoryName", res.statusCode));
     }
+
+    
     if (!user_Id) {
       return res.status(201).json(error("plz provide user_Id", res.statusCode));
     }
