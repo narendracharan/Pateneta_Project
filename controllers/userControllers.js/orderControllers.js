@@ -26,7 +26,7 @@ exports.createOrder = async (req, res) => {
       bids_Id,
       tran_ref,
     } = req.body;
-    const product = await productModel.findOne({ _id: product_Id })
+    const product = await productModel.findOne({ _id: product_Id });
     new notificationSchema({
       user_Id: product.user_Id,
       title: "Your Idea Has Been PURCHASED",
@@ -85,7 +85,7 @@ exports.orderDetails = async (req, res) => {
   try {
     const orderDetails = await orderSchema
       .findById(req.params.id)
-      .populate("user_Id")
+      .populate("user_Id");
     res.status(200).json(success(res.statusCode, "Success", { orderDetails }));
   } catch (err) {
     res.status(400).json(error("Error in Order Details", res.statusCode));
@@ -190,7 +190,8 @@ exports.myOrder = async (req, res) => {
   try {
     const orderDetails = await orderSchema
       .find({ user_Id: req.params.id })
-      .populate(["user_Id", "products.product_Id"]).lean()
+      .populate(["user_Id", "products.product_Id"])
+      .lean();
     res.status(200).json(success(res.statusCode, "Success", { orderDetails }));
   } catch (err) {
     res.status(400).json(error("Error in Order Details", res.statusCode));
@@ -210,7 +211,7 @@ exports.addRatings = async (req, res) => {
         .status(201)
         .json(error("Please Provide ratingby", res.statusCode));
     }
-    const ideas = await productModel.findById(idea_Id).lean()
+    const ideas = await productModel.findById(idea_Id).lean();
     let alreadyRated = ideas.ratings.find((user_Id) => user_Id.ratingby);
     if (alreadyRated) {
       const updateRating = await productModel.updateOne(
@@ -249,13 +250,17 @@ exports.withdrawalRequest = async (req, res) => {
         .status(200)
         .json(error("Please Provide user_Id", res.statusCode));
     }
-    const product = await productModel.findById(product_Id)
+    const product = await productModel.findById(product_Id);
     product.withdrawalRequest = true;
     await product.save();
     await withdrawalSchema.create({
       product_Id: product_Id,
       user_Id: user_Id,
       Price: Price,
+    });
+    await notificationSchema.create({
+      title: "Your Withdrawal Request Has Been Submited on the Platform 🎉🎉",
+      user_Id: user_Id,
     });
     res
       .status(201)
@@ -420,7 +425,7 @@ exports.myWithdrawalRequestList = async (req, res) => {
 
 exports.withdrawalRequestDetails = async (req, res) => {
   try {
-    const admin = await Admin.findOne()
+    const admin = await Admin.findOne();
     const Details = await withdrawalSchema
       .findById(req.params.id)
       .populate(["product_Id", "user_Id"]);
