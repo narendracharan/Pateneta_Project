@@ -296,13 +296,15 @@ exports.userTotalEarning = async (req, res) => {
       totalEarning = totalAmount - adminFee;
     }
 
-    const earningWeek = await withdrawalSchema.aggregate([
+    const earningDay = await withdrawalSchema.aggregate([
       {
         $match: {
           user_Id: new mongoose.Types.ObjectId(req.params.id),
           status: "Approved",
-          createdAt: { $gte: new Date(moment(new Date()).startOf("week")) },
-          createdAt: { $lte: new Date(moment(new Date()).endOf("week")) },
+          createdAt: {
+            $gte: new Date(moment(new Date()).startOf("day")),
+            $lte: new Date(moment(new Date()).endOf("day")),
+          },
         },
       },
       {
@@ -314,8 +316,8 @@ exports.userTotalEarning = async (req, res) => {
     ]);
     let totalMonthEarning = 0;
 
-    if (earningWeek.length > 0) {
-      const totalAmount = earningWeek[0].totalAmount;
+    if (earningDay.length > 0) {
+      const totalAmount = earningDay[0].totalAmount;
       const adminFee = totalAmount * (admin.commission / 100);
       totalMonthEarning = totalAmount - adminFee;
     }

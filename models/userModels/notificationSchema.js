@@ -8,6 +8,10 @@ const notificationSchema = new mongoose.Schema({
   title: {
     type: String,
   },
+  url:{
+    type:String,
+
+  },
   isRead: {
     type: Boolean,
     default: false,

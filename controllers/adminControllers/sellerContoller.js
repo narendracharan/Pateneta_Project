@@ -284,9 +284,71 @@ exports.salesUserList = async (req, res) => {
 //Sales User Details Api
 exports.salesUserDetails = async (req, res) => {
   try {
-    const details = await orderSchema
-      .findById(req.params.id)
-      .populate(["products.product_Id", "user_Id"])
+    const details = await orderSchema.aggregate([
+      {
+        $match:{
+          _id:new mongoose.Types.ObjectId(req.params.id)
+        }
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "user_Id",
+          pipeline: [
+            {
+              $project: {
+                fullName_en: 1,
+                companyName_ar: 1,
+                createdAt: 1,
+              },
+            },
+          ],
+
+        },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "products.product_Id",
+          foreignField: "_id",
+          as: "products",
+          pipeline: [
+            // {
+            //   $project: {
+            //     title_en: 1,
+            //     user_Id: 1,
+            //     documentPic: 1,
+            //     pic: 1,
+            //     logoPic: 1,
+            //     documentName: 1,
+            //     ratings: 1,
+            //     purchased: 1,
+            //     adminRequest: 1,
+            //   },
+            // },
+            {
+              $lookup: {
+                from: "users",
+                localField: "user_Id",
+                foreignField: "_id",
+                as: "user_Id",
+                pipeline: [
+                  {
+                    $project: {
+                      fullName_en: 1,
+                      companyName_ar: 1,
+                      createdAt: 1,
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    ])
     res.status(200).json(success(res.statusCode, "Success", { details }));
   } catch (err) {
     res.status(400).json(error("Error in Sales Details", res.statusCode));
