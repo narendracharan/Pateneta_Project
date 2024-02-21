@@ -516,7 +516,7 @@ exports.withdrawalDetails = async (req, res) => {
         },
       },
     ]);
-    const commission = ideasPrice.Price*(admin.commission / 100)
+    const commission = ideasPrice.Price*(adminCommission.commission/ 100)
     res
       .status(200)
       .json(success(res.status, "Success", { Details, commission }));
