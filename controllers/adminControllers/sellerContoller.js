@@ -8,6 +8,7 @@ const moment = require("moment");
 const withdrawalSchema = require("../../models/adminModels/withdrawal");
 const adminSchema = require("../../models/adminModels/userModels");
 const { default: mongoose } = require("mongoose");
+const notification=require("../../models/userModels/notificationSchema")
 
 //Seller List Api
 exports.sellerList = async (req, res) => {
@@ -447,6 +448,10 @@ exports.acceptWithdrawalRequest = async (req, res) => {
     await withdrawal.save();
     product.adminRequest = true;
     product.save();
+    await notification.create({
+      title:"Your Withdrawal Request Has Been Approved By Admin",
+      user_Id:withdrawal.user_Id
+    })
     res.status(200).json(success("Approved Request", {}, res.statusCode));
   } catch (err) {
     res.status(400).json(error("Error", res.statusCode));
@@ -456,6 +461,7 @@ exports.acceptWithdrawalRequest = async (req, res) => {
 exports.withdrawalDetails = async (req, res) => {
   try {
     const adminCommission = await adminSchema.findOne();
+    const ideasPrice=await withdrawalSchema.findById(req.params.id)
     const Details = await withdrawalSchema.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } },
       {
@@ -510,7 +516,7 @@ exports.withdrawalDetails = async (req, res) => {
         },
       },
     ]);
-    const commission = adminCommission.commission;
+    const commission = ideasPrice.Price*(admin.commission / 100)
     res
       .status(200)
       .json(success(res.status, "Success", { Details, commission }));

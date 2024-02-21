@@ -65,7 +65,7 @@ exports.loginAdmin = async (req, res) => {
     }
     const verifyUser = await adminSchema.findOne({
       userName: userName,
-    }).lean()
+    })
     verifyUser.token=fcmToken
     await verifyUser.save()
     if (!verifyUser) {

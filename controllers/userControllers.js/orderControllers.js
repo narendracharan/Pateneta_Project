@@ -424,7 +424,7 @@ exports.withdrawalRequestDetails = async (req, res) => {
     const Details = await withdrawalSchema
       .findById(req.params.id)
       .populate(["product_Id", "user_Id"]);
-    let Commission = Details.Price * (1 - admin.commission / 100);
+    let Commission = Details.Price * (admin.commission / 100);
     //let netAmount = Details.Price - Commission;
     res
       .status(200)

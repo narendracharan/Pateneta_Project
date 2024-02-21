@@ -31,9 +31,9 @@ exports.createIdea = async (req, res) => {
       urlFile,
       present,
     } = req.body;
-    const admin = await adminSchema.findOne().lean()
+    const admin = await adminSchema.findOne().lean();
     ////const userVerify = await userSchema.findOne({ _id: user_Id });
-    const idea = await productSchema.findOne({ title_en: title_en }).lean()
+    const idea = await productSchema.findOne({ title_en: title_en }).lean();
     if (idea) {
       return res
         .status(201)
@@ -79,6 +79,10 @@ exports.createIdea = async (req, res) => {
     const saveIdea = await newIdeas.save();
     await ideaNotification.create({
       title: "New idea has been added on the Platform",
+    });
+    await notification.create({
+      title: "Your idea has been added on the Platform",
+      user_Id: user_Id,
     });
     await sendMail(
       admin.userEmail,
@@ -127,9 +131,9 @@ exports.createAuctionIdea = async (req, res) => {
       urlFile,
       present,
     } = req.body;
-    const admin = await adminSchema.findOne().lean()
+    const admin = await adminSchema.findOne().lean();
     const userVerify = await userSchema.findOne({ _id: user_Id });
-    const idea = await productSchema.findOne({ title_en: title_en }).lean()
+    const idea = await productSchema.findOne({ title_en: title_en }).lean();
     if (idea) {
       return res
         .status(201)
@@ -175,6 +179,10 @@ exports.createAuctionIdea = async (req, res) => {
     await ideaNotification.create({
       title: "New idea has been added on the Platform",
     });
+    await notification.create({
+      title: "Your idea has been added on the Platform",
+      user_Id: user_Id,
+    });
     await sendMail(
       admin.userEmail,
       `New Idea`,
@@ -214,7 +222,8 @@ exports.bussinessIdeaDetails = async (req, res) => {
         "buyer_Id",
         "category_Id",
         "subCategory_Id",
-      ]).lean()
+      ])
+      .lean();
     res.status(200).json(success(res.statusCode, "Success", { detailsIdea }));
   } catch (err) {
     res
@@ -222,8 +231,6 @@ exports.bussinessIdeaDetails = async (req, res) => {
       .json(error("Error in Bussiness Idea Details", res.statusCode));
   }
 };
-
-
 
 //----> update bussiness idea
 
@@ -242,7 +249,7 @@ exports.updateBussinessIdea = async (req, res) => {
       Price,
       baseFare,
     } = req.body;
-    const product = await productSchema.findById(id).lean()
+    const product = await productSchema.findById(id).lean();
     if (title_en) {
       product.title_en = title_en;
     }
@@ -437,7 +444,7 @@ exports.addBids = async (req, res) => {
     if (!user_Id) {
       res.status(201).json(error("Please Provide User_Id", res.statusCode));
     }
-    const product = await productSchema.findById({ _id: id }).lean()
+    const product = await productSchema.findById({ _id: id }).lean();
     if (product.baseBid.length) {
       if (product.baseBid[0].Price > Price) {
         return res
@@ -450,7 +457,7 @@ exports.addBids = async (req, res) => {
       user_Id: user_Id,
       createdAt: Date.now(),
     });
-    const user = await userSchema.findById(user_Id).lean()
+    const user = await userSchema.findById(user_Id).lean();
     const newProduct = await product.save();
     if (user.fullName_en) {
       await notification.create({
@@ -516,7 +523,8 @@ exports.myBussinessIdea = async (req, res) => {
     const id = req.params.id;
     let myIdeas = await productSchema
       .find({ user_Id: id })
-      .populate(["user_Id", "category_Id", "subCategory_Id"]).lean()
+      .populate(["user_Id", "category_Id", "subCategory_Id"])
+      .lean();
     res.status(200).json(success(res.statusCode, "Success", { myIdeas }));
   } catch (err) {
     res
@@ -529,7 +537,7 @@ exports.myBussinessIdea = async (req, res) => {
 
 exports.bidsView = async (req, res) => {
   try {
-    const bidsView = await productModel.findById(req.params.id).lean()
+    const bidsView = await productModel.findById(req.params.id).lean();
     res.status(200).json(success(res.statusCode, "Success", { bidsView }));
   } catch (err) {
     res.status(400).json(error("Error in bids View", res.statusCode));
@@ -540,7 +548,7 @@ exports.bidsView = async (req, res) => {
 
 exports.CategoryListing = async (req, res) => {
   try {
-    const categoryList = await categoryModels.find({}).lean()
+    const categoryList = await categoryModels.find({}).lean();
     res.status(200).json(success(res.statusCode, "Success", { categoryList }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -552,7 +560,8 @@ exports.subCategoryListing = async (req, res) => {
     const id = req.params.id;
     const categoryList = await subCategoryModel
       .find({ category_Id: id })
-      .populate("category_Id").lean()
+      .populate("category_Id")
+      .lean();
     res.status(200).json(success(res.statusCode, "Success", { categoryList }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -613,7 +622,8 @@ exports.recommandedProduct = async (req, res) => {
     const id = req.params.id;
     const products = await productModel
       .find({ category_Id: id })
-      .populate("user_Id").lean()
+      .populate("user_Id")
+      .lean();
     const product = products.filter((x) => x.verify == "APPROVED");
     if (products.length > 0) {
       res.status(200).json(success(res.statusCode, "Success", { product }));
@@ -631,7 +641,8 @@ exports.subCategoryIdeas = async (req, res) => {
     const id = req.params.id;
     const ideas = await productModel
       .find({ subCategory_Id: id })
-      .populate("user_Id").lean()
+      .populate("user_Id")
+      .lean();
     const product = ideas.filter((x) => x.verify == "APPROVED");
     res.status(200).json(success(res.statusCode, "Success", { product }));
   } catch (err) {
@@ -646,7 +657,8 @@ exports.acceptBids = async (req, res) => {
     const { bids_Id, aceptbid } = req.body;
     const ideas = await productModel
       .findById(req.params.id)
-      .populate("baseBid.user_Id").lean()
+      .populate("baseBid.user_Id")
+      .lean();
     for (let i = 0; i < ideas.baseBid.length; i++) {
       ideas.baseBid[i].aceptbid = aceptbid;
     }
@@ -700,7 +712,8 @@ exports.RejectBids = async (req, res) => {
     const { bids_Id, aceptbid } = req.body;
     const ideas = await productModel
       .findById(req.params.id)
-      .populate("baseBid.user_Id").lean()
+      .populate("baseBid.user_Id")
+      .lean();
     for (let i = 0; i < ideas.baseBid.length; i++) {
       ideas.baseBid[i].aceptbid = aceptbid;
     }
@@ -833,7 +846,7 @@ exports.searchBids = async (req, res) => {
 exports.RecivedDocument = async (req, res) => {
   try {
     const type = req.body.type;
-    const product = await productSchema.findById(req.params.id).lean()
+    const product = await productSchema.findById(req.params.id).lean();
 
     if (type) {
       product.logoPic.typelogo = type;
@@ -844,9 +857,9 @@ exports.RecivedDocument = async (req, res) => {
     if (type) {
       product.documentPic.typedocument = type;
     }
-    product.purchased="Recieved"
+    product.purchased = "Recieved";
     await product.save();
-   
+
     res
       .status(200)
       .json(success(res.statusCode, "Success Received", { product }));
