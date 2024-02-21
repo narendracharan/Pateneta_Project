@@ -32,7 +32,7 @@ exports.createIdea = async (req, res) => {
       present,
     } = req.body;
     const admin = await adminSchema.findOne();
-    ////const userVerify = await userSchema.findOne({ _id: user_Id });
+   
     const idea = await productSchema.findOne({ title_en: title_en });
     if (idea) {
       return res
@@ -83,6 +83,7 @@ exports.createIdea = async (req, res) => {
     await notification.create({
       title: "Your idea has been added on the Platform",
       user_Id: user_Id,
+      url: "",
     });
     await sendMail(
       admin.userEmail,
@@ -182,6 +183,7 @@ exports.createAuctionIdea = async (req, res) => {
     await notification.create({
       title: "Your idea has been added on the Platform",
       user_Id: user_Id,
+      url: "",
     });
     await sendMail(
       admin.userEmail,
@@ -416,22 +418,11 @@ exports.searchBussinessIdea = async (req, res) => {
         },
       },
     ]);
-    //find({
-    //   $and: [
-    //     { title_en: { $regex: new RegExp(search.trim(), "i") } },
-    //     { description_en: { $regex: new RegExp(search.trim(), "i") } },
-    //     { category_en: { $regex: new RegExp(search.trim(), "i") } },
-    //     { subCategory_en: { $regex: new RegExp(search.trim(), "i") } },
-    //     { briefDescription_en: { $regex: new RegExp(search.trim(), "i") } },
-    //   ],
-    // });
-    if (searchIdeas.length > 0) {
-      return res
+
+     res
         .status(200)
         .json(success(res.statusCode, "Success", { searchIdeas }));
-    } else {
-      res.status(201).json(error("Ideas are not Found", res.statusCode));
-    }
+    
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Error In Searching", res.statusCode));
@@ -468,12 +459,14 @@ exports.addBids = async (req, res) => {
       await notification.create({
         title: `${user.fullName_en} Bids You $${Price} 💰🔨 for ${product.title_en}.`,
         user_Id: product.user_Id,
+        url: "",
       });
     }
     if (user.companyName_en) {
       await notification.create({
         title: `${user.companyName_en} Bids You $${Price} 💰🔨 for ${product.title_en}.`,
         user_Id: product.user_Id,
+        url: "",
       });
     }
 
@@ -585,13 +578,11 @@ exports.lowtoHighPrice = async (req, res) => {
         },
       },
     ]);
-    if (productFilter.length > 0) {
+   
       res
         .status(200)
         .json(success(res.statusCode, "Success", { productFilter }));
-    } else {
-      res.status(201).json(error("NO Data Found", res.statusCode));
-    }
+    
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -609,13 +600,11 @@ exports.highToLowPrice = async (req, res) => {
         },
       },
     ]);
-    if (productFilter.length > 0) {
+   
       res
         .status(200)
         .json(success(res.statusCode, "Success", { productFilter }));
-    } else {
-      res.status(201).json(error("No Data Found", res.statusCode));
-    }
+   
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -672,6 +661,7 @@ exports.acceptBids = async (req, res) => {
       await notification.create({
         title: "Your BIds Amount has been Accepted on the Platform 🎉🎉",
         user_Id: bids[0].user_Id,
+        url: "",
       });
       if (bids[0].user_Id.fullName_en) {
         await sendMail(
@@ -726,6 +716,7 @@ exports.RejectBids = async (req, res) => {
       await notification.create({
         title: "Your BIds Amount has been Decline on the Platform ",
         user_Id: bids[0].user_Id,
+        url: "",
       });
       if (bids[0].user_Id.fullName_en) {
         await sendMail(
@@ -851,7 +842,6 @@ exports.RecivedDocument = async (req, res) => {
   try {
     const type = req.body.type;
     const product = await productSchema.findById(req.params.id);
-
     if (type) {
       product.logoPic.typelogo = type;
     }

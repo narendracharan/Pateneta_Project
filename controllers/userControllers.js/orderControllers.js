@@ -30,6 +30,7 @@ exports.createOrder = async (req, res) => {
     new notificationSchema({
       user_Id: product.user_Id,
       title: "Your Idea Has Been PURCHASED",
+      url: "",
     }).save();
     const status = "PURCHASED";
     product.buyStatus = status;
@@ -261,6 +262,7 @@ exports.withdrawalRequest = async (req, res) => {
     await notificationSchema.create({
       title: "Your Withdrawal Request Has Been Submited on the Platform 🎉🎉",
       user_Id: user_Id,
+      url: "",
     });
     res
       .status(201)
@@ -431,8 +433,8 @@ exports.withdrawalRequestDetails = async (req, res) => {
     const Details = await withdrawalSchema
       .findById(req.params.id)
       .populate(["product_Id", "user_Id"]);
-    let Commission = Details.Price * (admin.commission / 100);
-    //let netAmount = Details.Price - Commission;
+    let balance = Details.Price * (admin.commission / 100);
+    let Commission = Details.Price - balance;
     res
       .status(200)
       .json(success(res.status, "Success", { Details, Commission }));

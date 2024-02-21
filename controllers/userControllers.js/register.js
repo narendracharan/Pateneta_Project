@@ -621,7 +621,6 @@ exports.userResetPassword = async (req, res) => {
     }
     if (newPassword == confirmPassword) {
       const match = await userSchema.findById(id);
-      console.log(match);
       if (!(await match.checkPassword(password, match.password))) {
         return res
           .status(201)

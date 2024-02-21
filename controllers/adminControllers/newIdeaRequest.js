@@ -32,7 +32,8 @@ exports.approvedIdea = async (req, res) => {
       .populate("user_Id");
     await notificationSchema.create({
       user_Id: appreovedIdea.user_Id,
-      title: "Your Idea has been approved by admin",
+      title: "Your Idea has been approved by admin 🎉🎉",
+      url:""
     });
 
     await sendMail(
@@ -83,6 +84,7 @@ exports.DeclineIdea = async (req, res) => {
     await notificationSchema.create({
       user_Id: declineData.user_Id,
       title: "Your Idea Has Been REJECTED",
+      url:""
     });
     res.status(200).json(success(res.statusCode, "Success", { declineData }));
   } catch (err) {

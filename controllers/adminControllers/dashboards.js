@@ -74,9 +74,7 @@ exports.homeDashboards = async (req, res) => {
       },
     ]);
     const totalWithdrawalRequest = await withdrawalSchema.find().count();
-    // const Commission = await admin.findOne();
-    // const totalCommission = Commission.commission;
-
+  
     const withdrawalAmount = await withdrawalSchema.aggregate([
       {
         $match: {

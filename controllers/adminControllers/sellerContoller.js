@@ -511,7 +511,8 @@ exports.acceptWithdrawalRequest = async (req, res) => {
     product.save();
     await notification.create({
       title:"Your Withdrawal Request Has Been Approved By Admin 🎉🎉",
-      user_Id:withdrawal.user_Id
+      user_Id:withdrawal.user_Id,
+      url:""
     })
     res.status(200).json(success("Approved Request", {}, res.statusCode));
   } catch (err) {
