@@ -448,7 +448,7 @@ exports.acceptWithdrawalRequest = async (req, res) => {
     product.adminRequest = true;
     product.save();
     await notification.create({
-      title:"Your Withdrawal Request Has Been Approved By Admin",
+      title:"Your Withdrawal Request Has Been Approved By Admin 🎉🎉",
       user_Id:withdrawal.user_Id
     })
     res.status(200).json(success("Approved Request", {}, res.statusCode));
@@ -494,23 +494,23 @@ exports.withdrawalDetails = async (req, res) => {
                 adminRequest: 1,
               },
             },
-            {
-              $lookup: {
-                from: "users",
-                localField: "user_Id",
-                foreignField: "_id",
-                as: "user_Id",
-                pipeline: [
-                  {
-                    $project: {
-                      fullName_en: 1,
-                      companyName_ar: 1,
-                      createdAt: 1,
-                    },
-                  },
-                ],
-              },
-            },
+            // {
+            //   $lookup: {
+            //     from: "users",
+            //     localField: "user_Id",
+            //     foreignField: "_id",
+            //     as: "user_Id",
+            //     pipeline: [
+            //       {
+            //         $project: {
+            //           fullName_en: 1,
+            //           companyName_ar: 1,
+            //           createdAt: 1,
+            //         },
+            //       },
+            //     ],
+            //   },
+            // },
           ],
         },
       },

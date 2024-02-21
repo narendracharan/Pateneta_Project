@@ -668,7 +668,7 @@ exports.acceptBids = async (req, res) => {
       bids[0].bidsVerify = approved;
       // bids[0].bids = bids;
       await notification.create({
-        title: "Your BIds Amount has been Accepted on the Platform",
+        title: "Your BIds Amount has been Accepted on the Platform 🎉🎉",
         user_Id: bids[0].user_Id,
       });
       if (bids[0].user_Id.fullName_en) {
@@ -721,6 +721,10 @@ exports.RejectBids = async (req, res) => {
     if (bids.length) {
       bids[0].bidsVerify = approved;
       bids[0].bidsReject = rejectReasons;
+      await notification.create({
+        title: "Your BIds Amount has been Decline on the Platform ",
+        user_Id: bids[0].user_Id,
+      });
       if (bids[0].user_Id.fullName_en) {
         await sendMail(
           bids[0].user_Id.Email,
