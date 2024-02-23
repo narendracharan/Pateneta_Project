@@ -262,7 +262,7 @@ exports.withdrawalRequest = async (req, res) => {
     await notificationSchema.create({
       title: "Your Withdrawal Request Has Been Submited on the Platform 🎉🎉",
       user_Id: user_Id,
-      url: "",
+      url: "https://patenta-sa.com/my-wallet",
     });
     res
       .status(201)

@@ -83,7 +83,7 @@ exports.createIdea = async (req, res) => {
     await notification.create({
       title: "Your idea has been added on the Platform",
       user_Id: user_Id,
-      url: "",
+      url: "https://patenta-sa.com/sales",
     });
     await sendMail(
       admin.userEmail,
@@ -183,7 +183,7 @@ exports.createAuctionIdea = async (req, res) => {
     await notification.create({
       title: "Your idea has been added on the Platform",
       user_Id: user_Id,
-      url: "",
+      url: "https://patenta-sa.com/sales",
     });
     await sendMail(
       admin.userEmail,
@@ -459,14 +459,14 @@ exports.addBids = async (req, res) => {
       await notification.create({
         title: `${user.fullName_en} Bids You $${Price} 💰🔨 for ${product.title_en}.`,
         user_Id: product.user_Id,
-        url: "",
+        url: "https://patenta-sa.com/sales",
       });
     }
     if (user.companyName_en) {
       await notification.create({
         title: `${user.companyName_en} Bids You $${Price} 💰🔨 for ${product.title_en}.`,
         user_Id: product.user_Id,
-        url: "",
+        url: "https://patenta-sa.com/sales",
       });
     }
 
@@ -661,7 +661,7 @@ exports.acceptBids = async (req, res) => {
       await notification.create({
         title: "Your BIds Amount has been Accepted on the Platform 🎉🎉",
         user_Id: bids[0].user_Id,
-        url: "",
+        url: "https://patenta-sa.com/mybid-history",
       });
       if (bids[0].user_Id.fullName_en) {
         await sendMail(
@@ -716,7 +716,7 @@ exports.RejectBids = async (req, res) => {
       await notification.create({
         title: "Your BIds Amount has been Decline on the Platform ",
         user_Id: bids[0].user_Id,
-        url: "",
+        url: "https://patenta-sa.com/mybid-history",
       });
       if (bids[0].user_Id.fullName_en) {
         await sendMail(

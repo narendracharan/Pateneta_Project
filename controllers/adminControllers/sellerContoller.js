@@ -512,7 +512,7 @@ exports.acceptWithdrawalRequest = async (req, res) => {
     await notification.create({
       title:"Your Withdrawal Request Has Been Approved By Admin 🎉🎉",
       user_Id:withdrawal.user_Id,
-      url:""
+      url:"https://patenta-sa.com/my-wallet"
     })
     res.status(200).json(success("Approved Request", {}, res.statusCode));
   } catch (err) {
