@@ -30,7 +30,7 @@ exports.createOrder = async (req, res) => {
     new notificationSchema({
       user_Id: product.user_Id,
       title: "Your Idea Has Been PURCHASED",
-      url: "",
+      url: "https://patenta-sa.com/sales",
     }).save();
     const status = "PURCHASED";
     product.buyStatus = status;

@@ -83,7 +83,7 @@ exports.createIdea = async (req, res) => {
     await notification.create({
       title: "Your idea has been added on the Platform",
       user_Id: user_Id,
-      url: "https://patenta-sa.com/sales",
+      url: "https://patenta-sa.com/businessidea",
     });
     await sendMail(
       admin.userEmail,
@@ -183,7 +183,7 @@ exports.createAuctionIdea = async (req, res) => {
     await notification.create({
       title: "Your idea has been added on the Platform",
       user_Id: user_Id,
-      url: "https://patenta-sa.com/sales",
+      url: "https://patenta-sa.com/businessidea",
     });
     await sendMail(
       admin.userEmail,
