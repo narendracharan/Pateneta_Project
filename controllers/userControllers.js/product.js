@@ -152,7 +152,7 @@ exports.createAuctionIdea = async (req, res) => {
       //   Price: Price,
       documentName: documentName,
       user_Id: user_Id,
-      baseFare: baseFare * (1 + admin.commission / 100),
+      baseFare: baseFare * (1 + admin.commission / 100) *(1 + present / 100),
       urlFile: urlFile,
       present: present,
       selectDocument: selectDocument,
@@ -459,14 +459,14 @@ exports.addBids = async (req, res) => {
       await notification.create({
         title: `${user.fullName_en} Bids You $${Price} 💰🔨 for ${product.title_en}.`,
         user_Id: product.user_Id,
-        url: "https://patenta-sa.com/sales",
+        url: "https://patenta-sa.com/businessidea",
       });
     }
     if (user.companyName_en) {
       await notification.create({
         title: `${user.companyName_en} Bids You $${Price} 💰🔨 for ${product.title_en}.`,
         user_Id: product.user_Id,
-        url: "https://patenta-sa.com/sales",
+        url: "https://patenta-sa.com/businessidea",
       });
     }
 
