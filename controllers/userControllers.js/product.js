@@ -152,7 +152,7 @@ exports.createAuctionIdea = async (req, res) => {
       //   Price: Price,
       documentName: documentName,
       user_Id: user_Id,
-      baseFare: baseFare * (1 + (admin.commission + present) / 100),
+      baseFare: baseFare * (1 + admin.commission / 100) *(1 + present / 100),
       urlFile: urlFile,
       present: present,
       selectDocument: selectDocument,
