@@ -212,7 +212,7 @@ exports.addRatings = async (req, res) => {
         .status(201)
         .json(error("Please Provide ratingby", res.statusCode));
     }
-    const ideas = await productModel.findById(idea_Id).lean();
+    const ideas = await productModel.findById(idea_Id);
     let alreadyRated = ideas.ratings.find((user_Id) => user_Id.ratingby);
     if (alreadyRated) {
       const updateRating = await productModel.updateOne(
@@ -233,6 +233,7 @@ exports.addRatings = async (req, res) => {
         .json(success(res.statusCode, "Rating Added Successfully", { ideas }));
     }
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("Error In Add Ratings", res.statusCode));
   }
 };

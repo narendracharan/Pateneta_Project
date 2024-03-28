@@ -1,10 +1,14 @@
 const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
-  subCategoryName: {
+ subCategoryName: {
     type: String,
     require: true,
-  },
+  }, 
+  subCategoryName_ar: {
+    type: String,
+    require: true,
+  }, 
   subCategoryPic: {
     type: String,
     require: true,

@@ -79,6 +79,7 @@ const {
   hyperPayStep2,
   orderPayment,
   validatePayments,
+  initiatePayout,
 } = require("../controllers/userControllers.js/payment");
 const {
   userList,
@@ -212,5 +213,6 @@ router.get("/user-offline/:id", tokenAuthorisationUser, userOffilne);
 router.post("/seen-message/:id", tokenAuthorisationUser, SeenMessage);
 router.post("/user-seen-msg", tokenAuthorisationUser, userSeenMsg);
 router.post("/validate", validatePayments);
+router.post("/payout-request",initiatePayout)
 
 module.exports = router;

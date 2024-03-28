@@ -16,23 +16,14 @@ const sendMail = async (
   //   console.log(user);
   const transporter = nodemailer.createTransport({
     service: "gmail",
-    // host: config.get("mailServerHost"),
-    // port: config.get("mailPort"),
-    //   secure: false,
-    //   console: true,
-    //   ignoreTLS: false,
-    //   requireTLS: false,
     auth: {
       user: "s04450647@gmail.com",
       pass: "rpdncvlikrlckuip",
     },
+    tls: {
+      rejectUnauthorized: false // This line trusts the self-signed certificate
+  }
   });
-  //   console.log(config.get("mailServerPassword"));
-  //   console.debug("From " + config.get("mailServerid"));
-  //   console.debug("To " + to);
-  //   console.debug("Subject " + subject);
-  //   console.debug("Body " + body);
-
   var mailOptions = {
     from: { name: "PATENTA", address: "s04450647@gmail.com" },
     to: to,

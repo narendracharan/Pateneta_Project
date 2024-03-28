@@ -5,6 +5,10 @@ const schema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  categoryName_ar: {
+    type: String,
+    require: true,
+  },
   category_Pic: {
     type: String,
     require: true,

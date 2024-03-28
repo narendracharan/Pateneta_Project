@@ -1,14 +1,98 @@
 // const https = require("https");
 // const queryString = require("querystring");
 const { success } = require("../../responseCode");
+const axios = require("axios");
 const { error } = require("console");
 const paytabs = require("paytabs_pt2");
 let profileID = "107560",
   serverKey = "S6JNHJKLL2-JHMT6L29NJ-JJMWHHZWJ6",
   region = "SAU";
 paytabs.setConfig(profileID, serverKey, region);
+const PAYTABS_API_URL = "https://secure.paytabs.com/payment/request";
 
+exports.initiatePayout = async (req, res) => {
+  try {
+    const {
+      name,
+      account,
+      bankName,
+      totalAmount,
+      bank_branch,
+      address,
+      mobileNumber,
+      sellerCommission,
+      adminCommission,
+      state,
+      city,
+      country,
+    } = req.body;
+    const headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer SJJNHJKLWM-JHZRDH2NJR-RR2WKL9B9N",
+    };
 
+    const response = await axios.post(
+      `${PAYTABS_API_URL}`,
+      {
+        profile_id: 107560,
+        tran_type: "sale",
+        tran_class: "ecom",
+        cart_id: "cart_11123",
+        cart_currency: "SAR",
+        cart_amount: 158.56,
+        paypage_lang: "en",
+        customer_details: {
+          name: "vijay",
+          email: "viay@domain.com",
+          phone: "0522222222",
+          street1: "address street",
+          city: "dubai",
+          state: "du",
+          country: "AE",
+        },
+        split_payout: [
+          {
+            entity_id: 1000,
+            entity_name: "Restaurant",
+            item_description: "Meal",
+            item_total: "133.56",
+            beneficiary: {
+              name: "ajay",
+              account_number: "39238765008",
+              country: "SA",
+              bank: "SBI",
+              bank_branch: "",
+              email: "email@domain.com",
+              mobile_number: "999000666",
+              address_1: "Riyadh",
+            },
+          },
+          {
+            entity_id: 1001,
+            entity_name: "Agency",
+            item_total: "15.00",
+            beneficiary: {
+              name: "rakesh",
+              account_number: "39238765008",
+              country: "SA",
+              bank: "SBI",
+              bank_branch: "",
+              email: "rakesh@gmail.com",
+              mobile_number: "999777666",
+              address_1: "Riyadh",
+              address_2: "",
+            },
+          },
+        ],
+      },
+      { headers: headers }
+    );
+    return response.data;
+  } catch (error) {
+    console.log("Error initiating payout:", error.response.data);
+    throw new Error("Failed to initiate payout");
+  }
+};
 
 ////---------> Paytabs Payment Api
 exports.orderPayment = async (request, respose) => {
@@ -108,31 +192,9 @@ exports.orderPayment = async (request, respose) => {
 };
 
 exports.validatePayments = (req, res) => {
-  var url="https://patenta-sa.com/payment-success"
-  res.redirect(url)
+  var url = "https://patenta-sa.com/payment-success";
+  res.redirect(url);
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // exports.payment = async (req, res) => {
 //   const path = "/v1/checkouts";
