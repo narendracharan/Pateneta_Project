@@ -485,6 +485,7 @@ exports.withdrawalApproved = async (req, res) => {
 exports.withdrawalRequestList = async (req, res) => {
   try {
     const { from, to } = req.body;
+    const adminCommission = await adminSchema.findOne().select("commission")
     const salesList = await withdrawalSchema
       .find({
         $and: [
@@ -494,7 +495,7 @@ exports.withdrawalRequestList = async (req, res) => {
       })
       .populate(["product_Id", "user_Id"])
       .lean();
-    res.status(200).json(success(res.status, "Success", { salesList }));
+    res.status(200).json(success(res.status, "Success", { salesList,adminCommission }));
   } catch (err) {
     res.status(400).json(error("Error in Sales Listing", res.statusCode));
   }
@@ -505,7 +506,7 @@ exports.acceptWithdrawalRequest = async (req, res) => {
     const { adminId, withdrawal_Id } = req.body;
     const withdrawal = await withdrawalSchema.findById(withdrawal_Id)
     const product = await productModel.findById(withdrawal.product_Id)
-    withdrawal.status = "Approved";
+    withdrawal.status = "PAY";
     await withdrawal.save();
     product.adminRequest = true;
     product.save();

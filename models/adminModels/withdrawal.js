@@ -14,7 +14,7 @@ const schema = new mongoose.Schema({
   status: {
     type: String,
     default: "Pending",
-    enum:["Pending","Approved"]
+    enum:["Pending","Approved","PAY"]
   },
   Price:{
     type:Number
