@@ -8,7 +8,7 @@ const moment = require("moment");
 const withdrawalSchema = require("../../models/adminModels/withdrawal");
 const adminSchema = require("../../models/adminModels/userModels");
 const { default: mongoose } = require("mongoose");
-const notification=require("../../models/userModels/notificationSchema")
+const notification = require("../../models/userModels/notificationSchema");
 
 //Seller List Api
 exports.sellerList = async (req, res) => {
@@ -76,7 +76,7 @@ exports.editSeller = async (req, res) => {
 exports.sellerDetails = async (req, res) => {
   try {
     const id = req.params.id;
-    const details = await UserRegister.findById(id)
+    const details = await UserRegister.findById(id);
     res.status(200).json(success(res.statusCode, "Success", { details }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -222,7 +222,7 @@ exports.buyerUserList = async (req, res) => {
 //Buyer Details Api
 exports.buyerDetails = async (req, res) => {
   try {
-    const buyerDetails = await UserRegister.findById(req.params.id)
+    const buyerDetails = await UserRegister.findById(req.params.id);
 
     res.status(200).json(success(res.statusCode, "Success", { buyerDetails }));
   } catch (err) {
@@ -252,7 +252,7 @@ exports.buyerStatus = async (req, res) => {
         .status(201)
         .json(error("Please Provide Status Key", res.statusCode));
     }
-    const user = await UserRegister.findById(req.params.id)
+    const user = await UserRegister.findById(req.params.id);
     if (status) {
       user.status = status;
     }
@@ -286,9 +286,9 @@ exports.salesUserDetails = async (req, res) => {
   try {
     const details = await orderSchema.aggregate([
       {
-        $match:{
-          _id:new mongoose.Types.ObjectId(req.params.id)
-        }
+        $match: {
+          _id: new mongoose.Types.ObjectId(req.params.id),
+        },
       },
       {
         $lookup: {
@@ -305,7 +305,6 @@ exports.salesUserDetails = async (req, res) => {
               },
             },
           ],
-
         },
       },
       {
@@ -348,7 +347,7 @@ exports.salesUserDetails = async (req, res) => {
           ],
         },
       },
-    ])
+    ]);
     res.status(200).json(success(res.statusCode, "Success", { details }));
   } catch (err) {
     res.status(400).json(error("Error in Sales Details", res.statusCode));
@@ -469,7 +468,7 @@ exports.setCommission = async (req, res) => {
 exports.withdrawalApproved = async (req, res) => {
   try {
     var status = "APPROVED";
-    const user = await UserRegister.findById(req.params.id)
+    const user = await UserRegister.findById(req.params.id);
     if (status) {
       user.withdrawalRequest = status;
     }
@@ -485,36 +484,101 @@ exports.withdrawalApproved = async (req, res) => {
 exports.withdrawalRequestList = async (req, res) => {
   try {
     const { from, to } = req.body;
-    const adminCommission = await adminSchema.findOne().select("commission")
-    const salesList = await withdrawalSchema
-      .find({
-        $and: [
-          from ? { createdAt: { $gte: new Date(from) } } : {},
-          to ? { createdAt: { $lte: new Date(`${to}T23:59:59`) } } : {},
-        ],
-      })
-      .populate(["product_Id", "user_Id"])
-      .lean();
-    res.status(200).json(success(res.status, "Success", { salesList,adminCommission }));
+    const adminCommission = await adminSchema.findOne().select("commission");
+    const salesList = await withdrawalSchema.aggregate([
+      {
+        $match: {
+          $and: [
+            from
+              ? {
+                  createdAt: {
+                    $gte: new Date(moment(new Date(from)).startOf("day")),
+                  },
+                }
+              : {},
+            to
+              ? {
+                  createdAt: {
+                    $lte: new Date(moment(new Date(to)).endOf("day")),
+                  },
+                }
+              : {},
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "users",
+        },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "product_Id",
+          foreignField: "_id",
+          as: "products",
+        },
+      },
+      { $unwind: "$users" },
+      { $unwind: "$products" },
+      {
+        $lookup: {
+          from: "orders",
+          localField: "products.product_Id",
+          foreignField: "product_Id",
+          as: "orders",
+        },
+      },
+      {
+        $unwind: {
+          path: "$orders",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $project: {
+          _id: 1, // Include specific fields for the final output
+          Price:1,
+          user: "$users",
+          // product: "$products",
+          order: "$orders",
+        },
+      },
+    ]);
+
+    res
+      .status(200)
+      .json(success(res.status, "Success", { salesList, adminCommission }));
   } catch (err) {
     res.status(400).json(error("Error in Sales Listing", res.statusCode));
   }
 };
 
+// .find({
+//   $and: [
+//     from ? { createdAt: { $gte: new Date(from) } } : {},
+//     to ? { createdAt: { $lte: new Date(`${to}T23:59:59`) } } : {},
+//   ],
+// })
+// .populate(["product_Id", "user_Id"])
+// .lean();
 exports.acceptWithdrawalRequest = async (req, res) => {
   try {
     const { adminId, withdrawal_Id } = req.body;
-    const withdrawal = await withdrawalSchema.findById(withdrawal_Id)
-    const product = await productModel.findById(withdrawal.product_Id)
+    const withdrawal = await withdrawalSchema.findById(withdrawal_Id);
+    const product = await productModel.findById(withdrawal.product_Id);
     withdrawal.status = "PAY";
     await withdrawal.save();
     product.adminRequest = true;
     product.save();
     await notification.create({
-      title:"Your Withdrawal Request Has Been Approved By Admin 🎉🎉",
-      user_Id:withdrawal.user_Id,
-      url:"https://patenta-sa.com/my-wallet"
-    })
+      title: "Your Withdrawal Request Has Been Approved By Admin 🎉🎉",
+      user_Id: withdrawal.user_Id,
+      url: "https://patenta-sa.com/my-wallet",
+    });
     res.status(200).json(success("Approved Request", {}, res.statusCode));
   } catch (err) {
     res.status(400).json(error("Error", res.statusCode));
@@ -524,7 +588,7 @@ exports.acceptWithdrawalRequest = async (req, res) => {
 exports.withdrawalDetails = async (req, res) => {
   try {
     const adminCommission = await adminSchema.findOne();
-    const ideasPrice=await withdrawalSchema.findById(req.params.id)
+    const ideasPrice = await withdrawalSchema.findById(req.params.id);
     const Details = await withdrawalSchema.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } },
       {
@@ -579,7 +643,7 @@ exports.withdrawalDetails = async (req, res) => {
         },
       },
     ]);
-    const commission = ideasPrice.Price*(adminCommission.commission/ 100)
+    const commission = ideasPrice.Price * (adminCommission.commission / 100);
     res
       .status(200)
       .json(success(res.status, "Success", { Details, commission }));

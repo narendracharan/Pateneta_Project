@@ -179,7 +179,7 @@ router.post("/buyer-change-status/:id", adminAuthorisationUser, buyerStatus);
 router.post("/buyer-details/:id", adminAuthorisationUser, buyerDetails);
 router.post("/home-dashboard", adminAuthorisationUser, homeDashboards);
 router.post("/set-commission", adminAuthorisationUser, setCommission);
-router.post("/withdrawal-list", adminAuthorisationUser, withdrawalRequestList);
+router.post("/withdrawal-list", withdrawalRequestList);
 router.post(
   "/accept-withdrawal",
   adminAuthorisationUser,
