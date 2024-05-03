@@ -169,6 +169,9 @@ const schema = new mongoose.Schema({
     type: Boolean,
     default:false
   },
+  tran_ref: {
+    type: String,
+  },
   adminRequest:{
     type: Boolean,
     default:false

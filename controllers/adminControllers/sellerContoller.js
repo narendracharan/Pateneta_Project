@@ -544,8 +544,8 @@ exports.withdrawalRequestList = async (req, res) => {
           Price:1,
           status:1,
           user: "$users",
-          // product: "$products",
-          order: "$orders",
+          product: "$products",
+          //order: "$orders",
         },
       },
     ]);
