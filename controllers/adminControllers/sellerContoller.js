@@ -542,6 +542,7 @@ exports.withdrawalRequestList = async (req, res) => {
         $project: {
           _id: 1, // Include specific fields for the final output
           Price:1,
+          status:1,
           user: "$users",
           // product: "$products",
           order: "$orders",
