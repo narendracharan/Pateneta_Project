@@ -493,7 +493,7 @@ exports.withdrawalRequestList = async (req, res) => {
         ],
       })
       .populate(["product_Id", "user_Id"])
-     .lean();
+     .lean().sort({createdAt:-1})
     res.status(200).json(success(res.status, "Success", { salesList,adminCommission }));
   } catch (err) {
     res.status(400).json(error("Error in Sales Listing", res.statusCode));
