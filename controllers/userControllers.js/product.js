@@ -28,6 +28,7 @@ exports.createIdea = async (req, res) => {
       selectDocument,
       user_Id,
       baseFare,
+      idea_Id,
       urlFile,
       present,
     } = req.body;
@@ -56,7 +57,7 @@ exports.createIdea = async (req, res) => {
       urlFile: urlFile,
       present: present,
       selectDocument: selectDocument,
-      idea_Id:"P00" +ideaCount
+      idea_Id:idea_Id
     });
     //newIdeas.urlFile.push(urlFile)
     if (req.files) {
@@ -132,6 +133,7 @@ exports.createAuctionIdea = async (req, res) => {
       baseFare,
       urlFile,
       present,
+      idea_Id
     } = req.body;
     const admin = await adminSchema.findOne();
     const userVerify = await userSchema.findOne({ _id: user_Id });
@@ -152,7 +154,7 @@ exports.createAuctionIdea = async (req, res) => {
       briefDescription_ar: briefDescription_ar,
       briefDescription_en: briefDescription_en,
       //   Price: Price,
-      idea_Id:"P00"+ideaCount,
+      idea_Id:idea_Id,
       documentName: documentName,
       user_Id: user_Id,
       baseFare: baseFare * (1 + admin.commission / 100) *(1 + present / 100),
