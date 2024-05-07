@@ -260,6 +260,7 @@ exports.updateBussinessIdea = async (req, res) => {
       briefDescription_ar,
       Price,
       baseFare,
+      idea_Id
     } = req.body;
     const product = await productSchema.findById(id);
     if (title_en) {
@@ -291,6 +292,9 @@ exports.updateBussinessIdea = async (req, res) => {
     }
     if (baseFare) {
       product.baseFare = baseFare;
+    }
+    if (idea_Id) {
+      product.idea_Id = idea_Id;
     }
     if (req.files) {
       for (let i = 0; i < req.files.length; i++) {
