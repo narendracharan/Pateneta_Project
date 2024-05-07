@@ -39,7 +39,7 @@ exports.createIdea = async (req, res) => {
         .status(201)
         .json(error("Title Name is already register", res.statusCode));
     }
-
+    const ideaCount = await productSchema.find().countDocuments()
     let newIdeas = new productSchema({
       title_en: title_en,
       title_ar: title_ar,
@@ -56,6 +56,7 @@ exports.createIdea = async (req, res) => {
       urlFile: urlFile,
       present: present,
       selectDocument: selectDocument,
+      idea_Id:"P00" +ideaCount
     });
     //newIdeas.urlFile.push(urlFile)
     if (req.files) {
@@ -140,6 +141,7 @@ exports.createAuctionIdea = async (req, res) => {
         .status(201)
         .json(error("Title Name is already register", res.statusCode));
     }
+    const ideaCount = await productSchema.find().countDocuments()
     let newIdeas = new productSchema({
       title_en: title_en,
       title_ar: title_ar,
@@ -150,6 +152,7 @@ exports.createAuctionIdea = async (req, res) => {
       briefDescription_ar: briefDescription_ar,
       briefDescription_en: briefDescription_en,
       //   Price: Price,
+      idea_Id:"P00"+ideaCount,
       documentName: documentName,
       user_Id: user_Id,
       baseFare: baseFare * (1 + admin.commission / 100) *(1 + present / 100),

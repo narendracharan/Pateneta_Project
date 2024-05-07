@@ -175,6 +175,10 @@ const schema = new mongoose.Schema({
   adminRequest:{
     type: Boolean,
     default:false
+  },
+  idea_Id:{
+    type: String,
+    default:"P00"
   }
 });
 schema.set("timestamps", true);

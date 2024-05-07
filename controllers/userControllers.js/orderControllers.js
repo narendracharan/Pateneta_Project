@@ -51,10 +51,10 @@ exports.createOrder = async (req, res) => {
         total: total,
         tran_ref: tran_ref,
       });
-      const updateTrasancation=await productModel.findById(product_Id)
-      updateTrasancation.tran_ref=tran_ref
+      const updateTrasancation = await productModel.findById(product_Id);
+      updateTrasancation.tran_ref = tran_ref;
       await newOrder.save();
-      await updateTrasancation.save()
+      await updateTrasancation.save();
       res.status(200).json(success(res.statusCode, "Success", { newOrder }));
     } else {
       const newOrder = new orderSchema({
@@ -72,9 +72,9 @@ exports.createOrder = async (req, res) => {
         total: total,
         tran_ref: tran_ref,
       });
-      const updateTrasancation=await productModel.findById(product_Id)
-      updateTrasancation.tran_ref=tran_ref
-      await updateTrasancation.save()
+      const updateTrasancation = await productModel.findById(product_Id);
+      updateTrasancation.tran_ref = tran_ref;
+      await updateTrasancation.save();
       await newOrder.save();
       res.status(200).json(success(res.statusCode, "Success", { newOrder }));
     }
@@ -287,7 +287,7 @@ exports.userTotalEarning = async (req, res) => {
       {
         $match: {
           user_Id: new mongoose.Types.ObjectId(req.params.id),
-          status: "Approved",
+          status: "PAY",
         },
       },
       {
@@ -309,7 +309,7 @@ exports.userTotalEarning = async (req, res) => {
       {
         $match: {
           user_Id: new mongoose.Types.ObjectId(req.params.id),
-          status: "Approved",
+          status: "PAY",
           createdAt: {
             $gte: new Date(moment(new Date()).startOf("day")),
             $lte: new Date(moment(new Date()).endOf("day")),
