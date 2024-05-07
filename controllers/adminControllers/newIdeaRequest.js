@@ -15,7 +15,8 @@ exports.ideaRequestList = async (req, res) => {
         ],
       })
       .populate(["user_Id", "category_Id", "subCategory_Id"])
-      .sort({ createdAt: -1 }).lean()
+      .sort({ createdAt: -1 })
+      .lean();
     res.status(200).json(success(res.statusCode, "Success", { list }));
   } catch {
     res.status(400).json(error("Failed", res.statusCode));
@@ -33,7 +34,7 @@ exports.approvedIdea = async (req, res) => {
     await notificationSchema.create({
       user_Id: appreovedIdea.user_Id,
       title: "Your Idea has been approved by admin 🎉🎉",
-      url:"https://patenta-sa.com/businessidea"
+      url: "https://patenta-sa.com/businessidea",
     });
 
     await sendMail(
@@ -84,7 +85,7 @@ exports.DeclineIdea = async (req, res) => {
     await notificationSchema.create({
       user_Id: declineData.user_Id,
       title: "Your Idea Has Been REJECTED",
-      url:"https://patenta-sa.com/businessidea"
+      url: "https://patenta-sa.com/businessidea",
     });
     res.status(200).json(success(res.statusCode, "Success", { declineData }));
   } catch (err) {
@@ -98,7 +99,7 @@ exports.viewIdeaRequest = async (req, res) => {
     const id = req.params.id;
     const detailIdea = await ideaRequestSchema
       .findById(id)
-      .populate(["user_Id", "category_Id", "subCategory_Id"])
+      .populate(["user_Id", "category_Id", "subCategory_Id"]);
     res.status(200).json(success(res.statusCode, "Success", { detailIdea }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -164,15 +165,10 @@ exports.updateStatus = async (req, res) => {
     if (!status) {
       res.status(200).json(error("Please provide status", res.statusCode));
     }
-    const updateStatus = await ideaRequestSchema.findById(id)
+    const updateStatus = await ideaRequestSchema.findById(id);
     updateStatus.status = status;
-    if (updateStatus) {
-      res
-        .status(201)
-        .json(success(res.statusCode, "Success", { updateStatus }));
-    } else {
-      res.status(201).json(error("No Data Found", res.statusCode));
-    }
+    await updateStatus.save();
+    res.status(201).json(success(res.statusCode, "Success", { updateStatus }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
