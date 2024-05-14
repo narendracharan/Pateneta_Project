@@ -3,7 +3,8 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const app = express();
-// const http=require("http")
+ const fs=require("fs")
+ const path = require("path");
 // const server=http.createServer(app)
 // const {Server}=require("socket.io")
 // const io=new Server()
@@ -23,12 +24,33 @@ const {
   sendMessage,
 } = require("./controllers/userControllers.js/chatControllers");
 
-
 process.env["BASE_URL"] = "https://patenta-sa.com:2053";
 app.use(express.static("./public"));
 // app.set("views", __dirname + "views");
 // app.set("view engine", "ejs");
 
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, "access.log"),
+  { flags: "a" }
+);
+app.use(
+    morgan("common", {
+      stream: fs.createWriteStream(path.join(__dirname,"access.log"), {
+        flags: "a",
+      }),
+    })
+  );
+  app.use(
+    morgan("common", {
+      skip: function (req, res) {
+        return res.statusCode < 400;
+      },
+      stream: fs.createWriteStream(path.join(__dirname,"error.log"), {
+        flags: "a",
+      }),
+    })
+  );
+  
 
 //----> User Routes
 app.use("/user", router);
@@ -70,7 +92,6 @@ io.on("connection", async (socket) => {
     console.log("🔥: A user disconnected");
   });
 });
-
 
 server.listen(process.env.PORT, () => {
   console.log(`Server is running port no:${process.env.PORT}`);
