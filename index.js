@@ -28,23 +28,7 @@ process.env["BASE_URL"] = "https://patenta-sa.com:2053";
 app.use(express.static("./public"));
 // app.set("views", __dirname + "views");
 // app.set("view engine", "ejs");
-app.use(
-    morgan("common", {
-      stream: fs.createWriteStream(path.join(__dirname), {
-        flags: "a",
-      }),
-    })
-  );
-  app.use(
-    morgan("common", {
-      skip: function (req, res) {
-        return res.statusCode < 400;
-      },
-      stream: fs.createWriteStream(path.join(__dirname), {
-        flags: "a",
-      }),
-    })
-  );
+
 
 //----> User Routes
 app.use("/user", router);
