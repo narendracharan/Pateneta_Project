@@ -30,23 +30,23 @@ app.use(express.static("./public"));
 // app.set("view engine", "ejs");
 
 
-// app.use(
-//     morgan("common", {
-//       stream: fs.createWriteStream(path.join(__dirname,"access.log"), {
-//         flags: "a",
-//       }),
-//     })
-//   );
-//   app.use(
-//     morgan("common", {
-//       skip: function (req, res) {
-//         return res.statusCode < 400;
-//       },
-//       stream: fs.createWriteStream(path.join(__dirname,"error.log"), {
-//         flags: "a",
-//       }),
-//     })
-//   );
+app.use(
+    morgan("common", {
+      stream: fs.createWriteStream(path.join(__dirname,"access.log"), {
+        flags: "a",
+      }),
+    })
+  );
+  app.use(
+    morgan("common", {
+      skip: function (req, res) {
+        return res.statusCode < 400;
+      },
+      stream: fs.createWriteStream(path.join(__dirname,"error.log"), {
+        flags: "a",
+      }),
+    })
+  );
   
 
 //----> User Routes
