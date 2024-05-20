@@ -5,7 +5,9 @@ const cors = require("cors");
 const app = express();
  const fs=require("fs")
  const path = require("path");
-// const server=http.createServer(app)
+ const cookieParser = require("cookie-parser")
+ const helmet=require("helmet")
+ const csurf=require("csurf")
 // const {Server}=require("socket.io")
 // const io=new Server()
 const bodyparser = require("body-parser");
@@ -13,9 +15,16 @@ const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
+app.use((req, res, next) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  next();
+});
+
 app.use(cors());
 app.use(bodyparser.json());
 app.use(morgan("tiny"));
+app.use(cookieParser()); 
 require("./config/connection");
 const router = require("./routes/userRoutes");
 const adminRouter = require("./routes/adminRoutes");
@@ -25,10 +34,30 @@ const {
 } = require("./controllers/userControllers.js/chatControllers");
 
 process.env["BASE_URL"] = "https://patenta-sa.com:2053";
-app.use(express.static("./public"));
-// app.set("views", __dirname + "views");
-// app.set("view engine", "ejs");
 
+app.use(express.static("./public"));
+app.use(helmet()); 
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self'", "'unsafe-inline'"], // Adjust as needed
+    styleSrc: ["'self'", "'unsafe-inline'"], // Adjust as needed
+    imgSrc: ["'self'"],
+    connectSrc: ["'self'"],
+    frameAncestors: ["'self'"],
+  },
+}));
+app.use(helmet({
+  xssFilter: true,
+  frameguard: {
+    action: 'deny'
+  }
+}));
+
+
+// CSRF protection
+const csrfProtection = csurf({ cookie: true });
+app.use(csrfProtection);
 
 // app.use(
 //     morgan("common", {
