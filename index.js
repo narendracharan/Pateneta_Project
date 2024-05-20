@@ -37,27 +37,29 @@ process.env["BASE_URL"] = "https://patenta-sa.com:2053";
 
 app.use(express.static("./public"));
 app.use(helmet()); 
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "'unsafe-inline'"], // Adjust as needed
-    styleSrc: ["'self'", "'unsafe-inline'"], // Adjust as needed
-    imgSrc: ["'self'"],
-    connectSrc: ["'self'"],
-    frameAncestors: ["'self'"],
-  },
-}));
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      "x-content-type-options": ["nosniff"],
+      "frame-ancestors": ["'self'"],
+    },
+  })
+);
 app.use(helmet({
   xssFilter: true,
   frameguard: {
     action: 'deny'
   }
 }));
-
-
 // CSRF protection
-const csrfProtection = csurf({ cookie: true });
-app.use(csrfProtection);
+// const csrfProtection = csurf({ cookie: true });
+// app.use(csrfProtection);
+
+app.use((req, res, next) => {
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
+
 
 // app.use(
 //     morgan("common", {
