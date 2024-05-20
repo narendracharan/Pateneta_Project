@@ -7,7 +7,7 @@ const app = express();
  const path = require("path");
  const cookieParser = require("cookie-parser")
  const helmet=require("helmet")
- const csurf=require("csurf")
+ //const csurf=require("csurf")
 // const {Server}=require("socket.io")
 // const io=new Server()
 const bodyparser = require("body-parser");
@@ -55,10 +55,6 @@ app.use(helmet({
 // const csrfProtection = csurf({ cookie: true });
 // app.use(csrfProtection);
 
-app.use((req, res, next) => {
-  res.locals.csrfToken = req.csrfToken();
-  next();
-});
 
 
 // app.use(
