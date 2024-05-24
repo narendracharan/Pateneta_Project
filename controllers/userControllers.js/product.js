@@ -33,14 +33,14 @@ exports.createIdea = async (req, res) => {
       present,
     } = req.body;
     const admin = await adminSchema.findOne();
-   
+
     const idea = await productSchema.findOne({ title_en: title_en });
     if (idea) {
       return res
         .status(201)
         .json(error("Title Name is already register", res.statusCode));
     }
-    const ideaCount = await productSchema.find().countDocuments()
+    const ideaCount = await productSchema.find().countDocuments();
     let newIdeas = new productSchema({
       title_en: title_en,
       title_ar: title_ar,
@@ -57,7 +57,7 @@ exports.createIdea = async (req, res) => {
       urlFile: urlFile,
       present: present,
       selectDocument: selectDocument,
-      idea_Id:idea_Id
+      idea_Id: idea_Id,
     });
     //newIdeas.urlFile.push(urlFile)
     if (req.files) {
@@ -133,7 +133,7 @@ exports.createAuctionIdea = async (req, res) => {
       baseFare,
       urlFile,
       present,
-      idea_Id
+      idea_Id,
     } = req.body;
     const admin = await adminSchema.findOne();
     const userVerify = await userSchema.findOne({ _id: user_Id });
@@ -143,7 +143,7 @@ exports.createAuctionIdea = async (req, res) => {
         .status(201)
         .json(error("Title Name is already register", res.statusCode));
     }
-    const ideaCount = await productSchema.find().countDocuments()
+    const ideaCount = await productSchema.find().countDocuments();
     let newIdeas = new productSchema({
       title_en: title_en,
       title_ar: title_ar,
@@ -154,10 +154,10 @@ exports.createAuctionIdea = async (req, res) => {
       briefDescription_ar: briefDescription_ar,
       briefDescription_en: briefDescription_en,
       //   Price: Price,
-      idea_Id:idea_Id,
+      idea_Id: idea_Id,
       documentName: documentName,
       user_Id: user_Id,
-      baseFare: baseFare * (1 + admin.commission / 100) *(1 + present / 100),
+      baseFare: baseFare * (1 + admin.commission / 100) * (1 + present / 100),
       urlFile: urlFile,
       present: present,
       selectDocument: selectDocument,
@@ -260,7 +260,7 @@ exports.updateBussinessIdea = async (req, res) => {
       briefDescription_ar,
       Price,
       baseFare,
-      idea_Id
+      idea_Id,
     } = req.body;
     const product = await productSchema.findById(id);
     if (title_en) {
@@ -318,6 +318,17 @@ exports.updateBussinessIdea = async (req, res) => {
 
 //-----------> list of bussiness ideas Api
 exports.listBussinesIdeas = async (req, res) => {
+  const { highPrice, lowPrice, purchased, sortBy1 } = req.body;
+  let sortQuery = {};
+  if (sortBy1 == -1) sortQuery.createdAt = -1;
+  if (highPrice == -1) sortQuery.Price = -1;
+  if (lowPrice == 1) sortQuery.Price = 1;
+  if (Object.keys(sortQuery).length === 0) {
+    sortQuery.createdAt = -1; // or any other default field
+  }
+  if (purchased === "PENDING") {
+    sortQuery.buyStatus = { $ne: true };
+  }
   try {
     const verify = await productSchema.aggregate([
       {
@@ -353,6 +364,7 @@ exports.listBussinesIdeas = async (req, res) => {
           //  ],
         },
       },
+      { $sort: sortQuery },
     ]);
     res.status(200).json(success(res.statusCode, "Success", { verify }));
   } catch (err) {
@@ -364,13 +376,27 @@ exports.listBussinesIdeas = async (req, res) => {
 //----> search bussiness idea api
 exports.searchBussinessIdea = async (req, res) => {
   try {
-    const search = req.body.search;
-    if (!search) {
-      return res
-        .status(201)
-        .json(error("Please provide search key", res.statusCode));
+    const { search, categoryId, subCategoryId } = req.body.search;
+    let sortQuery = {};
+    if (sortBy1 == -1) sortQuery.createdAt = -1;
+    // if (highPrice == -1) sortQuery.Price = -1;
+    // if (lowPrice == 1) sortQuery.Price = 1;
+    if (Object.keys(sortQuery).length === 0) {
+      sortQuery.createdAt = -1; // or any other default field
     }
     const searchIdeas = await productSchema.aggregate([
+      {
+        $match: {
+          $and: [
+            categoryId
+              ? { category_Id: new mongoose.Types.ObjectId(categoryId) }
+              : {},
+            subCategoryId
+              ? { subCategory_Id: new mongoose.Types.ObjectId(subCategoryId) }
+              : {},
+          ],
+        },
+      },
       {
         $lookup: {
           from: "users",
@@ -426,12 +452,10 @@ exports.searchBussinessIdea = async (req, res) => {
           ],
         },
       },
+      { $sort: sortQuery },
     ]);
 
-     res
-        .status(200)
-        .json(success(res.statusCode, "Success", { searchIdeas }));
-    
+    res.status(200).json(success(res.statusCode, "Success", { searchIdeas }));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Error In Searching", res.statusCode));
@@ -587,11 +611,8 @@ exports.lowtoHighPrice = async (req, res) => {
         },
       },
     ]);
-   
-      res
-        .status(200)
-        .json(success(res.statusCode, "Success", { productFilter }));
-    
+
+    res.status(200).json(success(res.statusCode, "Success", { productFilter }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }
@@ -609,11 +630,8 @@ exports.highToLowPrice = async (req, res) => {
         },
       },
     ]);
-   
-      res
-        .status(200)
-        .json(success(res.statusCode, "Success", { productFilter }));
-   
+
+    res.status(200).json(success(res.statusCode, "Success", { productFilter }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
   }

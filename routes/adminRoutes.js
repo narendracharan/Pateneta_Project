@@ -158,7 +158,7 @@ router.post("/idea-status-update/:id", adminAuthorisationUser, updateStatus);
 router.post("/delete-idea/:id", adminAuthorisationUser, deleteBussinessIdea);
 
 //----->content Routes
-router.post("/create-content", adminAuthorisationUser, createContent);
+router.post("/create-content", createContent);
 router.post("/content-list", adminAuthorisationUser, ContentList);
 router.post("/update-content/:id", adminAuthorisationUser, updateContent);
 

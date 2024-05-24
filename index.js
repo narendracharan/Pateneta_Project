@@ -32,6 +32,7 @@ const {
   getMessages,
   sendMessage,
 } = require("./controllers/userControllers.js/chatControllers");
+const csurf = require("csurf");
 
 process.env["BASE_URL"] = "https://patenta-sa.com:2053";
 
@@ -52,8 +53,8 @@ app.use(helmet({
   }
 }));
 // CSRF protection
-// const csrfProtection = csurf({ cookie: true });
-// app.use(csrfProtection);
+ //const csrfProtection = csurf({ cookie: true });
+//app.use(csurf);
 
 
 
@@ -106,6 +107,7 @@ io.on("connection", async (socket) => {
     const messages = await getMessages(chatId);
     io.to(chatId).emit("messageList", messages);
   });
+  
   socket.on("sendMessage", async (data) => {
     console.log("sendMessage", data);
     const messages = await sendMessage(data);
