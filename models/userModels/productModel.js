@@ -179,6 +179,10 @@ const schema = new mongoose.Schema({
   idea_Id:{
     type: String,
     default:"P00"
+  },
+  ideaType:{
+    type:String,
+    enum: ["Price", "Action"],
   }
 });
 schema.set("timestamps", true);

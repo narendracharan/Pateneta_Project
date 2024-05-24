@@ -58,6 +58,7 @@ exports.createIdea = async (req, res) => {
       present: present,
       selectDocument: selectDocument,
       idea_Id: idea_Id,
+      ideaType: "Price",
     });
     //newIdeas.urlFile.push(urlFile)
     if (req.files) {
@@ -161,6 +162,7 @@ exports.createAuctionIdea = async (req, res) => {
       urlFile: urlFile,
       present: present,
       selectDocument: selectDocument,
+      ideaType: "Action",
     });
     //newIdeas.urlFile.push(urlFile)
     if (req.files) {
@@ -318,7 +320,7 @@ exports.updateBussinessIdea = async (req, res) => {
 
 //-----------> list of bussiness ideas Api
 exports.listBussinesIdeas = async (req, res) => {
-  const { highPrice, lowPrice, purchased, sortBy1 } = req.body;
+  const { highPrice, lowPrice, purchased, sortBy1, type } = req.body;
   let sortQuery = {};
   if (sortBy1 == -1) sortQuery.createdAt = -1;
   if (highPrice == -1) sortQuery.Price = -1;
@@ -328,6 +330,12 @@ exports.listBussinesIdeas = async (req, res) => {
   }
   if (purchased === "PENDING") {
     sortQuery.buyStatus = { $ne: true };
+  }
+  if (type === "Price") {
+    sortQuery.ideaType = "Price";
+  }
+  if (type === "Action") {
+    sortQuery.ideaType = "Action";
   }
   try {
     const verify = await productSchema.aggregate([
