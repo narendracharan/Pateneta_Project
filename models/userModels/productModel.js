@@ -182,7 +182,7 @@ const schema = new mongoose.Schema({
   },
   ideaType:{
     type:String,
-    enum: ["Price", "Action"],
+    enum: ["Price", "Auction"],
   }
 });
 schema.set("timestamps", true);

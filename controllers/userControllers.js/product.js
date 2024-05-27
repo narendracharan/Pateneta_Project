@@ -324,7 +324,9 @@ exports.listBussinesIdeas = async (req, res) => {
   let sortQuery = {};
   if (sortBy1 == -1) sortQuery.createdAt = -1;
   if (highPrice == -1) sortQuery.Price = -1;
+  if (highPrice == -1) sortQuery.baseFare = -1;
   if (lowPrice == 1) sortQuery.Price = 1;
+  if (lowPrice == 1) sortQuery.baseFare = 1;
   if (Object.keys(sortQuery).length === 0) {
     sortQuery.createdAt = -1; // or any other default field
   }
@@ -332,10 +334,10 @@ exports.listBussinesIdeas = async (req, res) => {
     sortQuery.buyStatus = { $ne: true };
   }
   if (type === "Price") {
-    sortQuery.ideaType = "Price";
+    sortQuery.ideaType = "Price" ;
   }
-  if (type === "Action") {
-    sortQuery.ideaType = "Action";
+  if (type === "Auction") {
+    sortQuery.ideaType = "Auction";
   }
   try {
     const verify = await productSchema.aggregate([
@@ -373,7 +375,7 @@ exports.listBussinesIdeas = async (req, res) => {
         },
       },
       { $sort: sortQuery },
-    ]);
+    ]).sort({createdAt:-1})
     res.status(200).json(success(res.statusCode, "Success", { verify }));
   } catch (err) {
     console.log(err);
