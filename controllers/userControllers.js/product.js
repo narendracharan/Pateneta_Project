@@ -322,22 +322,27 @@ exports.updateBussinessIdea = async (req, res) => {
 exports.listBussinesIdeas = async (req, res) => {
   const { highPrice, lowPrice, purchased, sortBy1, type } = req.body;
   let sortQuery = {};
+  let matchQuery = { verify: "APPROVED" };
+
+  // Build sort query
   if (sortBy1 == -1) sortQuery.createdAt = -1;
   if (highPrice == -1) sortQuery.Price = -1;
   if (highPrice == -1) sortQuery.baseFare = -1;
   if (lowPrice == 1) sortQuery.Price = 1;
   if (lowPrice == 1) sortQuery.baseFare = 1;
   if (Object.keys(sortQuery).length === 0) {
-    sortQuery.createdAt = -1; // or any other default field
+    sortQuery.createdAt = -1; // default sort by createdAt descending
   }
+
+  // Build match query
   if (purchased === "PENDING") {
-    sortQuery.buyStatus = { $ne: true };
+    matchQuery.buyStatus = { $ne: true };
   }
   if (type === "Price") {
-    sortQuery.ideaType = "Price" ;
+    matchQuery.ideaType = "Price";
   }
   if (type === "Auction") {
-    sortQuery.ideaType = "Auction";
+    matchQuery.ideaType = "Auction";
   }
   try {
     const verify = await productSchema.aggregate([
@@ -366,16 +371,12 @@ exports.listBussinesIdeas = async (req, res) => {
         },
       },
       {
-        $match: {
-          verify: "APPROVED",
-          // $or: [
-          //   { 'baseBid.bidsVerify':"Accepted" },
-
-          //  ],
-        },
+        $match: matchQuery,
       },
-      { $sort: sortQuery },
-    ]).sort({createdAt:-1})
+      {
+        $sort: sortQuery,
+      },
+    ])
     res.status(200).json(success(res.statusCode, "Success", { verify }));
   } catch (err) {
     console.log(err);
