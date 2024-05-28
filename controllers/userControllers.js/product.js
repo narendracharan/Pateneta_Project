@@ -324,16 +324,12 @@ exports.listBussinesIdeas = async (req, res) => {
   let sortQuery = {};
   let matchQuery = { verify: "APPROVED" };
 
-  // Build sort query
-  if (sortBy1 == -1) sortQuery.createdAt = -1;
-  if (highPrice == -1) sortQuery.Price = -1;
- // if (highPrice == -1) sortQuery.baseFare = -1;
-  if (lowPrice == 1) sortQuery.Price = 1;
- // if (lowPrice == 1) sortQuery.baseFare = 1;
-  if (Object.keys(sortQuery).length === 0) {
-    sortQuery.createdAt = -1; // default sort by createdAt descending
+  let combinedSortOrder = 1;
+  if (highPrice == -1 || sortBy1 == -1) {
+    combinedSortOrder = -1; 
+  } else if (lowPrice == 1) {
+    combinedSortOrder = 1; 
   }
-
   // Build match query
   if (purchased === "PENDING") {
     matchQuery.buyStatus = { $ne: true };
@@ -373,9 +369,15 @@ exports.listBussinesIdeas = async (req, res) => {
       {
         $match: matchQuery,
       },
-     
       {
-        $sort: sortQuery,
+        $addFields: {
+          combinedValue: {
+            $sum: ["$baseFare", "$Price"] // Sum of baseFare and Price
+          }
+        }
+      },
+      {
+        $sort: {combinedValue: combinedSortOrder ,createdAt:-1} // Sort by createdAt and combined field
       },
     ])
     res.status(200).json(success(res.statusCode, "Success", { verify }));
@@ -388,27 +390,25 @@ exports.listBussinesIdeas = async (req, res) => {
 //----> search bussiness idea api
 exports.searchBussinessIdea = async (req, res) => {
   try {
-    const { search, categoryId, subCategoryId } = req.body.search;
+    const { search, highPrice, lowPrice, purchased, sortBy1, type } = req.body.search;
     let sortQuery = {};
-    if (sortBy1 == -1) sortQuery.createdAt = -1;
-    // if (highPrice == -1) sortQuery.Price = -1;
-    // if (lowPrice == 1) sortQuery.Price = 1;
-    if (Object.keys(sortQuery).length === 0) {
-      sortQuery.createdAt = -1; // or any other default field
+    let combinedSortOrder = 1;
+    if (highPrice == -1 || sortBy1 == -1) {
+      combinedSortOrder = -1; 
+    } else if (lowPrice == 1) {
+      combinedSortOrder = 1; 
+    }
+    // Build match query
+    if (purchased === "PENDING") {
+      matchQuery.buyStatus = { $ne: true };
+    }
+    if (type === "Price") {
+      matchQuery.ideaType = "Price";
+    }
+    if (type === "Auction") {
+      matchQuery.ideaType = "Auction";
     }
     const searchIdeas = await productSchema.aggregate([
-      {
-        $match: {
-          $and: [
-            categoryId
-              ? { category_Id: new mongoose.Types.ObjectId(categoryId) }
-              : {},
-            subCategoryId
-              ? { subCategory_Id: new mongoose.Types.ObjectId(subCategoryId) }
-              : {},
-          ],
-        },
-      },
       {
         $lookup: {
           from: "users",
@@ -464,7 +464,19 @@ exports.searchBussinessIdea = async (req, res) => {
           ],
         },
       },
-      { $sort: sortQuery },
+      {
+        $match: matchQuery,
+      },
+      {
+        $addFields: {
+          combinedValue: {
+            $sum: ["$baseFare", "$Price"] // Sum of baseFare and Price
+          }
+        }
+      },
+      {
+        $sort: {combinedValue: combinedSortOrder ,createdAt:-1} // Sort by createdAt and combined field
+      },
     ]);
 
     res.status(200).json(success(res.statusCode, "Success", { searchIdeas }));
@@ -667,13 +679,71 @@ exports.recommandedProduct = async (req, res) => {
 
 // Sub Category Idea Api
 exports.subCategoryIdeas = async (req, res) => {
+  const { highPrice, lowPrice, purchased, sortBy1, type } = req.body;
+  let sortQuery = {};
+  let matchQuery = { verify: "APPROVED" };
+
+  let combinedSortOrder = 1;
+  if (highPrice == -1 || sortBy1 == -1) {
+    combinedSortOrder = -1; 
+  } else if (lowPrice == 1) {
+    combinedSortOrder = 1; 
+  }
+  // Build match query
+  if (purchased === "PENDING") {
+    matchQuery.buyStatus = { $ne: true };
+  }
+  if (type === "Price") {
+    matchQuery.ideaType = "Price";
+  }
+  if (type === "Auction") {
+    matchQuery.ideaType = "Auction";
+  }
   try {
-    const id = req.params.id;
-    const ideas = await productModel
-      .find({ subCategory_Id: id })
-      .populate("user_Id")
-      .lean();
-    const product = ideas.filter((x) => x.verify == "APPROVED");
+    const product = await productSchema.aggregate([
+      {
+        $match: {
+          category_Id:new mongoose.Types.ObjectId(req.params.id)
+        }
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "users",
+        },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category_Id",
+          foreignField: "_id",
+          as: "categories",
+        },
+      },
+      {
+        $lookup: {
+          from: "subcategories",
+          localField: "subCategory_Id",
+          foreignField: "_id",
+          as: "subcategoriess",
+        },
+      },
+      {
+        $match: matchQuery,
+      },
+      {
+        $addFields: {
+          combinedValue: {
+            $sum: ["$baseFare", "$Price"] // Sum of baseFare and Price
+          }
+        }
+      },
+      {
+        $sort: {combinedValue: combinedSortOrder ,createdAt:-1} // Sort by createdAt and combined field
+      },
+    ])
     res.status(200).json(success(res.statusCode, "Success", { product }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
