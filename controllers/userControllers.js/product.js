@@ -327,9 +327,9 @@ exports.listBussinesIdeas = async (req, res) => {
   // Build sort query
   if (sortBy1 == -1) sortQuery.createdAt = -1;
   if (highPrice == -1) sortQuery.Price = -1;
-  if (highPrice == -1) sortQuery.baseFare = -1;
+ // if (highPrice == -1) sortQuery.baseFare = -1;
   if (lowPrice == 1) sortQuery.Price = 1;
-  if (lowPrice == 1) sortQuery.baseFare = 1;
+ // if (lowPrice == 1) sortQuery.baseFare = 1;
   if (Object.keys(sortQuery).length === 0) {
     sortQuery.createdAt = -1; // default sort by createdAt descending
   }
@@ -373,6 +373,7 @@ exports.listBussinesIdeas = async (req, res) => {
       {
         $match: matchQuery,
       },
+     
       {
         $sort: sortQuery,
       },
