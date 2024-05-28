@@ -41,6 +41,7 @@ const {
   RecivedDocument,
   createAuctionIdea,
   verifyKyc,
+  searchRequest,
 } = require("../controllers/userControllers.js/product");
 const {
   pushNotification,
@@ -134,7 +135,7 @@ router.post(
   createAuctionIdea
 );
 router.post("/list-bussiness-ideas", listBussinesIdeas);
-router.post("/search-bussiness-ideas", searchBussinessIdea);
+router.post("/search-bussiness-ideas", searchRequest);
 router.post("/low-to-high", tokenAuthorisationUser, lowtoHighPrice);
 router.post("/high-to-low", tokenAuthorisationUser, highToLowPrice);
 router.post("/bussines-idea-details/:id", bussinessIdeaDetails);

@@ -391,7 +391,106 @@ exports.listBussinesIdeas = async (req, res) => {
 exports.searchBussinessIdea = async (req, res) => {
   try {
     const { search, highPrice, lowPrice, purchased, sortBy1, type } = req.body.search;
-    let sortQuery = {};
+    let matchQuery = { verify: "APPROVED" };
+
+    let combinedSortOrder = 1;
+    if (highPrice == -1 || sortBy1 == -1) {
+      combinedSortOrder = -1; 
+    } else if (lowPrice == 1) {
+      combinedSortOrder = 1; 
+    }
+    // Build match query
+    if (purchased === "PENDING") {
+      matchQuery.buyStatus = { $ne: true };
+    }
+    if (type === "Price") {
+      matchQuery.ideaType = "Price";
+    }
+    if (type === "Auction") {
+      matchQuery.ideaType = "Auction";
+    }
+    const searchIdeas = await productSchema.aggregate([
+      {
+        $match: {
+          $or: [
+            {
+              title_en: { $regex: search, $options: "i" },
+            },
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "users",
+        },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category_Id",
+          foreignField: "_id",
+          as: "categories",
+        },
+      },
+      {
+        $lookup: {
+          from: "subcategories",
+          localField: "subCategory_Id",
+          foreignField: "_id",
+          as: "subcategoriess",
+        },
+      },
+      { $unwind: "$categories" },
+      { $unwind: "$subcategoriess" },
+      // {
+      //   $match: {
+      //     $or: [
+      //       {
+      //         title_en:  { $regex: search, $options: "i"  },
+      //       },
+      //       {
+      //         description_en: { $regex: search, $options: "i"  },
+      //       },
+      //       {
+      //         briefDescription_en: { $regex: search, $options: "i" } ,
+      //       },
+      //       {
+      //         "categories.categoryName":{ $regex: search, $options: "i" } ,
+      //       },
+      //       {
+      //         "subcategoriess.subCategoryName": { $regex: search, $options: "i" } 
+      //       },
+      //     ],
+      //   },
+      // },
+      // {
+      //   $match: matchQuery,
+      // },
+      // {
+      //   $addFields: {
+      //     combinedValue: {
+      //       $sum: ["$baseFare", "$Price"] // Sum of baseFare and Price
+      //     }
+      //   }
+      // },
+      // {
+      //   $sort: {combinedValue: combinedSortOrder ,createdAt:-1} // Sort by createdAt and combined field
+      // },
+    ]);
+
+    res.status(200).json(success(res.statusCode, "Success", { searchIdeas }));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("Error In Searching", res.statusCode));
+  }
+};
+
+exports.searchRequest = async (req, res) => {
+  try {
+    const {search, highPrice, lowPrice, purchased, sortBy1, type} = req.body;
     let matchQuery = { verify: "APPROVED" };
 
     let combinedSortOrder = 1;
@@ -427,64 +526,34 @@ exports.searchBussinessIdea = async (req, res) => {
           as: "categories",
         },
       },
-      {
-        $lookup: {
-          from: "subcategories",
-          localField: "subCategory_Id",
-          foreignField: "_id",
-          as: "subcategoriess",
-        },
-      },
       { $unwind: "$categories" },
-      { $unwind: "$subcategoriess" },
-      {
-        $match: {
-          verify: "APPROVED",
-        },
-      },
+      { $unwind: "$users" },
       {
         $match: {
           $or: [
             {
-              title_en: { $regex: search, $options: "i" },
-            },
-            {
-              description_en: { $regex: search, $options: "i" },
-            },
-            {
-              briefDescription_en: { $regex: search, $options: "i" },
-            },
-            {
-              "categories.categoryName": { $regex: search, $options: "i" },
-            },
-            {
-              "subcategoriess.subCategoryName": {
-                $regex: search,
-                $options: "i",
-              },
+             title_en: { $regex: search, $options: "i" },
             },
           ],
         },
       },
       {
-        $match: matchQuery,
-      },
-      {
-        $addFields: {
-          combinedValue: {
-            $sum: ["$baseFare", "$Price"] // Sum of baseFare and Price
+          $match: matchQuery,
+        },
+        {
+          $addFields: {
+            combinedValue: {
+              $sum: ["$baseFare", "$Price"] // Sum of baseFare and Price
+            }
           }
-        }
-      },
-      {
-        $sort: {combinedValue: combinedSortOrder ,createdAt:-1} // Sort by createdAt and combined field
-      },
+        },
+        {
+          $sort: {combinedValue: combinedSortOrder ,createdAt:-1} // Sort by createdAt and combined field
+        },
     ]);
-
     res.status(200).json(success(res.statusCode, "Success", { searchIdeas }));
   } catch (err) {
-    console.log(err);
-    res.status(400).json(error("Error In Searching", res.statusCode));
+    res.status(400).json(error("Failed", res.statusCode));
   }
 };
 
