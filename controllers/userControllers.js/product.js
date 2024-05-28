@@ -392,6 +392,8 @@ exports.searchBussinessIdea = async (req, res) => {
   try {
     const { search, highPrice, lowPrice, purchased, sortBy1, type } = req.body.search;
     let sortQuery = {};
+    let matchQuery = { verify: "APPROVED" };
+
     let combinedSortOrder = 1;
     if (highPrice == -1 || sortBy1 == -1) {
       combinedSortOrder = -1; 
