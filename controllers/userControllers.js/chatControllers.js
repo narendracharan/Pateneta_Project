@@ -140,7 +140,6 @@ exports.userSeenMsg = async (req, res) => {
         },
       }
     );
-  
     res
       .status(200)
       .json(success(res.statusCode, "Success", { chat,senderchat }));

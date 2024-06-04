@@ -10,5 +10,3 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
-//jwvd0y0iMQthnnTL
-///narendracharan257538

@@ -378,6 +378,19 @@ exports.resetPassword = async (req, res) => {
             )
           );
       } else {
+        const user = await userSchema.findOne({
+          Email:Email,
+        })
+        if (!user) {
+          return res
+            .status(200)
+            .json(
+              error(
+                "Invalid Email",
+                res.statusCode
+              )
+            );
+        }
         const passwordHash = await bcrypt.hash(newPassword, 10);
         const createPassword = await userSchema.findOneAndUpdate(
           { Email: Email },
