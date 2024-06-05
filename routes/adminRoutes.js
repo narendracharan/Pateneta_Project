@@ -26,6 +26,7 @@ const {
   subCategorySearch,
   categoryStatus,
   subCategoryStatus,
+  subCategory,
 } = require("../controllers/adminControllers/categoryController");
 const {
   ideaRequestList,
@@ -225,4 +226,5 @@ router.post("/add-banner", upload.any(), createBanner);
 router.get("/banner-view/id", adminAuthorisationUser, bannerView);
 router.get("/banner-list", adminAuthorisationUser, bannerList);
 router.delete("/banner-delete/:id", adminAuthorisationUser, bannerDelete);
+router.get("/banner-subCategory/:id", adminAuthorisationUser, subCategory);
 module.exports = router;

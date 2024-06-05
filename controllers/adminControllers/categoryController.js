@@ -12,7 +12,6 @@ exports.createCategory = async (req, res) => {
         .json(error("plz provide categoryName", res.statusCode));
     }
 
-    
     if (!user_Id) {
       return res.status(201).json(error("plz provide user_Id", res.statusCode));
     }
@@ -202,7 +201,7 @@ exports.categoryStatus = async (req, res) => {
         .status(201)
         .json(error("Please Provide Status Key", res.statusCode));
     }
-    const categoryStatus = await categoryModels.findById(req.params.id)
+    const categoryStatus = await categoryModels.findById(req.params.id);
     if (status) {
       categoryStatus.status = status;
     }
@@ -224,7 +223,7 @@ exports.subCategoryStatus = async (req, res) => {
         .status(201)
         .json(error("Please Provide Status Key", res.statusCode));
     }
-    const subCategoryStatus = await categoryModels.findById(req.params.id)
+    const subCategoryStatus = await categoryModels.findById(req.params.id);
     if (status) {
       subCategoryStatus.status = status;
     }
@@ -234,5 +233,21 @@ exports.subCategoryStatus = async (req, res) => {
       .json(success(res.statusCode, "Success", { subCategoryStatus }));
   } catch (err) {
     res.status(400).json(error("Error in Category Status", res.statusCode));
+  }
+};
+
+//-------> SubCategory list Api
+exports.subCategory = async (req, res) => {
+  try {
+    const listData = await subCategoryModel.find({
+      category_Id: req.params.id,
+    });
+    if (listData.length > 0) {
+      res.status(200).json(success(res.statusCode, "Success", { listData }));
+    } else {
+      res.status(201).json(error("List are not found", res.statusCode));
+    }
+  } catch (err) {
+    res.status(400).json(error("Error In SubCategory List", res.statusCode));
   }
 };
