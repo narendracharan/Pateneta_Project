@@ -92,6 +92,7 @@ const {
   bannerView,
   bannerList,
   bannerDelete,
+  allSellerList,
 } = require("../controllers/adminControllers/banner");
 
 //-admin register
@@ -227,4 +228,5 @@ router.get("/banner-view/id", adminAuthorisationUser, bannerView);
 router.get("/banner-list", adminAuthorisationUser, bannerList);
 router.delete("/banner-delete/:id", adminAuthorisationUser, bannerDelete);
 router.get("/banner-subCategory/:id", adminAuthorisationUser, subCategory);
+router.get("/banner-seller", adminAuthorisationUser, allSellerList);
 module.exports = router;
