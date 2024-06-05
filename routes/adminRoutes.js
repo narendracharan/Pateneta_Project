@@ -86,6 +86,12 @@ const {
   userUpdateStatus,
   ideaUpdateStatus,
 } = require("../controllers/adminControllers/notification");
+const {
+  createBanner,
+  bannerView,
+  bannerList,
+  bannerDelete,
+} = require("../controllers/adminControllers/banner");
 
 //-admin register
 router.post("/create-admin", adminRegister);
@@ -214,4 +220,9 @@ router.get("/user-notify-list", adminAuthorisationUser, userNotificationlist);
 router.get("/idea-notify-list", adminAuthorisationUser, ideaNotificationlist);
 router.post("/user-notify-update", adminAuthorisationUser, userUpdateStatus);
 router.post("/idea-notify-update", adminAuthorisationUser, ideaUpdateStatus);
+
+router.post("/add-banner", upload.any(), createBanner);
+router.get("/banner-view/id", adminAuthorisationUser, bannerView);
+router.get("/banner-list", adminAuthorisationUser, bannerList);
+router.delete("/banner-delete/:id", adminAuthorisationUser, bannerDelete);
 module.exports = router;

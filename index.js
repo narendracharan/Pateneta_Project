@@ -3,11 +3,11 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const app = express();
- const fs=require("fs")
- const path = require("path");
- const cookieParser = require("cookie-parser")
- const helmet=require("helmet")
- //const csurf=require("csurf")
+const fs = require("fs");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+//const csurf=require("csurf")
 // const {Server}=require("socket.io")
 // const io=new Server()
 const bodyparser = require("body-parser");
@@ -15,20 +15,23 @@ const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
+app.use(helmet.xssFilter());
 app.use((req, res, next) => {
-  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
-  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader(
+    "Cache-Control",
+    "no-cache, no-store, must-revalidate,max-age=0"
+  );
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-XSS-Protection", "1; mode=block");
   next();
 });
-
-
 
 app.use(cors());
 app.use(bodyparser.json());
 app.use(morgan("tiny"));
-app.use(cookieParser()); 
+app.use(cookieParser());
 require("./config/connection");
 const router = require("./routes/userRoutes");
 const adminRouter = require("./routes/adminRoutes");
@@ -41,7 +44,7 @@ const csurf = require("csurf");
 process.env["BASE_URL"] = "https://patenta-sa.com:2053";
 
 app.use(express.static("./public"));
-app.use(helmet()); 
+
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
@@ -50,17 +53,17 @@ app.use(
     },
   })
 );
-app.use(helmet({
-  xssFilter: true,
-  frameguard: {
-    action: 'deny'
-  }
-}));
+app.use(
+  helmet({
+    xssFilter: true,
+    frameguard: {
+      action: "deny",
+    },
+  })
+);
 // CSRF protection
- //const csrfProtection = csurf({ cookie: true });
+//const csrfProtection = csurf({ cookie: true });
 //app.use(csurf);
-
-
 
 // app.use(
 //     morgan("common", {
@@ -79,7 +82,6 @@ app.use(helmet({
 //       }),
 //     })
 //   );
-  
 
 //----> User Routes
 app.use("/user", router);
@@ -111,7 +113,7 @@ io.on("connection", async (socket) => {
     const messages = await getMessages(chatId);
     io.to(chatId).emit("messageList", messages);
   });
-  
+
   socket.on("sendMessage", async (data) => {
     console.log("sendMessage", data);
     const messages = await sendMessage(data);
