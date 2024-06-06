@@ -22,6 +22,10 @@ const bannerSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    url: {
+        type: String,
+        required: false,
+      },
   },
   { timestamps: true },
   { collection: "banner" }

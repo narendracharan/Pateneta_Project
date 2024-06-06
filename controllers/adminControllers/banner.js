@@ -4,23 +4,24 @@ const user = require("../../models/userModels/UserRegister")
 
 exports.createBanner = async (req, res) => {
     try {
-        const { category, subCategory, urlType, seller } = req.body;
+        const { category, subCategory, urlType, seller ,url} = req.body;
 
-        if (!category) {
-            return res
-                .status(201)
-                .json(error("Please Provide category", res.statusCode));
-        }
-        if (!subCategory) {
-            return res
-                .status(201)
-                .json(error("Please Provide subCategory", res.statusCode));
-        }
+        // if (!category) {
+        //     return res
+        //         .status(201)
+        //         .json(error("Please Provide category", res.statusCode));
+        // }
+        // if (!subCategory) {
+        //     return res
+        //         .status(201)
+        //         .json(error("Please Provide subCategory", res.statusCode));
+        // }
         const banner = await Banner.create({
             category: category,
             subCategory: subCategory,
             urlType: urlType,
-            seller: seller
+            seller: seller,
+            url:url
         });
         if (req.files) {
             for (let i = 0; i < req.files.length; i++) {

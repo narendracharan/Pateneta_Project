@@ -224,7 +224,7 @@ router.post("/user-notify-update", adminAuthorisationUser, userUpdateStatus);
 router.post("/idea-notify-update", adminAuthorisationUser, ideaUpdateStatus);
 
 router.post("/add-banner", upload.any(), createBanner);
-router.get("/banner-view/id", adminAuthorisationUser, bannerView);
+router.get("/banner-view/:id", adminAuthorisationUser, bannerView);
 router.get("/banner-list", adminAuthorisationUser, bannerList);
 router.delete("/banner-delete/:id", adminAuthorisationUser, bannerDelete);
 router.get("/banner-subCategory/:id", adminAuthorisationUser, subCategory);
