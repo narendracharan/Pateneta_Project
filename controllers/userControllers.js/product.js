@@ -10,6 +10,7 @@ const { default: mongoose } = require("mongoose");
 const notification = require("../../models/userModels/notificationSchema");
 const ideaNotification = require("../../models/adminModels/ideaNotification");
 const orderSchema = require("../../models/userModels/orderSchema");
+const Banner=require("../../models/adminModels/bannerModels")
 
 //---------> create bussiness idea api
 exports.createIdea = async (req, res) => {
@@ -1053,5 +1054,15 @@ exports.verifyKyc = async (req, res) => {
     res.status(200).json(success(res.statusCode, "Approved User", {}));
   } catch (err) {
     res.status(400).json(error("Error In Kyc", res.statusCode));
+  }
+};
+
+
+exports.Banners = async (req, res) => {
+  try {
+    const bannerList = await Banner.find({}).sort({ createdAt: -1 });
+    res.status(200).json(success(res.statusCode, "Success", { bannerList }));
+  } catch (err) {
+    res.status(400).json(error("Error", res.statusCode));
   }
 };

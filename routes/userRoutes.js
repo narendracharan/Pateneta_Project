@@ -42,6 +42,7 @@ const {
   createAuctionIdea,
   verifyKyc,
   searchRequest,
+  Banners,
 } = require("../controllers/userControllers.js/product");
 const {
   pushNotification,
@@ -215,5 +216,5 @@ router.post("/seen-message/:id", tokenAuthorisationUser, SeenMessage);
 router.post("/user-seen-msg", tokenAuthorisationUser, userSeenMsg);
 router.post("/validate", validatePayments);
 router.post("/payout-request",initiatePayout)
-
+router.get("/banners",Banners)
 module.exports = router;
