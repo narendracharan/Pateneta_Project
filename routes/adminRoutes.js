@@ -94,6 +94,12 @@ const {
   bannerDelete,
   allSellerList,
 } = require("../controllers/adminControllers/banner");
+const {
+  addNotification,
+  getAllNotifications,
+  viewNotifications,
+  deletePushNotification,
+} = require("../controllers/adminControllers/pushNotification");
 
 //-admin register
 router.post("/create-admin", adminRegister);
@@ -229,4 +235,9 @@ router.get("/banner-list", adminAuthorisationUser, bannerList);
 router.delete("/banner-delete/:id", adminAuthorisationUser, bannerDelete);
 router.get("/banner-subCategory/:id", adminAuthorisationUser, subCategory);
 router.get("/banner-seller", adminAuthorisationUser, allSellerList);
+
+router.post("/add-pushNotification", upload.any(), addNotification);
+router.patch("/get-pushNotification",getAllNotifications)
+router.get("/view-notification/:id",viewNotifications)
+router.delete("/delete-Notification/:id",deletePushNotification)
 module.exports = router;
