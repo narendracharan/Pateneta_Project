@@ -27,7 +27,7 @@ exports.addNotification = async (req, res) => {
     let image;
     if (req.files) {
       if (req.files.length)
-        image = `${process.env.BASE_URL}/${req.files[i].filename}`;
+        image = `${process.env.BASE_URL}/${req.files[0].filename}`;
     }
     const notification = await PushNotification.create({
       name: name,
@@ -135,7 +135,7 @@ exports.getAllNotifications = async (req, res) => {
 
 exports.viewNotifications = async (req, res) => {
   try {
-    const notification = await PushNotification.findById(req.params._id);
+    const notification = await PushNotification.findById(req.params.id);
     res
       .status(201)
       .json(success("Notification", { notification }, res.statusCode));
@@ -147,7 +147,7 @@ exports.viewNotifications = async (req, res) => {
 
 exports.deletePushNotification = async (req, res) => {
   try {
-    await PushNotification.findByIdAndDelete(req.params._id);
+    await PushNotification.findByIdAndDelete(req.params.id);
     res.status(201).json(success("Notification Deleted", {}, res.statusCode));
   } catch (err) {
     console.log(err);
