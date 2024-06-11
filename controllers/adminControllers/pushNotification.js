@@ -46,7 +46,6 @@ exports.addNotification = async (req, res) => {
             }
         }
       ])
-      console.log(Sellers);
       for (const seller of Sellers) {
         await Notification.create({
           user_Id: seller._id,
@@ -74,7 +73,6 @@ exports.addNotification = async (req, res) => {
             }
         }
       ])
-      console.log(Buyers);
       for (const Buyer of Buyers) {
         await Notification.create({
           user_Id: Buyer._id,
