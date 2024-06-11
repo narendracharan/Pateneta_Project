@@ -76,18 +76,6 @@ exports.addNotification = async (req, res) => {
           title: notification.message,
           url: notification.image,
         });
-
-        //     if (teacher.notification) {
-        //       sendNotificationTeacher(
-        //         "CUSTOM",
-        //         {
-        //           type: "CUSTOM",
-        //           title: name,
-        //           message,
-        //           image,
-        //         },
-        //         teacher._id
-        //       );
       }
     }
     res
