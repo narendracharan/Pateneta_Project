@@ -135,6 +135,10 @@ const schema = new mongoose.Schema({
   description:{
     type:String,
     require:true
+  },
+  fcmToken:{
+    type:String,
+    require:true
   }
 });
 schema.methods.checkPassword = async function (plainPassword, hashedPassword) {

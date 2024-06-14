@@ -225,7 +225,7 @@ exports.sellerRegister = async (req, res) => {
 // -----> Login Api
 exports.userLogin = async (req, res) => {
   try {
-    const { mobileNumber, password } = req.body;
+    const { mobileNumber, password,fcmToken } = req.body;
     if (!mobileNumber) {
       return res
         .status(201)
@@ -240,6 +240,8 @@ exports.userLogin = async (req, res) => {
     const verifyUser = await userSchema.findOne({
       mobileNumber: mobileNumber,
     });
+    verifyUser.fcmToken=fcmToken
+    await verifyUser.save()
     if (!verifyUser) {
       return res
         .status(201)

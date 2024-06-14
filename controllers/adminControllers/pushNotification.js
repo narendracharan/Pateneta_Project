@@ -3,6 +3,7 @@ const Notification = require("../../models/userModels/notificationSchema");
 const userSeller = require("../../models/userModels/UserRegister");
 const { error, success } = require("../../responseCode");
 const moment = require("moment");
+const { sendNotificationUser } = require("../userControllers.js/notification");
 
 exports.addNotification = async (req, res) => {
   try {
@@ -45,37 +46,48 @@ exports.addNotification = async (req, res) => {
     for (const seller of Sellers) {
       await Notification.create({
         user_Id: seller._id,
-        //type: "CUSTOM",
-        title: notification.message,
+        type: "CUSTOM",
+        description: notification.message,
         url: notification.image,
       });
-      //     if (student.notification) {
-      //       sendNotificationStudent(
-      //         "CUSTOM",
-      //         {
-      //           type: "CUSTOM",
-      //           title: name,
-      //           message,
-      //           image,
-      //         },
-      //         student._id
-      //       );
-      //     }
-      //   }
-      const Buyers = await userSeller.aggregate([
-        {
-          $match: {
-            userType: "Buyer",
+      if (seller) {
+        sendNotificationUser(
+          "CUSTOM",
+          {
+            type: "CUSTOM",
+            title: name,
+            message,
+            image,
           },
+          seller._id
+        );
+      }
+    }
+    const Buyer = await userSeller.aggregate([
+      {
+        $match: {
+          userType: "Buyer",
         },
-      ]);
-      for (const Buyer of Buyers) {
-        await Notification.create({
-          user_Id: Buyer._id,
-          //  type: "CUSTOM",
-          title: notification.message,
-          url: notification.image,
-        });
+      },
+    ]);
+    for (const buyer of Buyer) {
+      await Notification.create({
+        user_Id: buyer._id,
+        type: "CUSTOM",
+        description: notification.message,
+        url: notification.image,
+      });
+      if (buyer) {
+        sendNotificationUser(
+          "CUSTOM",
+          {
+            type: "CUSTOM",
+            title: name,
+            message,
+            image,
+          },
+          buyer._id
+        );
       }
     }
     res
