@@ -102,7 +102,7 @@ exports.addNotification = async (req, res) => {
 exports.sendAgain = async (req, res) => {
   try {
     const notification = await PushNotification.findById(req.params.id);
-    const buyer = await users.find({});
+    const buyer = await userSeller.find({});
     for (const buyers of buyer) {
       await Notification.create({
         user_Id: buyers._id,
