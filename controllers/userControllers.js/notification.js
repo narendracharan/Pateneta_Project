@@ -1,6 +1,79 @@
 const contentModels = require("../../models/adminModels/contentModels");
 const notificationSchema = require("../../models/userModels/notificationSchema");
 const { error, success } = require("../../responseCode");
+const users = require("../../models/userModels/UserRegister");
+const admin = require("firebase-admin");
+const serviceAccount = require("../../config/firebase.json");
+const notification=require("../../models/userModels/notificationSchema")
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+
+exports.sendNotificationUser = async (type, data, studentId) => {
+  try {
+    const devices = await users.find({ _id: studentId });
+    for (const device of devices) {
+      const count = await notification.find({
+        user_Id: device.studentId,
+        isRead: false,
+      }).countDocuments();
+      data.count = String(count);
+      let title = "";
+      let body = "";
+      if (type === "EVALUATED") {
+        title = "Exam Evaluated";
+        body = data.description;
+      } else if (type === "CUSTOM") {
+        title = data.title;
+        body = data.message;
+      }
+      if (device.fcmToken) {
+        const message = {
+          token: device.fcmToken,
+          data: { ...data },
+          notification: {
+            title: title,
+            body: body,
+            // imageUrl: `${process.env.BASEURL}:2053/logo.png`,
+          },
+          webpush: {
+            data: { ...data },
+            notification: {
+              title: title,
+              body: body,
+              // badge: `${process.env.BASEURL}:2053/logo.png`,
+              // icon: `${process.env.BASEURL}:2053/logo.png`,
+              dir: "ltr",
+              data: { ...data },
+            },
+            fcmOptions: {
+              // link: url,
+            },
+          },
+        };
+        if (data.image) {
+          message.webpush.notification.image = data.image;
+        }
+        admin
+          .messaging()
+          .send(message)
+          .then((response) => {
+            console.log(response);
+            return;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    }
+
+    return;
+  } catch (err) {
+    console.log(err);
+    return;
+  }
+};
 
 //------> notification List APi
 exports.notificationList = async (req, res) => {

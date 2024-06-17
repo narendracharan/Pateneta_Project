@@ -47,7 +47,7 @@ exports.addNotification = async (req, res) => {
       await Notification.create({
         user_Id: seller._id,
         type: "CUSTOM",
-        description: notification.message,
+        title: notification.message,
         url: notification.image,
       });
       if (seller) {
@@ -74,7 +74,7 @@ exports.addNotification = async (req, res) => {
       await Notification.create({
         user_Id: buyer._id,
         type: "CUSTOM",
-        description: notification.message,
+        title: notification.message,
         url: notification.image,
       });
       if (buyer) {
