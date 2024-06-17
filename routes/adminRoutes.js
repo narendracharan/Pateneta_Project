@@ -99,6 +99,7 @@ const {
   getAllNotifications,
   viewNotifications,
   deletePushNotification,
+  sendAgain,
 } = require("../controllers/adminControllers/pushNotification");
 
 //-admin register
@@ -237,6 +238,7 @@ router.get("/banner-subCategory/:id", adminAuthorisationUser, subCategory);
 router.get("/banner-seller", adminAuthorisationUser, allSellerList);
 
 router.post("/add-pushNotification", upload.any(), addNotification);
+router.post("/send-agains/:id", sendAgain);
 router.patch("/get-pushNotification",getAllNotifications)
 router.get("/view-notification/:id",viewNotifications)
 router.delete("/delete-Notification/:id",deletePushNotification)

@@ -99,6 +99,38 @@ exports.addNotification = async (req, res) => {
   }
 };
 
+exports.sendAgain = async (req, res) => {
+  try {
+    const notification = await PushNotification.findById(req.params.id);
+    const buyer = await users.find({});
+    for (const buyers of buyer) {
+      await Notification.create({
+        user_Id: buyers._id,
+        type: "CUSTOM",
+        title: notification.message,
+        url: notification.image,
+      });
+      if (buyers) {
+        sendNotificationUser(
+          "CUSTOM",
+          {
+            type: "CUSTOM",
+            title: notification.name,
+            message: notification.message,
+            image: notification.image,
+          },
+          buyers._id
+        );
+      }
+    }
+    res
+      .status(201)
+      .json(success("Notification sent again", {}, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(error("Error", res.statusCode));
+  }
+};
 exports.getAllNotifications = async (req, res) => {
   try {
     const { from, to, search } = req.body;

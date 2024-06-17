@@ -75,6 +75,8 @@ exports.sendNotificationUser = async (type, data, studentId) => {
   }
 };
 
+
+
 //------> notification List APi
 exports.notificationList = async (req, res) => {
   try {
