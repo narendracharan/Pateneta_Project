@@ -10,7 +10,7 @@ const { default: mongoose } = require("mongoose");
 const notification = require("../../models/userModels/notificationSchema");
 const ideaNotification = require("../../models/adminModels/ideaNotification");
 const orderSchema = require("../../models/userModels/orderSchema");
-const Banner=require("../../models/adminModels/bannerModels")
+const Banner = require("../../models/adminModels/bannerModels");
 
 //---------> create bussiness idea api
 exports.createIdea = async (req, res) => {
@@ -327,9 +327,9 @@ exports.listBussinesIdeas = async (req, res) => {
 
   let combinedSortOrder = 1;
   if (highPrice == -1 || sortBy1 == -1) {
-    combinedSortOrder = -1; 
+    combinedSortOrder = -1;
   } else if (lowPrice == 1) {
-    combinedSortOrder = 1; 
+    combinedSortOrder = 1;
   }
   // Build match query
   if (purchased === "PENDING") {
@@ -373,14 +373,14 @@ exports.listBussinesIdeas = async (req, res) => {
       {
         $addFields: {
           combinedValue: {
-            $sum: ["$baseFare", "$Price"] // Sum of baseFare and Price
-          }
-        }
+            $sum: ["$baseFare", "$Price"], // Sum of baseFare and Price
+          },
+        },
       },
       {
-        $sort: {combinedValue: combinedSortOrder ,createdAt:-1} // Sort by createdAt and combined field
+        $sort: { combinedValue: combinedSortOrder, createdAt: -1 }, // Sort by createdAt and combined field
       },
-    ])
+    ]);
     res.status(200).json(success(res.statusCode, "Success", { verify }));
   } catch (err) {
     console.log(err);
@@ -391,14 +391,15 @@ exports.listBussinesIdeas = async (req, res) => {
 //----> search bussiness idea api
 exports.searchBussinessIdea = async (req, res) => {
   try {
-    const { search, highPrice, lowPrice, purchased, sortBy1, type } = req.body.search;
+    const { search, highPrice, lowPrice, purchased, sortBy1, type } =
+      req.body.search;
     let matchQuery = { verify: "APPROVED" };
 
     let combinedSortOrder = 1;
     if (highPrice == -1 || sortBy1 == -1) {
-      combinedSortOrder = -1; 
+      combinedSortOrder = -1;
     } else if (lowPrice == 1) {
-      combinedSortOrder = 1; 
+      combinedSortOrder = 1;
     }
     // Build match query
     if (purchased === "PENDING") {
@@ -462,7 +463,7 @@ exports.searchBussinessIdea = async (req, res) => {
       //         "categories.categoryName":{ $regex: search, $options: "i" } ,
       //       },
       //       {
-      //         "subcategoriess.subCategoryName": { $regex: search, $options: "i" } 
+      //         "subcategoriess.subCategoryName": { $regex: search, $options: "i" }
       //       },
       //     ],
       //   },
@@ -491,14 +492,14 @@ exports.searchBussinessIdea = async (req, res) => {
 
 exports.searchRequest = async (req, res) => {
   try {
-    const {search, highPrice, lowPrice, purchased, sortBy1, type} = req.body;
+    const { search, highPrice, lowPrice, purchased, sortBy1, type } = req.body;
     let matchQuery = { verify: "APPROVED" };
 
     let combinedSortOrder = 1;
     if (highPrice == -1 || sortBy1 == -1) {
-      combinedSortOrder = -1; 
+      combinedSortOrder = -1;
     } else if (lowPrice == 1) {
-      combinedSortOrder = 1; 
+      combinedSortOrder = 1;
     }
     // Build match query
     if (purchased === "PENDING") {
@@ -533,24 +534,24 @@ exports.searchRequest = async (req, res) => {
         $match: {
           $or: [
             {
-             title_en: { $regex: search, $options: "i" },
+              title_en: { $regex: search, $options: "i" },
             },
           ],
         },
       },
       {
-          $match: matchQuery,
+        $match: matchQuery,
+      },
+      {
+        $addFields: {
+          combinedValue: {
+            $sum: ["$baseFare", "$Price"], // Sum of baseFare and Price
+          },
         },
-        {
-          $addFields: {
-            combinedValue: {
-              $sum: ["$baseFare", "$Price"] // Sum of baseFare and Price
-            }
-          }
-        },
-        {
-          $sort: {combinedValue: combinedSortOrder ,createdAt:-1} // Sort by createdAt and combined field
-        },
+      },
+      {
+        $sort: { combinedValue: combinedSortOrder, createdAt: -1 }, // Sort by createdAt and combined field
+      },
     ]);
     res.status(200).json(success(res.statusCode, "Success", { searchIdeas }));
   } catch (err) {
@@ -757,9 +758,9 @@ exports.subCategoryIdeas = async (req, res) => {
 
   let combinedSortOrder = 1;
   if (highPrice == -1 || sortBy1 == -1) {
-    combinedSortOrder = -1; 
+    combinedSortOrder = -1;
   } else if (lowPrice == 1) {
-    combinedSortOrder = 1; 
+    combinedSortOrder = 1;
   }
   // Build match query
   if (purchased === "PENDING") {
@@ -775,8 +776,8 @@ exports.subCategoryIdeas = async (req, res) => {
     const product = await productSchema.aggregate([
       {
         $match: {
-          category_Id:new mongoose.Types.ObjectId(req.params.id)
-        }
+          subCategory_Id: new mongoose.Types.ObjectId(req.params.id),
+        },
       },
       {
         $lookup: {
@@ -808,14 +809,57 @@ exports.subCategoryIdeas = async (req, res) => {
       {
         $addFields: {
           combinedValue: {
-            $sum: ["$baseFare", "$Price"] // Sum of baseFare and Price
-          }
-        }
+            $sum: ["$baseFare", "$Price"], // Sum of baseFare and Price
+          },
+        },
       },
       {
-        $sort: {combinedValue: combinedSortOrder ,createdAt:-1} // Sort by createdAt and combined field
+        $sort: { combinedValue: combinedSortOrder, createdAt: -1 }, // Sort by createdAt and combined field
       },
-    ])
+    ]);
+    res.status(200).json(success(res.statusCode, "Success", { product }));
+  } catch (err) {
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+exports.categoryIdeas = async (req, res) => {
+  try {
+    const product = await productSchema.aggregate([
+      {
+        $match: {
+          category_Id: new mongoose.Types.ObjectId(req.params.id),
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "user_Id",
+          foreignField: "_id",
+          as: "users",
+        },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category_Id",
+          foreignField: "_id",
+          as: "categories",
+        },
+      },
+      {
+        $lookup: {
+          from: "subcategories",
+          localField: "subCategory_Id",
+          foreignField: "_id",
+          as: "subcategoriess",
+        },
+      },
+
+      {
+        $sort: { createdAt: -1 }, // Sort by createdAt and combined field
+      },
+    ]);
     res.status(200).json(success(res.statusCode, "Success", { product }));
   } catch (err) {
     res.status(400).json(error("Failed", res.statusCode));
@@ -1056,7 +1100,6 @@ exports.verifyKyc = async (req, res) => {
     res.status(400).json(error("Error In Kyc", res.statusCode));
   }
 };
-
 
 exports.Banners = async (req, res) => {
   try {

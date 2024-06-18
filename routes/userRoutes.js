@@ -43,6 +43,7 @@ const {
   verifyKyc,
   searchRequest,
   Banners,
+  categoryIdeas,
 } = require("../controllers/userControllers.js/product");
 const {
   pushNotification,
@@ -149,6 +150,7 @@ router.post(
   updateBussinessIdea
 );
 router.post("/sub-category-ideas/:id", subCategoryIdeas);
+router.post("/category-ideas/:id", categoryIdeas);
 router.post("/search-my-idea/:id", tokenAuthorisationUser, searchMyIdea);
 router.post("/received-idea/:id", tokenAuthorisationUser, RecivedDocument);
 router.post("/my-ideas/:id",tokenAuthorisationUser,myIdeas)

@@ -19,8 +19,9 @@ app.use(helmet.xssFilter());
 app.use((req, res, next) => {
   res.setHeader(
     "Cache-Control",
-    "no-cache, no-store, must-revalidate,max-age=0"
+    "no-cache, no-store, must-revalidate,max-age=0,private"
   );
+  res.setHeader("X-Frame-Options", "SAMEORIGIN");
   res.setHeader("Pragma", "no-cache");
   res.setHeader("Expires", "0");
   res.setHeader("X-Content-Type-Options", "nosniff");

@@ -57,9 +57,6 @@ exports.approvedIdea = async (req, res) => {
       91164721
       `
     );
-
-    //
-
     res
       .status(200)
       .json(success(res.statusCode, "Approved idea", { appreovedIdea }));
