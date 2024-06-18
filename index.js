@@ -54,6 +54,8 @@ app.use(
     },
   })
 );
+
+
 app.use(
   helmet({
     xssFilter: true,
@@ -62,6 +64,10 @@ app.use(
     },
   })
 );
+
+
+
+
 // CSRF protection
 //const csrfProtection = csurf({ cookie: true });
 //app.use(csurf);
