@@ -782,7 +782,6 @@ exports.OtpVerify = async (req, res) => {
     if (userOtpVerify.otp === +otp && new Date() > userOtpVerify.otpExpriTime) {
       return res.status(201).json(error("OTP Expired", res.statusCode));
     }
-
     if (userOtpVerify.otp == otp) {
       return res
         .status(200)
