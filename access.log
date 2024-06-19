@@ -1,3 +1,14 @@
 ::ffff:127.0.0.1 - - [19/Jun/2024:05:18:34 +0000] "POST /admin/send-agains/66682f8f57670b4700cd686d HTTP/1.1" 500 63
 ::ffff:127.0.0.1 - - [19/Jun/2024:05:18:56 +0000] "POST /admin/send-agains/66682f8f57670b4700cd686d HTTP/1.1" 500 63
 ::ffff:127.0.0.1 - - [19/Jun/2024:05:19:04 +0000] "POST /admin/send-agains/66682f8f57670b4700cd686d HTTP/1.1" 500 63
+::ffff:127.0.0.1 - - [19/Jun/2024:06:54:58 +0000] "POST /user/login HTTP/1.1" 404 150
+::ffff:127.0.0.1 - - [19/Jun/2024:06:55:21 +0000] "POST /user/user-login HTTP/1.1" 400 64
+::ffff:127.0.0.1 - - [19/Jun/2024:06:56:57 +0000] "POST /user/user-login HTTP/1.1" 201 87
+::ffff:127.0.0.1 - - [19/Jun/2024:07:52:00 +0000] "POST /user/seller-register HTTP/1.1" 400 64
+::ffff:127.0.0.1 - - [19/Jun/2024:07:52:42 +0000] "POST /user/seller-register HTTP/1.1" 201 91
+::ffff:127.0.0.1 - - [19/Jun/2024:07:54:59 +0000] "POST /user/seller-register HTTP/1.1" 200 503
+::ffff:127.0.0.1 - - [19/Jun/2024:07:56:56 +0000] "POST /user/seller-register HTTP/1.1" 200 503
+::ffff:127.0.0.1 - - [19/Jun/2024:07:58:54 +0000] "POST /user/seller-register HTTP/1.1" 200 503
+::ffff:127.0.0.1 - - [19/Jun/2024:08:01:20 +0000] "POST /user/seller-register HTTP/1.1" 201 83
+::ffff:127.0.0.1 - - [19/Jun/2024:08:01:41 +0000] "POST /user/otp-verify HTTP/1.1" 400 64
+::ffff:127.0.0.1 - - [19/Jun/2024:08:03:55 +0000] "POST /user/otp-verify HTTP/1.1" 400 64

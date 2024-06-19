@@ -15,10 +15,10 @@ const sendMail = async (
     adminDocs === undefined ? "" : adminDocs.length ? adminDocs : "";
   //   console.log(user);
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    service: "gmail.com",
     auth: {
       user: "s04450647@gmail.com",
-      pass: "rpdncvlikrlckuip",
+      pass: "fwgz znds chrd mchw",
     },
     tls: {
       rejectUnauthorized: false // This line trusts the self-signed certificate

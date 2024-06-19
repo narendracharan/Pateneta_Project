@@ -9,6 +9,7 @@ const adminSchema = require("../../models/adminModels/userModels");
 const sendMail = require("../../services/EmailSerices");
 const { notification } = require("./notification");
 const userNotification = require("../../models/adminModels/userNotification");
+const moment=require("moment")
 // const firebase = require("firebase-admin");
 // const service = require("../../config/firebase.json");
 
@@ -79,6 +80,11 @@ exports.userRegister = async (req, res) => {
       userType: "Buyer",
     });
     const user = await newUser.save();
+    var expire_time = (expire_time = moment(expire_time).add(5, "minutes"));
+    await userSchema.findByIdAndUpdate(user._id, {
+      otp: +otp,
+      otpExpriTime: expire_time,
+    });
     // await notification(
     //   "Signup",
     //   `${newUser.fullName_en} `,
@@ -112,7 +118,21 @@ exports.userRegister = async (req, res) => {
     //   });
     await userNotification.create({
       title: "New User has been registered on the Platform",
-    });
+    }); 
+    await sendMail(
+      Email,
+      `PATENTA OTP`,
+      fullName_en || fullName_ar,
+      `<br.
+      <br>
+      Your otp is ${otp} expire in 5 minute<br>
+      <br>
+      <br>
+      Patenta<br>
+      Customer Service Team<br>
+      91164721
+      `
+    );
 
     await sendMail(
       admin.userEmail,
@@ -194,9 +214,28 @@ exports.sellerRegister = async (req, res) => {
       userType: "Seller",
     });
     const user = await newUser.save();
+    var expire_time = (expire_time = moment(expire_time).add(5, "minutes"));
+    await userSchema.findByIdAndUpdate(user._id, {
+      otp: +otp,
+      otpExpriTime: expire_time,
+    });
     await userNotification.create({
       title: " New User has been registered on the Platform",
     });
+    await sendMail(
+      Email,
+      `PATENTA OTP`,
+      fullName_en || fullName_ar,
+      `<br.
+      <br>
+      Your otp is ${otp} expire in 5 minute<br>
+      <br>
+      <br>
+      Patenta<br>
+      Customer Service Team<br>
+      91164721
+      `
+    );
     await sendMail(
       admin.userEmail,
       `New User`,
@@ -225,7 +264,7 @@ exports.sellerRegister = async (req, res) => {
 // -----> Login Api
 exports.userLogin = async (req, res) => {
   try {
-    const { mobileNumber, password,fcmToken } = req.body;
+    const { mobileNumber, password, fcmToken } = req.body;
     if (!mobileNumber) {
       return res
         .status(201)
@@ -240,8 +279,10 @@ exports.userLogin = async (req, res) => {
     const verifyUser = await userSchema.findOne({
       mobileNumber: mobileNumber,
     });
-    verifyUser.fcmToken=fcmToken
-    await verifyUser.save()
+    if (fcmToken) {
+      verifyUser.fcmToken = fcmToken;
+      await verifyUser.save();
+    }
     if (!verifyUser) {
       return res
         .status(201)
@@ -381,17 +422,10 @@ exports.resetPassword = async (req, res) => {
           );
       } else {
         const user = await userSchema.findOne({
-          Email:Email,
-        })
+          Email: Email,
+        });
         if (!user) {
-          return res
-            .status(200)
-            .json(
-              error(
-                "Invalid Email",
-                res.statusCode
-              )
-            );
+          return res.status(200).json(error("Invalid Email", res.statusCode));
         }
         const passwordHash = await bcrypt.hash(newPassword, 10);
         const createPassword = await userSchema.findOneAndUpdate(
@@ -489,7 +523,6 @@ exports.userEditProfile = async (req, res) => {
       anotherEmail,
       DOB,
       address,
-      
     } = req.body;
     // const passwordHash = await bcrypt.hash(password, 10);
     const userprofile = await userSchema.findById(req.params.id);
@@ -660,7 +693,7 @@ exports.userResetPassword = async (req, res) => {
 exports.userDetails = async (req, res) => {
   try {
     const id = req.params.id;
-    const userDetails = await userSchema.findById(id)
+    const userDetails = await userSchema.findById(id);
     res.status(200).json(success(res.statusCode, "Success", { userDetails }));
   } catch (err) {
     res.status(400).json(error("Error in User Details", res.statusCode));
@@ -692,7 +725,7 @@ exports.addAccount = async (req, res) => {
         .status(201)
         .json(error("Please Provide Owner Name", res.statusCode));
     }
-    const user = await userSchema.findById(req.params.id)
+    const user = await userSchema.findById(req.params.id);
     if (bankName) {
       user.bankName = bankName;
     }
@@ -742,22 +775,23 @@ exports.sendOtpPassword = async (req, res) => {
   }
 };
 
-// exports.OtpVerify = async (req, res) => {
-//   try {
-//     const otp  = req.body.otp
-//     const userOtpVerify = await userModels.findOne({ userEmail: userEmail });
-//     if (userOtpVerify.otp === +otp && new Date() > userOtpVerify.expireOtp) {
-//       return res.status(201).json(error("OTP Expired", res.statusCode));
-//     }
+exports.OtpVerify = async (req, res) => {
+  try {
+    const {otp,Email} = req.body;
+    const userOtpVerify = await userSchema.findOne({ Email: Email });
+    if (userOtpVerify.otp === +otp && new Date() > userOtpVerify.otpExpriTime) {
+      return res.status(201).json(error("OTP Expired", res.statusCode));
+    }
 
-//     if (userOtpVerify.otp == otp) {
-//       return res
-//         .status(200)
-//         .json(success(res.statusCode, "Verify Otp Successfully", {}));
-//     } else {
-//       return res.status(200).json(error("Invalid Otp", res.statusCode));
-//     }
-//   } catch (err) {
-//     res.status(400).json(error("Failed", res.statusCode));
-//   }
-// };
+    if (userOtpVerify.otp == otp) {
+      return res
+        .status(200)
+        .json(success(res.statusCode, "Verify Otp Successfully", {}));
+    } else {
+      return res.status(200).json(error("Invalid Otp", res.statusCode));
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("Failed", res.statusCode));
+  }
+};
