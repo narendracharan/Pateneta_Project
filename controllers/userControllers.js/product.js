@@ -321,7 +321,7 @@ exports.updateBussinessIdea = async (req, res) => {
 
 //-----------> list of bussiness ideas Api
 exports.listBussinesIdeas = async (req, res) => {
-  const { highPrice, lowPrice, purchased, sortBy1, type } = req.body;
+  const { highPrice, lowPrice, purchased, sortBy1, type, category } = req.body;
   let sortQuery = {};
   let matchQuery = { verify: "APPROVED" };
 
@@ -340,6 +340,9 @@ exports.listBussinesIdeas = async (req, res) => {
   }
   if (type === "Auction") {
     matchQuery.ideaType = "Auction";
+  }
+  if (category) {
+    matchQuery.category_Id = new mongoose.Types.ObjectId(category); // Add category filter
   }
   try {
     const verify = await productSchema.aggregate([
@@ -1105,6 +1108,15 @@ exports.Banners = async (req, res) => {
   try {
     const bannerList = await Banner.find({}).sort({ createdAt: -1 });
     res.status(200).json(success(res.statusCode, "Success", { bannerList }));
+  } catch (err) {
+    res.status(400).json(error("Error", res.statusCode));
+  }
+};
+
+exports.categoryView = async (req, res) => {
+  try {
+    const category = await categoryModels.findById(req.params.id);
+    res.status(200).json(success(res.statusCode, "Success", { category }));
   } catch (err) {
     res.status(400).json(error("Error", res.statusCode));
   }

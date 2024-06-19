@@ -21,11 +21,11 @@ app.use((req, res, next) => {
     "Cache-Control",
     "no-cache, no-store, must-revalidate,max-age=0,private"
   );
-  res.setHeader("X-Frame-Options", "SAMEORIGIN");
+  res.setHeader("X-Frame-Options", "SAMEORIGIN", "DENY");
   res.setHeader("Pragma", "no-cache");
   res.setHeader("Expires", "0");
   res.setHeader("X-Content-Type-Options", "nosniff");
-  res.setHeader("X-XSS-Protection", "1; mode=block");
+  res.setHeader("X-XSS-Protection", "0; mode=block");
   next();
 });
 
@@ -55,7 +55,6 @@ app.use(
   })
 );
 
-
 app.use(
   helmet({
     xssFilter: true,
@@ -65,30 +64,27 @@ app.use(
   })
 );
 
-
-
-
 // CSRF protection
 //const csrfProtection = csurf({ cookie: true });
 //app.use(csurf);
 
-// app.use(
-//     morgan("common", {
-//       stream: fs.createWriteStream(path.join(__dirname,"access.log"), {
-//         flags: "a",
-//       }),
-//     })
-//   );
-//   app.use(
-//     morgan("common", {
-//       skip: function (req, res) {
-//         return res.statusCode < 400;
-//       },
-//       stream: fs.createWriteStream(path.join(__dirname,"error.log"), {
-//         flags: "a",
-//       }),
-//     })
-//   );
+app.use(
+  morgan("common", {
+    stream: fs.createWriteStream(path.join(__dirname, "access.log"), {
+      flags: "a",
+    }),
+  })
+);
+app.use(
+  morgan("common", {
+    skip: function (req, res) {
+      return res.statusCode < 400;
+    },
+    stream: fs.createWriteStream(path.join(__dirname, "error.log"), {
+      flags: "a",
+    }),
+  })
+);
 
 //----> User Routes
 app.use("/user", router);

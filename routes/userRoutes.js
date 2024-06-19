@@ -44,6 +44,7 @@ const {
   searchRequest,
   Banners,
   categoryIdeas,
+  categoryView,
 } = require("../controllers/userControllers.js/product");
 const {
   pushNotification,
@@ -151,6 +152,7 @@ router.post(
 );
 router.post("/sub-category-ideas/:id", subCategoryIdeas);
 router.post("/category-ideas/:id", categoryIdeas);
+router.get("/category-view/:id", categoryView);
 router.post("/search-my-idea/:id", tokenAuthorisationUser, searchMyIdea);
 router.post("/received-idea/:id", tokenAuthorisationUser, RecivedDocument);
 router.post("/my-ideas/:id",tokenAuthorisationUser,myIdeas)
