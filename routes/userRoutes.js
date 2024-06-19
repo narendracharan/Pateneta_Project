@@ -16,6 +16,7 @@ const {
   sellerRegister,
   addAccount,
   OtpVerify,
+  sendEmail,
 } = require("../controllers/userControllers.js/register");
 const upload = require("../middleware/multer");
 const tokenAuthorisationUser = require("../middleware/userAuthentication");
@@ -108,6 +109,7 @@ router.post("/seller-register", sellerRegister);
 router.post("/register-company", companySignup);
 router.post("/user-login", userLogin);
 router.post("/send-otp", sendOtpPassword);
+router.post("/resSend-Otp", sendEmail);
 router.post("/otp-verify",OtpVerify)
 router.post("/reset-password", resetPassword);
 router.post("/create-user_kyc/:id", upload.any(), userKyc);

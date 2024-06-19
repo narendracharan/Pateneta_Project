@@ -9,7 +9,7 @@ const adminSchema = require("../../models/adminModels/userModels");
 const sendMail = require("../../services/EmailSerices");
 const { notification } = require("./notification");
 const userNotification = require("../../models/adminModels/userNotification");
-const moment=require("moment")
+const moment = require("moment");
 // const firebase = require("firebase-admin");
 // const service = require("../../config/firebase.json");
 
@@ -50,17 +50,17 @@ exports.userRegister = async (req, res) => {
     const checkName = await userSchema.findOne({
       fullName_en: fullName_en,
     });
-   if(mobileNumber){
-    const checkNumber = await userSchema.findOne({
-      mobileNumber: mobileNumber,
-    });
-    if (checkNumber) {
-      return res
-        .status(201)
-        .json(error("mobile Number is already register", res.statusCode));
+    if (mobileNumber) {
+      const checkNumber = await userSchema.findOne({
+        mobileNumber: mobileNumber,
+      });
+      if (checkNumber) {
+        return res
+          .status(201)
+          .json(error("mobile Number is already register", res.statusCode));
+      }
     }
-   }
-   
+
     const checkMail = await userSchema.findOne({ Email: Email });
     if (checkMail) {
       return res
@@ -82,10 +82,10 @@ exports.userRegister = async (req, res) => {
     await userSchema.findByIdAndUpdate(user._id, {
       otp: +otp,
       otpExpriTime: expire_time,
-    }); 
+    });
     await userNotification.create({
       title: "New User has been registered on the Platform",
-    }); 
+    });
     await sendMail(
       Email,
       `PATENTA OTP`,
@@ -149,7 +149,7 @@ exports.sellerRegister = async (req, res) => {
         .json(error("Please enter password", res.statusCode));
     }
     const admin = await adminSchema.findOne();
-    if(mobileNumber){
+    if (mobileNumber) {
       const checkNumber = await userSchema.findOne({
         mobileNumber: mobileNumber,
       });
@@ -159,7 +159,7 @@ exports.sellerRegister = async (req, res) => {
           .json(error("mobile Number is already register", res.statusCode));
       }
     }
-    
+
     const checkMail = await userSchema.findOne({ Email: Email });
     if (checkMail) {
       return res
@@ -316,7 +316,7 @@ exports.companySignup = async (req, res) => {
         .status(201)
         .json(error("companyName is already register", res.statusCode));
     }
-    if(mobileNumber){
+    if (mobileNumber) {
       const checkNumber = await userSchema.findOne({
         mobileNumber: mobileNumber,
       });
@@ -326,7 +326,7 @@ exports.companySignup = async (req, res) => {
           .json(error("mobile Number is already register", res.statusCode));
       }
     }
-   
+
     const checkMail = await userSchema.findOne({ Email: Email });
     if (checkMail) {
       return res
@@ -765,7 +765,7 @@ exports.sendOtpPassword = async (req, res) => {
 
 exports.OtpVerify = async (req, res) => {
   try {
-    const {otp,Email} = req.body;
+    const { otp, Email } = req.body;
     const userOtpVerify = await userSchema.findOne({ Email: Email });
     if (userOtpVerify.otp === +otp && new Date() > userOtpVerify.otpExpriTime) {
       return res.status(201).json(error("OTP Expired", res.statusCode));
@@ -780,5 +780,50 @@ exports.OtpVerify = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).json(error("Failed", res.statusCode));
+  }
+};
+
+///-------> Send Email
+exports.sendEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res
+        .status(201)
+        .json(error("Please provide email", res.statusCode));
+    }
+    if (!validator.isEmail(email)) {
+      return res.status(201).json(error("Invalid email", res.statusCode));
+    }
+    const users = await userSchema.findOne({
+      Email: email,
+    });
+    const otp = Math.floor(1000 + Math.random() * 9000);
+    var expire_time = (expire_time = moment(expire_time).add(5, "minutes"));
+    const user = await userSchema.findByIdAndUpdate(users._id, {
+      otp: +otp,
+      otpExpriTime: expire_time,
+    });
+    await sendMail(
+      email,
+      `PATENTA OTP`,
+      users.companyName_en ||
+        users.companyName_ar ||
+        users.fullName_ar ||
+        users.fullName_en,
+      `<br.
+      <br>
+      Your otp is ${otp} expire in 5 minute<br>
+      <br>
+      <br>
+      Patenta<br>
+      Customer Service Team<br>
+      91164721
+      `
+    );
+    res.status(201).json(success("OTP Sent", { otp, admin }, res.statusCode));
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(error("forget password error", res.statusCode));
   }
 };
