@@ -68,25 +68,25 @@ app.use(
 //const csrfProtection = csurf({ cookie: true });
 //app.use(csurf);
 
-app.use(
-  morgan("common", {
-    stream: fs.createWriteStream(path.join(__dirname, "access.log"), {
-      flags: "a",
-    }),
-  })
-);
+// app.use(
+//   morgan("common", {
+//     stream: fs.createWriteStream(path.join(__dirname, "access.log"), {
+//       flags: "a",
+//     }),
+//   })
+// );
 
 
-app.use(
-  morgan("common", {
-    skip: function (req, res) {
-      return res.statusCode < 400;
-    },
-    stream: fs.createWriteStream(path.join(__dirname, "error.log"), {
-      flags: "a",
-    }),
-  })
-);
+// app.use(
+//   morgan("common", {
+//     skip: function (req, res) {
+//       return res.statusCode < 400;
+//     },
+//     stream: fs.createWriteStream(path.join(__dirname, "error.log"), {
+//       flags: "a",
+//     }),
+//   })
+// );
 
 //----> User Routes
 app.use("/user", router);
