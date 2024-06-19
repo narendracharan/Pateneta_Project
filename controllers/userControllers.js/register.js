@@ -36,11 +36,11 @@ exports.userRegister = async (req, res) => {
     if (!validator.isEmail(Email)) {
       return res.status(201).json(error("Please enter  Email", res.statusCode));
     }
-    if (!mobileNumber) {
-      return res
-        .status(201)
-        .json(error("Please enter mobileNumber", res.statusCode));
-    }
+    // if (!mobileNumber) {
+    //   return res
+    //     .status(201)
+    //     .json(error("Please enter mobileNumber", res.statusCode));
+    // }
     if (!password) {
       return res
         .status(201)
@@ -170,11 +170,11 @@ exports.sellerRegister = async (req, res) => {
     if (!validator.isEmail(Email)) {
       return res.status(201).json(error("Please enter  Email", res.statusCode));
     }
-    if (!mobileNumber) {
-      return res
-        .status(201)
-        .json(error("Please enter mobileNumber", res.statusCode));
-    }
+    // if (!mobileNumber) {
+    //   return res
+    //     .status(201)
+    //     .json(error("Please enter mobileNumber", res.statusCode));
+    // }
     if (!password) {
       return res
         .status(201)
@@ -335,11 +335,11 @@ exports.companySignup = async (req, res) => {
     if (!validator.isEmail(Email)) {
       return res.status(201).json(error("Please enter  Email", res.statusCode));
     }
-    if (!mobileNumber) {
-      return res
-        .status(201)
-        .json(error("Please enter mobile Number", res.statusCode));
-    }
+    // if (!mobileNumber) {
+    //   return res
+    //     .status(201)
+    //     .json(error("Please enter mobile Number", res.statusCode));
+    // }
     if (!password) {
       return res
         .status(201)
@@ -382,6 +382,28 @@ exports.companySignup = async (req, res) => {
     await userNotification.create({
       title: "New User has been registered on the Platform",
     });
+    var expire_time = (expire_time = moment(expire_time).add(5, "minutes"));
+    await userSchema.findByIdAndUpdate(company._id, {
+      otp: +otp,
+      otpExpriTime: expire_time,
+    });
+    await userNotification.create({
+      title: " New User has been registered on the Platform",
+    });
+    await sendMail(
+      Email,
+      `PATENTA OTP`,
+      companyName_en || companyName_ar,
+      `<br.
+      <br>
+      Your otp is ${otp} expire in 5 minute<br>
+      <br>
+      <br>
+      Patenta<br>
+      Customer Service Team<br>
+      91164721
+      `
+    );
     await sendMail(
       admin.userEmail,
       `New User`,
