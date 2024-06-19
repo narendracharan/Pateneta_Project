@@ -48,7 +48,7 @@ exports.addNotification = async (req, res) => {
         user_Id: seller._id,
         type: "CUSTOM",
         title: notification.message,
-        url: notification.image,
+        image: notification.image,
       });
       if (seller) {
         sendNotificationUser(
@@ -75,7 +75,7 @@ exports.addNotification = async (req, res) => {
         user_Id: buyer._id,
         type: "CUSTOM",
         title: notification.message,
-        url: notification.image,
+        image: notification.image,
       });
       if (buyer) {
         sendNotificationUser(
@@ -108,7 +108,7 @@ exports.sendAgain = async (req, res) => {
         user_Id: buyers._id,
         type: "CUSTOM",
         title: notification.message,
-        url: notification.image,
+        image: notification.image,
       });
       if (buyers) {
         sendNotificationUser(

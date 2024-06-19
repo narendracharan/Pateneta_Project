@@ -12,6 +12,10 @@ const notificationSchema = new mongoose.Schema({
     type:String,
 
   },
+  image:{
+    type:String,
+
+  },
   isRead: {
     type: Boolean,
     default: false,
