@@ -50,11 +50,7 @@ exports.userRegister = async (req, res) => {
     const checkName = await userSchema.findOne({
       fullName_en: fullName_en,
     });
-    // if (checkName) {
-    //   return res
-    //     .status(201)
-    //     .json(error("Name is already register", res.statusCode));
-    // }
+   if(mobileNumber){
     const checkNumber = await userSchema.findOne({
       mobileNumber: mobileNumber,
     });
@@ -63,6 +59,8 @@ exports.userRegister = async (req, res) => {
         .status(201)
         .json(error("mobile Number is already register", res.statusCode));
     }
+   }
+   
     const checkMail = await userSchema.findOne({ Email: Email });
     if (checkMail) {
       return res
@@ -84,38 +82,7 @@ exports.userRegister = async (req, res) => {
     await userSchema.findByIdAndUpdate(user._id, {
       otp: +otp,
       otpExpriTime: expire_time,
-    });
-    // await notification(
-    //   "Signup",
-    //   `${newUser.fullName_en} `,
-    //   {
-    //     user: String(newUser._id),
-    //     type: "Signup",
-    //     url: "url",
-    //   },
-    //   // registerd.deviceId
-    // );
-    // const message = {
-    //   notification: {
-    //     title: "New User has been registered on the Platform ",
-    //     body: `New User has been registered on the Platform `,
-    //   },
-    //        token:"cUoKSzI8W653eCcx-X7l16:APA91bGikS52Sj8kewOgr4NMJtyBZrkjKSq1XYTDLTXPuYPmIQpOir1V6UFFo_mGMhsKfFm4Mb7V3WUIKhChhw6ARTTT9dAfACrNjEEM90m-7vrf8t_P2hG39r1Y4nqjR5IfyTQQu3lA",
-    //     //  data:{
-    //     //   orderKey: `${orderAssign._id}`,
-    //     //   redirect_to: "Notification"
-    //     // }
-    // };
-
-    // firebase
-    //   .messaging()
-    //   .send(message)
-    //   .then((response) => {
-    //     console.log("Successfully sent notification:", response);
-    //   })
-    //   .catch((error) => {
-    //     console.log("Error sending notification:", error);
-    //   });
+    }); 
     await userNotification.create({
       title: "New User has been registered on the Platform",
     }); 
@@ -167,6 +134,7 @@ exports.sellerRegister = async (req, res) => {
     // if (!fullName_en || !fullName_ar) {
     //   return res.status(201).json(error("Please enter  name", res.statusCode));
     // }
+    console.log(req.body);
     if (!validator.isEmail(Email)) {
       return res.status(201).json(error("Please enter  Email", res.statusCode));
     }
@@ -181,22 +149,17 @@ exports.sellerRegister = async (req, res) => {
         .json(error("Please enter password", res.statusCode));
     }
     const admin = await adminSchema.findOne();
-    // const checkName = await userSchema.findOne({
-    //   fullName_en: fullName_en,
-    // });
-    // if (checkName) {
-    //   return res
-    //     .status(201)
-    //     .json(error("Name is already register", res.statusCode));
-    // }
-    const checkNumber = await userSchema.findOne({
-      mobileNumber: mobileNumber,
-    });
-    if (checkNumber) {
-      return res
-        .status(201)
-        .json(error("mobile Number is already register", res.statusCode));
+    if(mobileNumber){
+      const checkNumber = await userSchema.findOne({
+        mobileNumber: mobileNumber,
+      });
+      if (checkNumber) {
+        return res
+          .status(201)
+          .json(error("mobile Number is already register", res.statusCode));
+      }
     }
+    
     const checkMail = await userSchema.findOne({ Email: Email });
     if (checkMail) {
       return res
@@ -353,14 +316,17 @@ exports.companySignup = async (req, res) => {
         .status(201)
         .json(error("companyName is already register", res.statusCode));
     }
-    const checkNumber = await userSchema.findOne({
-      mobileNumber: mobileNumber,
-    });
-    if (checkNumber) {
-      return res
-        .status(201)
-        .json(error("mobile Number is already register", res.statusCode));
+    if(mobileNumber){
+      const checkNumber = await userSchema.findOne({
+        mobileNumber: mobileNumber,
+      });
+      if (checkNumber) {
+        return res
+          .status(201)
+          .json(error("mobile Number is already register", res.statusCode));
+      }
     }
+   
     const checkMail = await userSchema.findOne({ Email: Email });
     if (checkMail) {
       return res
