@@ -18,6 +18,10 @@ const bannerSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
     },
+    sellerIdea:{
+      type: String,
+      required: false,
+    },
     urlType: {
       type: String,
       required: false,

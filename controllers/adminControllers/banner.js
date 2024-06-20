@@ -1,7 +1,7 @@
 const Banner = require("../../models/adminModels/bannerModels");
 const { error, success } = require("../../responseCode");
 const user = require("../../models/userModels/UserRegister");
-
+const productModel = require("../../models/userModels/productModel");
 exports.createBanner = async (req, res) => {
   try {
     const { category, subCategory, urlType, seller, url } = req.body;
@@ -16,11 +16,18 @@ exports.createBanner = async (req, res) => {
     //         .status(201)
     //         .json(error("Please Provide subCategory", res.statusCode));
     // }
+    if (seller) {
+      var sellerIdea = await productModel
+        .find({ user_Id: seller})
+        .select("user_Id");
+    }
+    
     const banner = await Banner.create({
       category: category,
       subCategory: subCategory,
       urlType: urlType,
       seller: seller,
+      sellerIdea: sellerIdea[0]._id,
       url: url,
     });
     if (req.files) {
@@ -31,6 +38,7 @@ exports.createBanner = async (req, res) => {
       }
     }
     await banner.save();
+
     res.status(200).json(success(res.statusCode, "Success", { banner }));
   } catch (err) {
     console.log(err);
