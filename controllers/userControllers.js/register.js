@@ -227,11 +227,11 @@ exports.sellerRegister = async (req, res) => {
 // -----> Login Api
 exports.userLogin = async (req, res) => {
   try {
-    const { mobileNumber, password, fcmToken } = req.body;
-    if (!mobileNumber) {
+    const { email, password, fcmToken } = req.body;
+    if (!email) {
       return res
         .status(201)
-        .json(error("Please Provide Mobile Number", res.statusCode));
+        .json(error("Please Provide  Email", res.statusCode));
     }
     if (!password) {
       return res
@@ -240,7 +240,7 @@ exports.userLogin = async (req, res) => {
     }
 
     const verifyUser = await userSchema.findOne({
-      mobileNumber: mobileNumber,
+      Email: email,
     });
     if (fcmToken) {
       verifyUser.fcmToken = fcmToken;
@@ -821,7 +821,7 @@ exports.sendEmail = async (req, res) => {
       91164721
       `
     );
-    res.status(201).json(success("OTP Sent", { otp, admin }, res.statusCode));
+    res.status(201).json(success("OTP Sent", { otp, user }, res.statusCode));
   } catch (err) {
     console.log(err);
     res.status(400).json(error("forget password error", res.statusCode));
