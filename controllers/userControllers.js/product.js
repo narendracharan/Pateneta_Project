@@ -1121,3 +1121,14 @@ exports.categoryView = async (req, res) => {
     res.status(400).json(error("Error", res.statusCode));
   }
 };
+
+exports.sellerId = async (req, res) => {
+  try {
+    const seller = await productModel.find({ user_Id: req.params.id }).select("user_Id")
+    res
+      .status(200)
+      .json(success(res.statusCode, "Success", { seller: seller[0] }));
+  } catch (err) {
+    res.status(400).json(error("Error", res.statusCode));
+  }
+};

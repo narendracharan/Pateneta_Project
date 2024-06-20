@@ -47,6 +47,7 @@ const {
   Banners,
   categoryIdeas,
   categoryView,
+  sellerId,
 } = require("../controllers/userControllers.js/product");
 const {
   pushNotification,
@@ -160,6 +161,7 @@ router.get("/category-view/:id", categoryView);
 router.post("/search-my-idea/:id", tokenAuthorisationUser, searchMyIdea);
 router.post("/received-idea/:id", tokenAuthorisationUser, RecivedDocument);
 router.post("/my-ideas/:id",tokenAuthorisationUser,myIdeas)
+router.get("/seller-Id/:id",sellerId)
 //----> user Order
 
 router.post("/user-order", tokenAuthorisationUser, createOrder);
