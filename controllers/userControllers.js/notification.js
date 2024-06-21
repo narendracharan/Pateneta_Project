@@ -21,12 +21,16 @@ exports.sendNotificationUser = async (type, data, studentId) => {
       data.count = String(count);
       let title = "";
       let body = "";
+     
       if (type === "EVALUATED") {
         title = "Exam Evaluated";
         body = data.description;
+       
+
       } else if (type === "CUSTOM") {
         title = data.title;
         body = data.message;
+       
       }
       if (device.fcmToken) {
         const message = {
@@ -35,13 +39,15 @@ exports.sendNotificationUser = async (type, data, studentId) => {
           notification: {
             title: title,
             body: body,
-            // imageUrl: `${process.env.BASEURL}:2053/logo.png`,
+           // weburl:weburl
           },
+         
           webpush: {
             data: { ...data },
             notification: {
               title: title,
               body: body,
+              click_action:"https://patenta-sa.com/",
               // badge: `${process.env.BASEURL}:2053/logo.png`,
               // icon: `${process.env.BASEURL}:2053/logo.png`,
               dir: "ltr",

@@ -16,6 +16,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 app.use(helmet.xssFilter());
+
 app.use((req, res, next) => {
   res.setHeader(
     "Cache-Control",

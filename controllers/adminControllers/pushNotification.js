@@ -9,9 +9,10 @@ const sendMail = require("../../services/EmailSerices");
 
 exports.addNotification = async (req, res) => {
   try {
-    const { message, name, type } = req.body;
+    const { message, name, type,weburl } = req.body;
     console.log(req.body);
     console.log(req.files);
+   // let weburl = "https://patenta-sa.com/";
     if (!name) {
       return res
         .status(201)
@@ -37,6 +38,7 @@ exports.addNotification = async (req, res) => {
       message: message,
       type: type,
       image: image,
+      
     });
     const Sellers = await userSeller.aggregate([
       {
@@ -51,6 +53,7 @@ exports.addNotification = async (req, res) => {
         type: "CUSTOM",
         title: notification.message,
         image: notification.image,
+       
       });
       if (seller) {
         sendNotificationUser(
@@ -60,6 +63,7 @@ exports.addNotification = async (req, res) => {
             title: name,
             message,
             image,
+           
           },
           seller._id
         );
@@ -67,7 +71,7 @@ exports.addNotification = async (req, res) => {
       await sendMail(
         seller.Email,
         `Notification`,
-        seller.fullName_en||seller.companyName_en,
+        seller.fullName_en || seller.companyName_en,
         `<br.
         <br>
           ${notification.message} <br>
@@ -94,6 +98,7 @@ exports.addNotification = async (req, res) => {
         type: "CUSTOM",
         title: notification.message,
         image: notification.image,
+       
       });
       if (buyer) {
         sendNotificationUser(
@@ -103,13 +108,14 @@ exports.addNotification = async (req, res) => {
             title: name,
             message,
             image,
+          
           },
           buyer._id
         );
         await sendMail(
           buyer.Email,
           `Notification`,
-          buyer.fullName_en ||buyer.companyName_en,
+          buyer.fullName_en || buyer.companyName_en,
           `<br.
           <br>
             ${notification.message} <br>
@@ -158,7 +164,7 @@ exports.sendAgain = async (req, res) => {
         await sendMail(
           buyers.Email,
           `Notification`,
-          buyers.fullName_en||buyers.companyName_en,
+          buyers.fullName_en || buyers.companyName_en,
           `<br.
           <br>
             ${notification.message} <br>

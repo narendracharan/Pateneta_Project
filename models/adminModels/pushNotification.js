@@ -18,7 +18,7 @@ const pushNotificationSchema = new Schema(
     image: {
       type: String,
       default: true,
-    },
+    }
   },
   { timestamps: true }
 );
