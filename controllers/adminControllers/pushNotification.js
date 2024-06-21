@@ -4,10 +4,12 @@ const userSeller = require("../../models/userModels/UserRegister");
 const { error, success } = require("../../responseCode");
 const moment = require("moment");
 const { sendNotificationUser } = require("../userControllers.js/notification");
+const { sendEmail } = require("../userControllers.js/register");
+const sendMail = require("../../services/EmailSerices");
 
 exports.addNotification = async (req, res) => {
   try {
-    const { message, name, type, } = req.body;
+    const { message, name, type } = req.body;
     console.log(req.body);
     console.log(req.files);
     if (!name) {
@@ -62,6 +64,22 @@ exports.addNotification = async (req, res) => {
           seller._id
         );
       }
+      await sendMail(
+        seller.Email,
+        `Notification`,
+        seller.fullName_en||seller.companyName_en,
+        `<br.
+        <br>
+          ${notification.message} <br>
+        <br>
+    
+
+        <br>
+        Patenta<br>
+        Customer Service Team<br>
+        91164721
+        `
+      );
     }
     const Buyer = await userSeller.aggregate([
       {
@@ -87,6 +105,22 @@ exports.addNotification = async (req, res) => {
             image,
           },
           buyer._id
+        );
+        await sendMail(
+          buyer.Email,
+          `Notification`,
+          buyer.fullName_en ||buyer.companyName_en,
+          `<br.
+          <br>
+            ${notification.message} <br>
+          <br>
+      
+          
+          <br>
+          Patenta<br>
+          Customer Service Team<br>
+          91164721
+          `
         );
       }
     }
@@ -120,6 +154,22 @@ exports.sendAgain = async (req, res) => {
             image: notification.image,
           },
           buyers._id
+        );
+        await sendMail(
+          buyers.Email,
+          `Notification`,
+          buyers.fullName_en||buyers.companyName_en,
+          `<br.
+          <br>
+            ${notification.message} <br>
+          <br>
+      
+  
+          <br>
+          Patenta<br>
+          Customer Service Team<br>
+          91164721
+          `
         );
       }
     }
