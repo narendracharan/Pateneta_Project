@@ -7,7 +7,7 @@ const { sendNotificationUser } = require("../userControllers.js/notification");
 
 exports.addNotification = async (req, res) => {
   try {
-    const { message, name, type } = req.body;
+    const { message, name, type, } = req.body;
     console.log(req.body);
     console.log(req.files);
     if (!name) {
@@ -58,7 +58,6 @@ exports.addNotification = async (req, res) => {
             title: name,
             message,
             image,
-            url: "https://patenta-sa.com/",
           },
           seller._id
         );
@@ -86,7 +85,6 @@ exports.addNotification = async (req, res) => {
             title: name,
             message,
             image,
-            url: "https://patenta-sa.com/",
           },
           buyer._id
         );
@@ -120,7 +118,6 @@ exports.sendAgain = async (req, res) => {
             title: notification.name,
             message: notification.message,
             image: notification.image,
-            url: "https://patenta-sa.com/",
           },
           buyers._id
         );

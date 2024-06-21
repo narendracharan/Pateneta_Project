@@ -21,7 +21,6 @@ exports.sendNotificationUser = async (type, data, studentId) => {
       data.count = String(count);
       let title = "";
       let body = "";
-      let url=""
       if (type === "EVALUATED") {
         title = "Exam Evaluated";
         body = data.description;
@@ -36,7 +35,6 @@ exports.sendNotificationUser = async (type, data, studentId) => {
           notification: {
             title: title,
             body: body,
-            url:url
             // imageUrl: `${process.env.BASEURL}:2053/logo.png`,
           },
           webpush: {
