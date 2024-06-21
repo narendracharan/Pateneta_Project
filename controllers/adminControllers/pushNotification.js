@@ -58,6 +58,7 @@ exports.addNotification = async (req, res) => {
             title: name,
             message,
             image,
+            url: "https://patenta-sa.com/",
           },
           seller._id
         );
@@ -85,6 +86,7 @@ exports.addNotification = async (req, res) => {
             title: name,
             message,
             image,
+            url: "https://patenta-sa.com/",
           },
           buyer._id
         );
