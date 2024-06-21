@@ -12,7 +12,7 @@ exports.userList = async (req, res) => {
         from ? { createdAt: { $gte: new Date(from) } } : {},
         to ? { createdAt: { $lte: new Date(`${to}T23:59:59`) } } : {},
       ],
-    });
+    }).sort({createdAt:-1})
 
     res.status(200).json(success(res.statusCode, "Success", { userList }));
 
