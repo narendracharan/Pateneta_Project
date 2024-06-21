@@ -18,16 +18,16 @@ exports.createBanner = async (req, res) => {
     // }
     if (seller) {
       var sellerIdea = await productModel
-        .find({ user_Id: seller})
+        .find({ user_Id: seller })
         .select("user_Id");
     }
-    
+
     const banner = await Banner.create({
       category: category,
       subCategory: subCategory,
       urlType: urlType,
       seller: seller,
-      sellerIdea: sellerIdea[0]._id,
+      //sellerIdea: sellerIdea[0]._id ||"",
       url: url,
     });
     if (req.files) {
@@ -38,7 +38,11 @@ exports.createBanner = async (req, res) => {
       }
     }
     await banner.save();
-
+    if (sellerIdea) {
+      const banners = await Banner.findById(banner._id)
+      banners.sellerIdea = sellerIdea[0]._id
+      await banners.save()
+    }
     res.status(200).json(success(res.statusCode, "Success", { banner }));
   } catch (err) {
     console.log(err);
