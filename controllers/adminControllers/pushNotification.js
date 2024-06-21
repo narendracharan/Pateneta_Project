@@ -120,6 +120,7 @@ exports.sendAgain = async (req, res) => {
             title: notification.name,
             message: notification.message,
             image: notification.image,
+            url: "https://patenta-sa.com/",
           },
           buyers._id
         );
