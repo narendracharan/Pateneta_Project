@@ -43,7 +43,7 @@ const sendMail = async (
                                     <span
                                        style="display: inline-block; background-color: #fff; border-radius: 10px; padding: 10px;">
                                        <img style="display: inline-block; max-width: 150px;"
-                                          src="https://patenta-sa.com:2053/1698041746311hwbi3.png"
+                                          src="http://ec2-52-66-186-107.ap-south-1.compute.amazonaws.com:3001/1718946511311wm89z.png"
                                           alt="Patenta">
                                     </span>
                                  </td>
