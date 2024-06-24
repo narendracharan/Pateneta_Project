@@ -10,6 +10,7 @@ const sendMail = require("../../services/EmailSerices");
 const { notification } = require("./notification");
 const userNotification = require("../../models/adminModels/userNotification");
 const moment = require("moment");
+const Image=require("../../models/userModels/imageModels")
 // const firebase = require("firebase-admin");
 // const service = require("../../config/firebase.json");
 
@@ -825,5 +826,18 @@ exports.sendEmail = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).json(error("forget password error", res.statusCode));
+  }
+};
+
+
+exports.addImage = async (req, res) => {
+  try {
+    const image = await Image.create({
+      image: `${process.env.BASEURL}/${req.files[0].filename}`,
+    });
+
+    res.status(200).json(success("Success", { image }, res.statusCode));
+  } catch (err) {
+    res.status(400).json(error("error", res.statusCode));
   }
 };

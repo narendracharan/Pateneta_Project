@@ -6,13 +6,14 @@ const moment = require("moment");
 const { sendNotificationUser } = require("../userControllers.js/notification");
 const { sendEmail } = require("../userControllers.js/register");
 const sendMail = require("../../services/EmailSerices");
+const sendNotificationEmail = require("../../services/notificationEmail");
 
 exports.addNotification = async (req, res) => {
   try {
-    const { message, name, type,weburl } = req.body;
+    const { message, name, type, weburl } = req.body;
     console.log(req.body);
     console.log(req.files);
-   // let weburl = "https://patenta-sa.com/";
+    // let weburl = "https://patenta-sa.com/";
     if (!name) {
       return res
         .status(201)
@@ -38,7 +39,6 @@ exports.addNotification = async (req, res) => {
       message: message,
       type: type,
       image: image,
-      
     });
     const Sellers = await userSeller.aggregate([
       {
@@ -53,7 +53,6 @@ exports.addNotification = async (req, res) => {
         type: "CUSTOM",
         title: notification.message,
         image: notification.image,
-       
       });
       if (seller) {
         sendNotificationUser(
@@ -63,26 +62,15 @@ exports.addNotification = async (req, res) => {
             title: name,
             message,
             image,
-           
           },
           seller._id
         );
       }
-      await sendMail(
-        seller.Email,
+      await sendNotificationEmail(
+        "narendracharan25753@gmail.com",
         `Notification`,
-        seller.fullName_en || seller.companyName_en,
-        `<br.
-        <br>
-          ${notification.message} <br>
-        <br>
-    
-
-        <br>
-        Patenta<br>
-        Customer Service Team<br>
-        91164721
-        `
+        notification.name,
+        notification.message,
       );
     }
     const Buyer = await userSeller.aggregate([
@@ -98,7 +86,6 @@ exports.addNotification = async (req, res) => {
         type: "CUSTOM",
         title: notification.message,
         image: notification.image,
-       
       });
       if (buyer) {
         sendNotificationUser(
@@ -108,26 +95,24 @@ exports.addNotification = async (req, res) => {
             title: name,
             message,
             image,
-          
           },
           buyer._id
         );
-        await sendMail(
-          buyer.Email,
-          `Notification`,
-          buyer.fullName_en || buyer.companyName_en,
-          `<br.
-          <br>
-            ${notification.message} <br>
-          <br>
-      
-          
-          <br>
-          Patenta<br>
-          Customer Service Team<br>
-          91164721
-          `
-        );
+        // await sendNotificationEmail(
+        //   buyer.Email,
+        //   `Notification`,
+        //   notification.name
+        //   `<br.
+        //   <br>
+        //     ${notification.message} <br>
+        //   <br>
+
+        //   <br>
+        //   Patenta<br>
+        //   Customer Service Team<br>
+        //   91164721
+        //   `
+        // );
       }
     }
     res
