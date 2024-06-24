@@ -833,11 +833,12 @@ exports.sendEmail = async (req, res) => {
 exports.addImage = async (req, res) => {
   try {
     const image = await Image.create({
-      image: `${process.env.BASEURL}/${req.files[0].filename}`,
+      image:`${process.env.BASE_URL}/${req.files[0].filename}`,
     });
 
     res.status(200).json(success("Success", { image }, res.statusCode));
   } catch (err) {
+    console.log(err);
     res.status(400).json(error("error", res.statusCode));
   }
 };

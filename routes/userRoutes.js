@@ -119,7 +119,7 @@ router.post("/user-details/:id", userDetails);
 router.post("/create-compny_kyc/:id", upload.any(), companyKyc);
 router.post("/verify-user/:id", verifyUser);
 router.post("/verify-kyc/:id", verifyKyc);
-router.post("/add-images", addImage);
+router.post("/add-images", upload.any(), addImage);
 router.post(
   "/updated-profile/:id",
   tokenAuthorisationUser,
