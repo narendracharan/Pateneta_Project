@@ -20,13 +20,14 @@ app.use(helmet.xssFilter());
 app.use((req, res, next) => {
   res.setHeader(
     "Cache-Control",
-    "no-cache, no-store, must-revalidate,max-age=0,private"
+    "no-cache, must-revalidate,max-age=0,private"
   );
+  res.setHeader('Surrogate-Control', 'no-store');
   res.setHeader("X-Frame-Options", "SAMEORIGIN", "DENY");
   res.setHeader("Pragma", "no-cache");
   res.setHeader("Expires", "0");
   res.setHeader("X-Content-Type-Options", "nosniff");
-  res.setHeader("X-XSS-Protection", "0; mode=block");
+  res.setHeader("X-XSS-Protection", "1; mode=block");
   next();
 });
 
@@ -76,7 +77,6 @@ app.use(
     }),
   })
 );
-
 
 app.use(
   morgan("common", {
