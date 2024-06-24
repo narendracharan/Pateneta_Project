@@ -116,7 +116,7 @@ const sendNotificationEmail = async (
                                  </td>
                               </tr>
                               <tr>
-                                 <td style="text-align: center; margin-bottom:20px">
+                                 <td style="text-align: center;">
                                     <a href="https://patenta-sa.com/" target="_blank"
                                        style="background-color: #164262;  color:white; padding: 8px 26px; font-size: 16px; font-weight: 500;border-radius: 5px; cursor: pointer; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">Go
                                        to website</a>

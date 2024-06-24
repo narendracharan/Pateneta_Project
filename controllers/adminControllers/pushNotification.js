@@ -137,21 +137,11 @@ exports.sendAgain = async (req, res) => {
           },
           buyers._id
         );
-        await sendMail(
+        await sendNotificationEmail(
           buyers.Email,
           `Notification`,
-          buyers.fullName_en || buyers.companyName_en,
-          `<br.
-          <br>
-            ${notification.message} <br>
-          <br>
-      
-  
-          <br>
-          Patenta<br>
-          Customer Service Team<br>
-          91164721
-          `
+          notification.name,
+          notification.message
         );
       }
     }
