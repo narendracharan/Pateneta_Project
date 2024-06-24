@@ -10,10 +10,9 @@ const sendNotificationEmail = async (
   adminDocs,
   attachments
 ) => {
-
   const description =
     message === undefined ? "" : message.length ? message : "";
-    const user = name === undefined ? "" : name.length ? name : "";
+  const user = name === undefined ? "" : name.length ? name : "";
   const documents =
     adminDocs === undefined ? "" : adminDocs.length ? adminDocs : "";
   //   console.log(user);
@@ -33,6 +32,16 @@ const sendNotificationEmail = async (
     subject: subject,
     text: body,
     html: `
+    <head>
+   <meta charset="utf-8" />
+   <title>StarImpoters</title>
+   <meta content="" name="description" />
+   <meta content="" name="keywords" />
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap"
+      rel="stylesheet">
+</head>
    <body style="font-family: 'Poppins', sans-serif; margin: 0;">
    <tr>
       <td style="border: 0;">
@@ -49,7 +58,7 @@ const sendNotificationEmail = async (
                                        style="display: inline-block; background-color: #fff; border-radius: 10px; padding: 8px ; border: 2px solid #164262;">
                                        <img
                                           style="display: inline-block; max-width: 120px; border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;"
-                                          src="http://ec2-52-66-186-107.ap-south-1.compute.amazonaws.com:3001/1719215210992r6pki.png" alt="Diet On">
+                                          src="https://patenta-sa.com:2053/1719216187747y4j7x.png" alt="">
                                     </span>
                                  </td>
                               </tr>
@@ -59,7 +68,7 @@ const sendNotificationEmail = async (
                                        style="display: inline-block; background-color: #fff; border-radius: 10px; padding: 5px ;">
                                        <img
                                           style="display: inline-block; max-width: 250px; max-height: 200px; border-radius: 5px;"
-                                          src="Client-Satisfaction.png" alt="Diet On">
+                                          src="https://patenta-sa.com:2053/1719216258514j57gv.png" alt="" >
                                     </span>
                                  </td>
                               </tr>
@@ -67,19 +76,19 @@ const sendNotificationEmail = async (
                                  <td style="text-align: center; padding-top: 50px;">
                                     <a href="" style="display: inline-block; border-radius: 10px; padding: 8px ;">
                                        <img style="display: inline-block; max-width: 120px; border-radius: 5px;"
-                                          src="twitter.png" alt="Diet On">
+                                          src="https://patenta-sa.com:2053/17192163068517nixw.png" alt="">
                                     </a>
                                     <a href="" style="display: inline-block; border-radius: 10px; padding: 8px ;">
                                        <img style="display: inline-block; max-width: 120px; border-radius: 5px;"
-                                          src="facebook.png" alt="Diet On">
+                                          src="https://patenta-sa.com:2053/1719216337365c90ir.png" alt="">
                                     </a>
                                     <a href="" style="display: inline-block; border-radius: 10px; padding: 8px ;">
                                        <img style="display: inline-block; max-width: 120px; border-radius: 5px;"
-                                          src="instagram.png" alt="Diet On">
+                                          src="https://patenta-sa.com:2053/1719216362335drvf4.png" alt="">
                                     </a>
                                     <a href="" style="display: inline-block; border-radius: 10px; padding: 8px ;">
                                        <img style="display: inline-block; max-width: 120px; border-radius: 5px;"
-                                          src="world-wide-web.png" alt="Diet On">
+                                          src="https://patenta-sa.com:2053/1719216395736gnudu.png" alt="">
                                     </a>
                                  </td>
                               </tr>
@@ -87,7 +96,7 @@ const sendNotificationEmail = async (
                         </td>
                      </tr>
                   </table>
-                  <table width="50%" style="border: 0; border-spacing: 0; height: 400px;margin: 50px auto;">
+                  <table width="50%"  style="border: 0; border-spacing: 0; height: 400px;margin: 50px auto;">
                      <tr>
                         <td
                            style="text-align: left; background-color: white; padding: 15px 20px 0; border-radius: 0px 5px 5px 0px;">
@@ -107,9 +116,9 @@ const sendNotificationEmail = async (
                                  </td>
                               </tr>
                               <tr>
-                                 <td style="text-align: center;">
-                                    <a
-                                       style="background-color: #164262; color:white; padding: 8px 26px; font-size: 16px; font-weight: 500;border-radius: 5px; cursor: pointer; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">Go
+                                 <td style="text-align: center; margin-bottom:20px">
+                                    <a href="https://patenta-sa.com/" target="_blank"
+                                       style="background-color: #164262;  color:white; padding: 8px 26px; font-size: 16px; font-weight: 500;border-radius: 5px; cursor: pointer; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">Go
                                        to website</a>
                                  </td>
                               </tr>

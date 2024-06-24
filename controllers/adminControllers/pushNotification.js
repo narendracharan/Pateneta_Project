@@ -67,10 +67,10 @@ exports.addNotification = async (req, res) => {
         );
       }
       await sendNotificationEmail(
-        "narendracharan25753@gmail.com",
+        seller.Email,
         `Notification`,
         notification.name,
-        notification.message,
+        notification.message
       );
     }
     const Buyer = await userSeller.aggregate([
@@ -98,21 +98,12 @@ exports.addNotification = async (req, res) => {
           },
           buyer._id
         );
-        // await sendNotificationEmail(
-        //   buyer.Email,
-        //   `Notification`,
-        //   notification.name
-        //   `<br.
-        //   <br>
-        //     ${notification.message} <br>
-        //   <br>
-
-        //   <br>
-        //   Patenta<br>
-        //   Customer Service Team<br>
-        //   91164721
-        //   `
-        // );
+        await sendNotificationEmail(
+          buyer.Email,
+          `Notification`,
+          notification.name,
+          notification.message
+        );
       }
     }
     res
