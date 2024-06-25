@@ -7,7 +7,6 @@ const fs = require("fs");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
-//const csurf=require("csurf")
 // const {Server}=require("socket.io")
 // const io=new Server()
 const bodyparser = require("body-parser");
@@ -15,26 +14,10 @@ const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-app.use(helmet.xssFilter());
-
-app.use((req, res, next) => {
-  res.setHeader(
-    "Cache-Control",
-    "no-cache,'no-store',must-revalidate,max-age=0,private"
-  );
-  res.setHeader('Surrogate-Control', 'no-store');
-  res.setHeader("X-Frame-Options", "SAMEORIGIN", "DENY");
-  res.setHeader("Pragma", "no-cache");
-  res.setHeader("Expires", "0");
-  res.setHeader("X-Content-Type-Options", "nosniff");
-  res.setHeader("X-XSS-Protection", "1; mode=block");
-  next();
-});
-
+app.use(helmet());
 app.use(cors());
 app.use(bodyparser.json());
 app.use(morgan("tiny"));
-app.use(cookieParser());
 require("./config/connection");
 const router = require("./routes/userRoutes");
 const adminRouter = require("./routes/adminRoutes");
@@ -47,6 +30,19 @@ const csurf = require("csurf");
 process.env["BASE_URL"] = "https://patenta-sa.com:2053";
 
 app.use(express.static("./public"));
+app.use((req, res, next) => {
+  res.setHeader(
+    "Cache-Control",
+    "no-cache,'no-store',must-revalidate,max-age=0,private"
+  );
+  res.setHeader("Surrogate-Control", "no-store");
+  res.setHeader("X-Frame-Options", "SAMEORIGIN", "DENY");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-XSS-Protection", "1; mode=block");
+  next();
+});
 
 app.use(
   helmet.contentSecurityPolicy({
@@ -65,10 +61,35 @@ app.use(
     },
   })
 );
-
-// CSRF protection
-//const csrfProtection = csurf({ cookie: true });
-//app.use(csurf);
+app.use((req, res, next) => {
+  const forbiddenMethods = [
+    "PROPFIND",
+    "PROPPATCH",
+    "MKCOL",
+    "COPY",
+    "MOVE",
+    "LOCK",
+    "UNLOCK",
+  ];
+  if (forbiddenMethods.includes(req.method)) {
+    return res.status(405).send("Method Not Allowed");
+  }
+  next();
+});
+app.use(cookieParser());
+// CSRF protection middleware
+const csrfProtection = csurf({ cookie: true });
+// Routes
+app.get("/form", csrfProtection, (req, res) => {
+  // Pass the csrfToken to the view
+  res.send(`<form action="/process" method="POST">
+              <input type="hidden" name="_csrf" value="${req.csrfToken()}">
+              <button type="submit">Submit</button>
+            </form>`);
+});
+app.post("/process", csrfProtection, (req, res) => {
+  res.send("Form processed");
+});
 
 app.use(
   morgan("common", {
