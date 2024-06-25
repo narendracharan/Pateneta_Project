@@ -21,7 +21,8 @@ app.use(
       "https://patenta-sa.com",
       "https://admin.patenta-sa.com",
       "http://localhost:3001",
-      "http://localhost:3000"
+      "http://localhost:3000",
+      "*"
     ]
   })
 );
