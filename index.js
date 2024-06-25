@@ -15,9 +15,6 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
  app.use(helmet());
-app.use(
-  cors()
-);
 var allowlist = [
   "https://patenta-sa.com",
   "https://admin.patenta-sa.com",
