@@ -55,7 +55,6 @@ app.use(
 
 app.use(
   helmet({
-    xssFilter: true,
     frameguard: {
       action: "deny",
     },
