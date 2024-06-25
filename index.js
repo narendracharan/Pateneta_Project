@@ -32,8 +32,7 @@ process.env["BASE_URL"] = "https://patenta-sa.com:2053";
 app.use(express.static("./public"));
 app.use((req, res, next) => {
   res.setHeader(
-    "Cache-Control",
-    "no-cache,'no-store',must-revalidate,max-age=0,private"
+    "no-cache,'no-store',must-revalidate"
   );
   res.setHeader("Surrogate-Control", "no-store");
   res.setHeader("X-Frame-Options", "SAMEORIGIN", "DENY");
