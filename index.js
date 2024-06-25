@@ -15,10 +15,15 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 // app.use(helmet());
-app.use(cors({origin:"https://patenta-sa.com"}));
-app.use(cors({origin:"http://localhost:3001"}));
-app.use(cors({origin:"https://admin.patenta-sa.com"}));
-app.use(cors({origin:"http://localhost:3000"}));
+app.use(
+  cors({
+    origin:
+      "https://patenta-sa.com" ||
+      "https://admin.patenta-sa.com" ||
+      "http://localhost:3001" ||
+      "http://localhost:3000",
+  })
+);
 app.use(bodyparser.json());
 app.use(morgan("tiny"));
 require("./config/connection");
@@ -34,7 +39,7 @@ process.env["BASE_URL"] = "https://patenta-sa.com:2053";
 
 app.use(express.static("./public"));
 app.use((req, res, next) => {
-  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   res.setHeader("Surrogate-Control", "no-store");
   //res.setHeader("X-Frame-Options", "SAMEORIGIN", "DENY");
   res.setHeader("Pragma", "no-cache");
