@@ -17,11 +17,12 @@ const io = new Server(server);
 // app.use(helmet());
 app.use(
   cors({
-    origin:
-      "https://patenta-sa.com" ||
-      "https://admin.patenta-sa.com" ||
-      "http://localhost:3001" ||
-      "http://localhost:3000",
+    origin: [
+      "https://patenta-sa.com",
+      "https://admin.patenta-sa.com",
+      "http://localhost:3001",
+      "http://localhost:3000"
+    ]
   })
 );
 app.use(bodyparser.json());
