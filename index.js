@@ -6,7 +6,7 @@ const app = express();
 const fs = require("fs");
 const path = require("path");
 const cookieParser = require("cookie-parser");
- const helmet = require("helmet");
+ //const helmet = require("helmet");
 // const {Server}=require("socket.io")
 // const io=new Server()
 const bodyparser = require("body-parser");
@@ -61,23 +61,23 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      "x-content-type-options": ["nosniff"],
-      "frame-ancestors": ["'self'"],
-    },
-  })
-);
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       "x-content-type-options": ["nosniff"],
+//       "frame-ancestors": ["'self'"],
+//     },
+//   })
+// );
 
-app.use(
-  helmet({
-    xssFilter:true,
-    frameguard: {
-      action: "deny",
-    },
-  })
-);
+// app.use(
+//   helmet({
+//     xssFilter:true,
+//     frameguard: {
+//       action: "deny",
+//     },
+//   })
+// );
 // app.use((req, res, next) => {
 //   const forbiddenMethods = [
 //     "PROPFIND",
