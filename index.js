@@ -58,21 +58,21 @@ app.use((req, res, next) => {
 //     },
 //   })
 // );
-app.use((req, res, next) => {
-  const forbiddenMethods = [
-    "PROPFIND",
-    "PROPPATCH",
-    "MKCOL",
-    "COPY",
-    "MOVE",
-    "LOCK",
-    "UNLOCK",
-  ];
-  if (forbiddenMethods.includes(req.method)) {
-    return res.status(405).send("Method Not Allowed");
-  }
-  next();
-});
+// app.use((req, res, next) => {
+//   const forbiddenMethods = [
+//     "PROPFIND",
+//     "PROPPATCH",
+//     "MKCOL",
+//     "COPY",
+//     "MOVE",
+//     "LOCK",
+//     "UNLOCK",
+//   ];
+//   if (forbiddenMethods.includes(req.method)) {
+//     return res.status(405).send("Method Not Allowed");
+//   }
+//   next();
+// });
 app.use(cookieParser());
 // CSRF protection middleware
 const csrfProtection = csurf({ cookie: true });
