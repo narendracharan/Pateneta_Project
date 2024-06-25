@@ -20,7 +20,7 @@ app.use(helmet.xssFilter());
 app.use((req, res, next) => {
   res.setHeader(
     "Cache-Control",
-    "no-cache, must-revalidate,max-age=0,private"
+    "no-cache,'no-store',must-revalidate,max-age=0,private"
   );
   res.setHeader('Surrogate-Control', 'no-store');
   res.setHeader("X-Frame-Options", "SAMEORIGIN", "DENY");
