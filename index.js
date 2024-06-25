@@ -15,7 +15,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 // app.use(helmet());
-app.use(cors({origin:url}));
+app.use(cors({origin:"https://patenta-sa.com"}));
 app.use(bodyparser.json());
 app.use(morgan("tiny"));
 require("./config/connection");
