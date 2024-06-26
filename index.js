@@ -31,7 +31,7 @@ var corsOptionsDelegate = function (req, callback) {
   callback(null, corsOptions); // callback expects two parameters: error and options
 };
 app.use(cookieParser());
-app.use(bodyparser.urlencoded({ extended: false }));
+//app.use(bodyparser.urlencoded({ extended: false }));
 
 app.use(bodyparser.json());
 app.use(morgan("tiny"));
