@@ -31,7 +31,7 @@ var corsOptionsDelegate = function (req, callback) {
   callback(null, corsOptions); // callback expects two parameters: error and options
 };
 app.use(cookieParser());
-//app.use(bodyparser.urlencoded({ extended: false }));
+app.use(bodyparser.urlencoded({ extended: false }));
 
 app.use(bodyparser.json());
 app.use(morgan("tiny"));
@@ -78,7 +78,6 @@ app.use((req, res, next) => {
 app.use(cookieParser());
 // CSRF protection middleware
 const csrfProtection = csurf({ cookie: true });
-app.use(csrfProtection);
 // Routes
 app.get("/form", csrfProtection, (req, res) => {
   // Pass the csrfToken to the view
