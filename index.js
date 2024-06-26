@@ -30,6 +30,8 @@ var corsOptionsDelegate = function (req, callback) {
   }
   callback(null, corsOptions); // callback expects two parameters: error and options
 };
+app.use(cookieParser());
+app.use(bodyparser.urlencoded({ extended: false }));
 
 app.use(bodyparser.json());
 app.use(morgan("tiny"));
@@ -73,6 +75,25 @@ app.use((req, res, next) => {
 //     },
 //   })
 // );
+app.use(cookieParser());
+// CSRF protection middleware
+const csrfProtection = csurf({ cookie: true });
+app.use(csrfProtection);
+// Routes
+app.get("/form", csrfProtection, (req, res) => {
+  // Pass the csrfToken to the view
+  const csrfToken = req.csrfToken();
+  console.log('Generated CSRF Token:', csrfToken);
+  res.send(`<form action="/process" method="POST">
+              <input type="hidden" name="_csrf" value="${req.csrfToken()}">
+              <button type="submit">Submit</button>
+            </form>`);
+});
+app.post("/process", csrfProtection, (req, res) => {
+  
+  res.send("Form processed");
+});
+
 // app.use((req, res, next) => {
 //   const forbiddenMethods = [
 //     "PROPFIND",
@@ -88,21 +109,6 @@ app.use((req, res, next) => {
 //   }
 //   next();
 // });
-app.use(cookieParser());
-// CSRF protection middleware
-const csrfProtection = csurf({ cookie: true });
-// Routes
-app.get("/form", csrfProtection, (req, res) => {
-  // Pass the csrfToken to the view
-  res.send(`<form action="/process" method="POST">
-              <input type="hidden" name="_csrf" value="${req.csrfToken()}">
-              <button type="submit">Submit</button>
-            </form>`);
-});
-app.post("/process", csrfProtection, (req, res) => {
-  res.send("Form processed");
-});
-
 app.use(
   morgan("common", {
     stream: fs.createWriteStream(path.join(__dirname, "access.log"), {
