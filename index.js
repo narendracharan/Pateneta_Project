@@ -44,7 +44,7 @@ const {
 } = require("./controllers/userControllers.js/chatControllers");
 const csurf = require("csurf");
 
-process.env["BASE_URL"] = "https://ec2-16-24-2-241.me-south-1.compute.amazonaws.com:2053";
+process.env["BASE_URL"] = "http://ec2-16-24-2-241.me-south-1.compute.amazonaws.com:2053";
 
 app.use(express.static("./public"));
 app.use((req, res, next) => {
