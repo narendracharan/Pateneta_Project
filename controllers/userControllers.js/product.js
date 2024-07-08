@@ -163,7 +163,7 @@ exports.createAuctionIdea = async (req, res) => {
       urlFile: urlFile,
       present: present,
       selectDocument: selectDocument,
-      ideaType: "Action",
+      ideaType: "Auction",
     });
     //newIdeas.urlFile.push(urlFile)
     if (req.files) {
