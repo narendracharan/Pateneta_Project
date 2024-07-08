@@ -58,7 +58,7 @@ const sendNotificationEmail = async (
                                        style="display: inline-block; background-color: #fff; border-radius: 10px; padding: 8px ; border: 2px solid #164262;">
                                        <img
                                           style="display: inline-block; max-width: 120px; border-radius: 5px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;"
-                                          src="http://ec2-16-24-2-241.me-south-1.compute.amazonaws.com:2053/1719216187747y4j7x.png" alt="">
+                                          src="https://patenta-sa.com:2053/1720419081811h77qrh.png" alt="">
                                     </span>
                                  </td>
                               </tr>
@@ -68,7 +68,7 @@ const sendNotificationEmail = async (
                                        style="display: inline-block; background-color: #fff; border-radius: 10px; padding: 5px ;">
                                        <img
                                           style="display: inline-block; max-width: 250px; max-height: 200px; border-radius: 5px;"
-                                          src="http://ec2-16-24-2-241.me-south-1.compute.amazonaws.com:2053/1719216258514j57gv.png" alt="" >
+                                          src="https://patenta-sa.com:2053/1720419293853t7kxs.png" alt="" >
                                     </span>
                                  </td>
                               </tr>
@@ -76,19 +76,19 @@ const sendNotificationEmail = async (
                                  <td style="text-align: center; padding-top: 50px;">
                                     <a href="" style="display: inline-block; border-radius: 10px; padding: 8px ;">
                                        <img style="display: inline-block; max-width: 120px; border-radius: 5px;"
-                                          src="http://ec2-16-24-2-241.me-south-1.compute.amazonaws.com:2053/17192163068517nixw.png" alt="">
+                                          src="https://patenta-sa.com:2053/17204193465639mp2b.png" alt="">
                                     </a>
                                     <a href="" style="display: inline-block; border-radius: 10px; padding: 8px ;">
                                        <img style="display: inline-block; max-width: 120px; border-radius: 5px;"
-                                          src="http://ec2-16-24-2-241.me-south-1.compute.amazonaws.com:2053/1719216337365c90ir.png" alt="">
+                                          src="https://patenta-sa.com:2053/1720419404859dld9dh.png" alt="">
                                     </a>
                                     <a href="" style="display: inline-block; border-radius: 10px; padding: 8px ;">
                                        <img style="display: inline-block; max-width: 120px; border-radius: 5px;"
-                                          src="http://ec2-16-24-2-241.me-south-1.compute.amazonaws.com:2053/1719216362335drvf4.png" alt="">
+                                          src="https://patenta-sa.com:2053/1720419444626mfjg5.png" alt="">
                                     </a>
                                     <a href="" style="display: inline-block; border-radius: 10px; padding: 8px ;">
                                        <img style="display: inline-block; max-width: 120px; border-radius: 5px;"
-                                          src="http://ec2-16-24-2-241.me-south-1.compute.amazonaws.com:2053/1719216395736gnudu.png" alt="">
+                                          src="https://patenta-sa.com:2053/17204194846438e05k.png" alt="">
                                     </a>
                                  </td>
                               </tr>
