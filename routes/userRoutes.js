@@ -202,7 +202,7 @@ router.post("/sub-category-list/:id", subCategoryListing);
 
 ///--> Privacy Routes
 //router.post("/push-notification", pushNotification);
-router.post("/privacy-list", tokenAuthorisationUser, PrivacyUser);
+router.post("/privacy-list", PrivacyUser);
 router.get("/notification-list/:id", tokenAuthorisationUser, notificationList);
 router.post("/update-isRead/:id", tokenAuthorisationUser, updateStatus);
 router.delete(
