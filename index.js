@@ -6,7 +6,7 @@ const app = express();
 const fs = require("fs");
 const path = require("path");
 const cookieParser = require("cookie-parser");
- //const helmet = require("helmet");
+//const helmet = require("helmet");
 // const {Server}=require("socket.io")
 // const io=new Server()
 const bodyparser = require("body-parser");
@@ -82,14 +82,13 @@ const csrfProtection = csurf({ cookie: true });
 app.get("/form", csrfProtection, (req, res) => {
   // Pass the csrfToken to the view
   const csrfToken = req.csrfToken();
-  console.log('Generated CSRF Token:', csrfToken);
+  console.log("Generated CSRF Token:", csrfToken);
   res.send(`<form action="/process" method="POST">
               <input type="hidden" name="_csrf" value="${req.csrfToken()}">
               <button type="submit">Submit</button>
             </form>`);
 });
 app.post("/process", csrfProtection, (req, res) => {
-  
   res.send("Form processed");
 });
 
@@ -108,24 +107,24 @@ app.post("/process", csrfProtection, (req, res) => {
 //   }
 //   next();
 // });
-// app.use(
-//   morgan("common", {
-//     stream: fs.createWriteStream(path.join(__dirname, "access.log"), {
-//       flags: "a",
-//     }),
-//   })
-// );
+app.use(
+  morgan("common", {
+    stream: fs.createWriteStream(path.join(__dirname, "access.log"), {
+      flags: "a",
+    }),
+  })
+);
 
-// app.use(
-//   morgan("common", {
-//     skip: function (req, res) {
-//       return res.statusCode < 400;
-//     },
-//     stream: fs.createWriteStream(path.join(__dirname, "error.log"), {
-//       flags: "a",
-//     }),
-//   })
-// );
+app.use(
+  morgan("common", {
+    skip: function (req, res) {
+      return res.statusCode < 400;
+    },
+    stream: fs.createWriteStream(path.join(__dirname, "error.log"), {
+      flags: "a",
+    }),
+  })
+);
 
 //----> User Routes
 app.use("/user", router);
