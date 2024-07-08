@@ -44,7 +44,7 @@ const {
 } = require("./controllers/userControllers.js/chatControllers");
 const csurf = require("csurf");
 
-process.env["BASE_URL"] = "https://patenta-sa.com:2053";
+process.env["BASE_URL"] = "https://ec2-16-24-2-241.me-south-1.compute.amazonaws.com:2053";
 
 app.use(express.static("./public"));
 app.use((req, res, next) => {
@@ -108,24 +108,24 @@ app.post("/process", csrfProtection, (req, res) => {
 //   }
 //   next();
 // });
-app.use(
-  morgan("common", {
-    stream: fs.createWriteStream(path.join(__dirname, "access.log"), {
-      flags: "a",
-    }),
-  })
-);
+// app.use(
+//   morgan("common", {
+//     stream: fs.createWriteStream(path.join(__dirname, "access.log"), {
+//       flags: "a",
+//     }),
+//   })
+// );
 
-app.use(
-  morgan("common", {
-    skip: function (req, res) {
-      return res.statusCode < 400;
-    },
-    stream: fs.createWriteStream(path.join(__dirname, "error.log"), {
-      flags: "a",
-    }),
-  })
-);
+// app.use(
+//   morgan("common", {
+//     skip: function (req, res) {
+//       return res.statusCode < 400;
+//     },
+//     stream: fs.createWriteStream(path.join(__dirname, "error.log"), {
+//       flags: "a",
+//     }),
+//   })
+// );
 
 //----> User Routes
 app.use("/user", router);
